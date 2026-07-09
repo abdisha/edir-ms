@@ -8,9 +8,9 @@ import com.edir.app.shared.domain.valueobjects.Money;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-class ContributionPeriod extends AggregateRoot<ContributionPeriodId> {
-    private ContributionPeriodId contributionPeriodId;
+public class ContributionPeriod extends AggregateRoot<ContributionPeriodId> {
     private EdirId edirId;
     private Money standardAmount;
     private DateRange dateRange;
@@ -19,14 +19,60 @@ class ContributionPeriod extends AggregateRoot<ContributionPeriodId> {
     private Set<Fulfillment> fullFilaments =  new HashSet<>();
 
 
-    public ContributionPeriod(EdirId edirId, Money standardAmount, DateRange dateRange, Money penaltyFee) {
-       setId(ContributionPeriodId.generateId());
+    protected ContributionPeriod(ContributionPeriodId contributionPeriodId,
+                              EdirId edirId,
+                              Money standardAmount,
+                              DateRange dateRange,
+                              Money penaltyFee,
+                              Boolean isClosed) {
+        this.setId(contributionPeriodId);
         this.edirId = edirId;
-        this.standardAmount = standardAmount;
+        this.standardAmount=standardAmount;
         this.dateRange = dateRange;
+        this.isClosed = isClosed;
         this.penaltyFee = penaltyFee;
-        this.isClosed = false;
+
+    }
+
+    public static ContributionPeriod createContributionPeriod(
+            EdirId edirId,
+            Money standardAmount,
+            DateRange dateRange,
+            Money penaltyFee
+    ){
+        return new ContributionPeriod(
+                ContributionPeriodId.generateId(),
+                edirId,
+                standardAmount,
+                dateRange,
+                penaltyFee,
+                false
+        );
+
     }
 
 
+    public EdirId getEdirId() {
+        return edirId;
+    }
+
+    public Money getStandardAmount() {
+        return standardAmount;
+    }
+
+    public DateRange getDateRange() {
+        return dateRange;
+    }
+
+    public Boolean getClosed() {
+        return isClosed;
+    }
+
+    public Money getPenaltyFee() {
+        return penaltyFee;
+    }
+
+    public Set<Fulfillment> getFullFilaments() {
+        return fullFilaments.stream().collect(Collectors.toUnmodifiableSet());
+    }
 }

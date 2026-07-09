@@ -13,16 +13,31 @@ import java.util.Objects;
 public class Fulfillment extends BaseEntity<FulfillmentId> {
     private final MemberId memberId;
     private Money paidAmount;
-    private Money expectedAmount;
-    private Money carriedOverDebt;
+    private final Money expectedAmount;
+    private final Money carriedOverDebt;
     private Money penaltyAmount;
     private ZonedDateTime paidDate;
 
-    public Fulfillment(MemberId memberId,Money expectedAmount,Money carriedOverDebt){
-        setId(FulfillmentId.generateId());
+    protected Fulfillment(FulfillmentId fulfillmentId,
+                       MemberId memberId,
+                       Money expectedAmount,
+                       Money carriedOverDebt) {
+        this.setId(fulfillmentId);
         this.memberId = memberId;
         this.expectedAmount = expectedAmount;
         this.carriedOverDebt = carriedOverDebt;
+    }
+
+    public static Fulfillment addFulfillment(MemberId memberId,
+                                             Money expectedAmount,
+                                             Money carriedOverDebt){
+
+        return new Fulfillment(
+                FulfillmentId.generateId(),
+                memberId,
+                expectedAmount,
+                carriedOverDebt
+        );
     }
 
     public void recordPayment(Money paidAmount, ZonedDateTime paidDate){
