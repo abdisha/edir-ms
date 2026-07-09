@@ -1,7 +1,7 @@
 import {createBrowserRouter} from "react-router";
 import MainLayout from "@/layouts/MainLayout.tsx";
-import DashboardPage from "@/features/dashboard/pages/DashboardPage.tsx";
-import {EdirRouters} from "@/features/edir/EdirRouters.tsx";
+import {EdirRoutes} from "@/features/edir/EdirRoutes.tsx";
+import {MembersRoutes} from "@/features/members/MembersRoutes.tsx";
 
 export const router = createBrowserRouter([
        // ...authRouter,
@@ -9,11 +9,8 @@ export const router = createBrowserRouter([
               path:'/',
               element:<MainLayout/>,
               children:[
-                     {
-                            path:'/',
-                            element:<DashboardPage/>
-                     },
-                  ...EdirRouters
+                  ...EdirRoutes,
+                  ...MembersRoutes
               ]
 
        }
