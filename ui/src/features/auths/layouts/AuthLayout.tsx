@@ -5,9 +5,7 @@ export function AuthLayout() {
 
     return (
         <div>
-
             <Outlet/>
-
         </div>
     );
 }
