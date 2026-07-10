@@ -4,14 +4,16 @@ import jakarta.validation.constraints.*;
 
 public record EdirDto (
        @NotNull
-       @Min(value = 3,message = "Minimum name character count reached")
-       @Max(value = 50,message = "Maximum name character count reached")
+       @Size(min = 3, max = 50,message = "Edir name cannot be less than 3 or more than 50 characters")
        String edirName,
-       @Max(value = 500,message = "Maximum description character count reached")
+       @Size(max = 500,message = "Maximum description character count reached")
        String description,
        @NotNull Address address,
        @NotNull
-       @Digits(message = "phone number can only be number", integer = 10, fraction = 0)
+       @Pattern(
+               regexp = "^(09|07)\\d{8}$",
+               message = "Invalid phone number"
+       )
        String phoneNumber
 ){}
 

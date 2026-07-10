@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface EdirRepository{
     Optional<Edir> findById(EdirId edirId);
+    Optional<Edir> findAny();
     Edir save(Edir edir);
 }

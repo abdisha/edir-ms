@@ -32,7 +32,6 @@ public class Edir extends AggregateRoot<EdirId> {
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
-
     public static Edir register(EdirName edirName,
                                 String about,
                                 Address address,
@@ -43,6 +42,13 @@ public class Edir extends AggregateRoot<EdirId> {
                 about,
                 address,
                 phoneNumber);
+    }
+
+    public void updateEdirInformation(EdirName edirName,String about,PhoneNumber phoneNumber,Address address){
+        this.edirName = edirName;
+        this.about = about;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
     }
 
     public void registerNewMember(EdirMember member) {
