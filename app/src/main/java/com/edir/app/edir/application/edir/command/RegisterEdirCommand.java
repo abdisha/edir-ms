@@ -1,8 +1,8 @@
-package com.edir.app.edir.application.dto;
+package com.edir.app.edir.application.edir.command;
 
 import jakarta.validation.constraints.*;
 
-public record EdirDto (
+public record RegisterEdirCommand(
        @NotNull
        @Size(min = 3, max = 50,message = "Edir name cannot be less than 3 or more than 50 characters")
        String edirName,

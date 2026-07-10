@@ -28,7 +28,7 @@ public class EdirRepositoryImpl implements EdirRepository {
 
     @Override
     public Optional<Edir> findAny() {
-        return edirJpaRepository.getFirst().map(this.edirMapper::edirEntityToEdir);
+        return edirJpaRepository.findFirstBy().map(this.edirMapper::edirEntityToEdir);
     }
 
     @Override

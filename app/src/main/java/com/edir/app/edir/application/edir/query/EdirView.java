@@ -1,13 +1,15 @@
-package com.edir.app.edir.application.query;
+package com.edir.app.edir.application.edir.query;
 
-public record EdirView(String uuid,
+import java.util.UUID;
+
+public record EdirView(UUID uuid,
                        String edirName,
                        String description,
                        String city,
                        String subcity,
                        String worda,
                        String phoneNumber,
-                       Double membersCount
+                       Long membersCount
 
 ) {
 }

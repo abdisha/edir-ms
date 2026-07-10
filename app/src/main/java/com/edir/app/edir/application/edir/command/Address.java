@@ -1,4 +1,4 @@
-package com.edir.app.edir.application.dto;
+package com.edir.app.edir.application.edir.command;
 
 import jakarta.validation.constraints.NotNull;
 

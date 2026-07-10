@@ -1,7 +1,7 @@
 package com.edir.app.edir.adapter.persistance.jpa;
 
 import com.edir.app.edir.adapter.persistance.entity.EdirEntity;
-import com.edir.app.edir.application.query.EdirView;
+import com.edir.app.edir.application.edir.query.EdirView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,15 +12,15 @@ import java.util.UUID;
 @Repository
 public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
     Optional<EdirEntity> findById(String uuid);
-    Optional<EdirEntity> getFirst();
+    Optional<EdirEntity> findFirstBy();
 
     @Query("""
         SELECT new com.edir.app.edir.application.query.EdirView(
-            CAST(e.id as string),
-            e.edirName,
+            e.id,
+            e.name,
             e.description,
             e.city,
-            e.subcity,
+            e.subCity,
             e.worda,
             e.phoneNumber,
             COUNT(m)
@@ -29,10 +29,10 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
         LEFT JOIN e.members m
         GROUP BY
             e.id,
-            e.edirName,
+            e.name,
             e.description,
             e.city,
-            e.subcity,
+            e.subCity,
             e.worda,
             e.phoneNumber
         """)

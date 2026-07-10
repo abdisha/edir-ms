@@ -1,4 +1,4 @@
-package com.edir.app.edir.application.query;
+package com.edir.app.edir.application.edir.query;
 
 import org.springframework.stereotype.Component;
 
