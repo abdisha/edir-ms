@@ -1,6 +1,7 @@
 package com.edir.app.edir.application.edir.query;
 
 import com.edir.app.edir.domain.valueobjects.MemberStatus;
+import com.edir.app.shared.domain.valueobjects.Gender;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -11,13 +12,13 @@ public record MemberDetailView(
         String middleName,
         String lastName,
         Integer age,
-        String gender,
+        Gender gender,
         String city,
         String subcity,
         String worda,
         String phoneNumber,
-        ZonedDateTime joined,
-        ZonedDateTime left,
+        ZonedDateTime joinedDate,
+        ZonedDateTime leftDate,
         MemberStatus memberStatus,
         Boolean isDeceased
         ) {
