@@ -6,9 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class GetMemberDetailService implements GetMemberDetailQuery{
-    @Override
-    public Optional<MemberDetailView> execute(UUID memberId) {
+public class MemberQueryService {
+
+    public Optional<MemberDetailView> getMember(UUID memberId) {
         return Optional.empty();
     }
 }

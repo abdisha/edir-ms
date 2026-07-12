@@ -5,15 +5,14 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class GetEdirService implements GetEdirQuery {
+public class EdirQueryService  {
    private final EdirQueryRepository edirQueryRepository;
 
-    public GetEdirService(EdirQueryRepository edirQueryRepository) {
+    public EdirQueryService(EdirQueryRepository edirQueryRepository) {
         this.edirQueryRepository = edirQueryRepository;
     }
 
-    @Override
-    public Optional<EdirView> execute() {
+    public Optional<EdirView> getEdir() {
         return edirQueryRepository.findEdir();
     }
 }

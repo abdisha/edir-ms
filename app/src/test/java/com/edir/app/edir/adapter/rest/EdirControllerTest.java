@@ -16,12 +16,11 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -56,7 +55,7 @@ class EdirControllerTest {
                 "0912345678"
         );
 
-        mockMvc.perform(post("/api/v0/edirs")
+        mockMvc.perform(post("/api/v0/edir")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
@@ -79,7 +78,7 @@ class EdirControllerTest {
                 "0912345678"
         );
 
-        MvcResult result = mockMvc.perform(post("/api/v0/edirs")
+        MvcResult result = mockMvc.perform(post("/api/v0/edir")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -104,12 +103,12 @@ class EdirControllerTest {
                 "0912345678"
         );
 
-         mockMvc.perform(post("/api/v0/edirs")
+         mockMvc.perform(post("/api/v0/edir")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
 
-     mockMvc.perform(get("/api/v0/edirs")
+     mockMvc.perform(get("/api/v0/edir")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect( status().isOk())

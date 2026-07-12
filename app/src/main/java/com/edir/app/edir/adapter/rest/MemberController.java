@@ -1,8 +1,8 @@
 package com.edir.app.edir.adapter.rest;
 
 import com.edir.app.edir.application.edir.command.RegisterMemberCommand;
-import com.edir.app.edir.application.edir.query.GetMemberDetailQuery;
 import com.edir.app.edir.application.edir.query.MemberDetailView;
+import com.edir.app.edir.application.edir.query.MemberQueryService;
 import com.edir.app.edir.application.edir.usecase.RegisterMemberUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,13 +17,13 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 @RequestMapping(REST_VERSION + "members")
 public class MemberController {
     private final RegisterMemberUseCase registerMemberUseCase;
-    private final GetMemberDetailQuery getMemberDetailQuery;
+    private final MemberQueryService memberQueryService;
 
 
     public MemberController(RegisterMemberUseCase registerMemberUseCase,
-                            GetMemberDetailQuery getMemberDetailQuery) {
+                            MemberQueryService memberQueryService) {
         this.registerMemberUseCase = registerMemberUseCase;
-        this.getMemberDetailQuery = getMemberDetailQuery;
+        this.memberQueryService = memberQueryService;
     }
 
     @PostMapping
@@ -35,7 +35,7 @@ public class MemberController {
 
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberDetailView> getMember(@PathVariable UUID memberId) {
-        var result = getMemberDetailQuery.execute(memberId);
+        var result = memberQueryService.getMember(memberId);
         return result.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
