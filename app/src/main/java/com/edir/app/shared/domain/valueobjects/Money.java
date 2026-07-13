@@ -28,8 +28,12 @@ public record Money(BigDecimal amount) {
         return new Money(result);
     }
 
-    public Money multiply(int quantity) {
-        return new Money(amount.multiply(BigDecimal.valueOf(quantity)));
+    public Money multiply(BigDecimal quantity) {
+        return new Money(amount.multiply(quantity));
+    }
+
+    public Money divide(BigDecimal quantity){
+        return new Money(amount.divide(quantity));
     }
 
     public boolean isGreaterThan(Money other) {
