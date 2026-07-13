@@ -1,18 +1,21 @@
 package com.edir.app.edir.domain.entity;
 
-import com.edir.app.edir.domain.exceptions.MemberIsAlreadyLeadershipException;
 import com.edir.app.edir.domain.exceptions.MemberAlreadyRegisteredException;
 import com.edir.app.edir.domain.exceptions.MemberInActiveException;
+import com.edir.app.edir.domain.exceptions.MemberIsAlreadyLeadershipException;
 import com.edir.app.edir.domain.exceptions.MemberNotFoundException;
-import com.edir.app.edir.domain.valueobjects.*;
+import com.edir.app.edir.domain.valueobjects.EdirId;
+import com.edir.app.edir.domain.valueobjects.EdirName;
+import com.edir.app.edir.domain.valueobjects.MemberRole;
+import com.edir.app.edir.domain.valueobjects.MemberStatus;
 import com.edir.app.shared.domain.entity.AggregateRoot;
 import com.edir.app.shared.domain.valueobjects.Address;
+import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.PhoneNumber;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Edir extends AggregateRoot<EdirId> {
     private EdirName edirName;

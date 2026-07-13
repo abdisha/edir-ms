@@ -8,7 +8,7 @@ import com.edir.app.edir.application.edir.usecase.AppointMemberUseCase;
 import com.edir.app.edir.application.edir.usecase.MemberDeceasedUseCase;
 import com.edir.app.edir.application.edir.usecase.RegisterMemberUseCase;
 import com.edir.app.edir.application.edir.usecase.RevokeAppointmentUseCase;
-import com.edir.app.edir.domain.valueobjects.MemberId;
+import com.edir.app.shared.domain.valueobjects.MemberId;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

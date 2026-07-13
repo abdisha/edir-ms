@@ -1,6 +1,4 @@
-package com.edir.app.edir.domain.valueobjects;
-
-import java.time.ZonedDateTime;
+package com.edir.app.contribution.domain.valueobjects;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -51,3 +49,4 @@ public record DateRange(ZonedDateTime startDate, ZonedDateTime endDate) {
                 .toDays();
     }
 }
+

@@ -6,16 +6,11 @@ import com.edir.app.edir.domain.entity.Edir;
 import com.edir.app.edir.domain.entity.EdirMember;
 import com.edir.app.edir.domain.valueobjects.EdirId;
 import com.edir.app.edir.domain.valueobjects.EdirName;
-import com.edir.app.edir.domain.valueobjects.MemberId;
-import com.edir.app.shared.domain.valueobjects.Address;
-import com.edir.app.shared.domain.valueobjects.Age;
-import com.edir.app.shared.domain.valueobjects.FullName;
-import com.edir.app.shared.domain.valueobjects.PhoneNumber;
+import com.edir.app.shared.domain.valueobjects.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component

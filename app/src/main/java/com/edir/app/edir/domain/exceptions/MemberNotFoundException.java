@@ -1,7 +1,7 @@
 package com.edir.app.edir.domain.exceptions;
 
-import com.edir.app.edir.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.exceptions.DomainException;
+import com.edir.app.shared.domain.valueobjects.MemberId;
 
 public class MemberNotFoundException extends DomainException {
     public MemberNotFoundException(MemberId memberId) {
