@@ -64,7 +64,7 @@ public class EdirMapper {
     }
 
     public EdirEntity edirToEdirEntity(Edir edir) {
-           return EdirEntity.builder()
+           EdirEntity edirEntity =  EdirEntity.builder()
                 .id(edir.getId().value())
                 .name(edir.getEdirName().name())
                 .description(edir.getAbout())
@@ -97,6 +97,9 @@ public class EdirMapper {
                 .subCity(edir.getAddress().subCity())
                 .worda(edir.getAddress().worda())
                 .build();
+
+           edirEntity.getMembers().forEach(m->m.setEdir(edirEntity));
+           return  edirEntity;
     }
 
 }

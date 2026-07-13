@@ -1,49 +1,27 @@
 package com.edir.app.edir.adapter.rest;
 
+import com.edir.app.edir.adapter.rest.request.AppointmentRequest;
 import com.edir.app.edir.application.edir.command.Address;
-import com.edir.app.edir.application.edir.command.RegisterEdirCommand;
-import com.edir.app.shared.adapter.rest.GlobalExceptionHandler;
-import org.junit.jupiter.api.BeforeEach;
+import com.edir.app.edir.application.edir.command.UpInsertEdirCommand;
+import com.edir.app.edir.domain.valueobjects.MemberRole;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
+import static com.edir.app.shared.EdirConstant.REST_VERSION;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@ActiveProfiles("test")
-class EdirControllerTest {
+class EdirControllerTest extends IntegrationTest {
 
-    private MockMvc mockMvc;
-    @Autowired
-    private EdirController edirController;
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @BeforeEach
-    void setup() {
-        this.mockMvc = MockMvcBuilders
-                .standaloneSetup(edirController)
-                .setControllerAdvice(
-                        new GlobalExceptionHandler()
-                ). build();
-    }
     @Test
     void shouldReturn400WhenNameIsBlank() throws Exception {
 
-        RegisterEdirCommand request = new RegisterEdirCommand(
+        UpInsertEdirCommand request = new UpInsertEdirCommand(
                 "",
                 "100.0",
                 new Address(
@@ -66,7 +44,7 @@ class EdirControllerTest {
     @Test
     void shouldRegisterEdir() throws Exception {
 
-        RegisterEdirCommand request = new RegisterEdirCommand(
+        UpInsertEdirCommand request = new UpInsertEdirCommand(
                 "Edir Name",
                 "Edir is community support system",
                 new Address(
@@ -91,7 +69,7 @@ class EdirControllerTest {
 
     @Test
     void shouldReturnFullEdir() throws Exception {
-        RegisterEdirCommand request = new RegisterEdirCommand(
+        UpInsertEdirCommand request = new UpInsertEdirCommand(
                 "Edir Name",
                 "Edir is community support system",
                 new Address(
@@ -116,4 +94,6 @@ class EdirControllerTest {
                 .andExpect(jsonPath("$.description").exists());
 
     }
+
+
 }

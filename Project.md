@@ -38,6 +38,7 @@ Members are the foundation of an Edir. The system allows administrators to regis
 - Record members who leave the Edir
 - Record deceased members
 - Assign leadership roles
+- Suspend Members
 
 #### Member Information
 
@@ -53,7 +54,7 @@ Members are the foundation of an Edir. The system allows administrators to regis
     - Woreda
 - Registration Date
 - Membership Status
-
+- Left Date
 ---
 
 ### Contributions
@@ -74,6 +75,8 @@ Manage member contributions and contribution periods.
 - Every contribution belongs to a contribution period.
 - A contribution period has a start date and an end date.
 - Members are expected to pay their contributions before the due date.
+- Late contributions are automatically penalized
+-  
 
 ---
 
