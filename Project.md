@@ -22,7 +22,7 @@ The system manages a single Edir organization.
     - Sub-city
     - Woreda
 - Phone Number
-
+- Home address
 ---
 
 ### Members
