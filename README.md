@@ -46,7 +46,7 @@ The application follows **Domain-Driven Design (DDD)**, **Hexagonal Architecture
 - Spring Data JPA
 - Hibernate
 - PostgreSQL
-- Flyway/Liquibase
+- Liquibase
 - Maven
 - Docker
 
@@ -76,8 +76,9 @@ The application follows **Domain-Driven Design (DDD)**, **Hexagonal Architecture
 ```
 edir-management-system
 │
-├── backend
+├── app
 │   ├── src
+|   ├── docker-compose.yml
 │   ├── Dockerfile
 │   └── pom.xml
 │
@@ -141,8 +142,8 @@ Create a `.env` file in the project root.
 
 ```env
 POSTGRES_DB=edir_db
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=admin123
 
 SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/edir_db
 SPRING_DATASOURCE_USERNAME=postgres
@@ -208,7 +209,7 @@ The project contains three services.
 ```
 database
     │
-    ├──────────────► backend
+    ├──────────────► app
     │                     │
     │                     │ REST API
     │                     ▼
@@ -224,7 +225,7 @@ database
 Navigate to the backend directory.
 
 ```bash
-cd backend
+cd app
 ```
 
 Run
@@ -290,8 +291,8 @@ Default credentials
 | Property | Value |
 |----------|-------|
 | Database | edir_db |
-| Username | postgres |
-| Password | postgres |
+| Username | admin |
+| Password | Admin123 |
 | Port | 5432 |
 
 Database data is persisted using a Docker volume.
@@ -337,7 +338,7 @@ npm test
 Backend
 
 ```bash
-docker build -t edir-backend ./backend
+docker build -t edir-backend ./app
 ```
 
 Frontend
@@ -470,5 +471,10 @@ This project is licensed under the MIT License.
 ---
 
 # Authors
+  * Abdi Asres
+  * Abenezer
+  * Dawit Bedecho
+  * Abreham
+  * Solomon Abbay
 
 Developed with ❤️ using Spring Boot, React, PostgreSQL, and Docker.
