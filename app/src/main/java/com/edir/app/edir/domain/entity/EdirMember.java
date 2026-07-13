@@ -7,6 +7,8 @@ import com.edir.app.shared.domain.valueobjects.*;
 import com.edir.app.edir.domain.valueobjects.MemberId;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
+
 public class EdirMember extends BaseEntity<MemberId> {
     private FullName fullName;
     private Age age;
@@ -18,13 +20,44 @@ public class EdirMember extends BaseEntity<MemberId> {
     private ZonedDateTime Left;
     private Boolean isDeceased;
 
-    protected EdirMember(MemberId id,
-                      FullName fullName,
-                      Age age,
-                      Gender gender,
-                      Address address,
-                      PhoneNumber phoneNumber) {
-        this.setId(id);
+
+    private EdirMember(MemberId memberId,
+                       FullName fullName,
+                       Age age,
+                       Gender gender,
+                       MemberStatus memberStatus,
+                       Address address,
+                       PhoneNumber phoneNumber,
+                       ZonedDateTime joined,
+                       ZonedDateTime left,
+                       Boolean isDeceased) {
+        super(memberId);
+        this.fullName = fullName;
+        this.age = age;
+        this.gender = gender;
+        this.memberStatus = memberStatus;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.joined = joined;
+        Left = left;
+        this.isDeceased = isDeceased;
+    }
+
+    private EdirMember(MemberId id,
+                       FullName fullName,
+                       Age age,
+                       Gender gender,
+                       Address address,
+                       PhoneNumber phoneNumber) {
+        super(id);
+        Objects.requireNonNull(id, "Id cannot be null");
+        Objects.requireNonNull(id, "Id cannot be null");
+        Objects.requireNonNull(fullName, "Full name cannot be null");
+        Objects.requireNonNull(age, "Age cannot be null");
+        Objects.requireNonNull(gender, "Gender cannot be null");
+        Objects.requireNonNull(address, "Address cannot be null");
+        Objects.requireNonNull(phoneNumber, "Phone number cannot be null");
+
         this.fullName = fullName;
         this.age = age;
         this.gender = gender;
@@ -35,11 +68,11 @@ public class EdirMember extends BaseEntity<MemberId> {
         this.isDeceased = false;
     }
 
-    public static EdirMember register(  FullName fullName,
-                                        Age age,
-                                        Gender gender,
-                                        Address address,
-                                        PhoneNumber phoneNumber){
+    public static EdirMember register(FullName fullName,
+                                      Age age,
+                                      Gender gender,
+                                      Address address,
+                                      PhoneNumber phoneNumber) {
 
         return new EdirMember(MemberId.generateId(),
                 fullName,
@@ -49,97 +82,37 @@ public class EdirMember extends BaseEntity<MemberId> {
                 phoneNumber);
     }
 
-    public void markAsDeceased(){
+    public static EdirMember rehydrate(
+            MemberId id,
+            FullName fullName,
+            Age age,
+            Gender gender,
+            Address address,
+            PhoneNumber phoneNumber,
+            MemberStatus memberStatus,
+            ZonedDateTime joined,
+            ZonedDateTime left,
+            Boolean isDeceased
+    ) {
+        return new EdirMember(
+                id,
+                fullName,
+                age,
+                gender,
+                memberStatus,
+                address,
+                phoneNumber,
+                joined,
+                left,
+                isDeceased
+        );
+    }
+
+    public void markAsDeceased() {
         this.isDeceased = true;
         memberStatus = MemberStatus.INACTIVE;
         Left = ZonedDateTime.now();
     }
-
-    public void markAsLeft(){
-        this.memberStatus = MemberStatus.INACTIVE;
-        this.Left = ZonedDateTime.now();
-    }
-    public static EdirMemberBuilder builder() {
-        return new EdirMemberBuilder();
-    }
-    public static final class EdirMemberBuilder {
-        private FullName fullName;
-        private Age age;
-        private Gender gender;
-        private MemberStatus memberStatus;
-        private Address address;
-        private PhoneNumber phoneNumber;
-        private ZonedDateTime joined;
-        private ZonedDateTime Left;
-        private Boolean isDeceased;
-        private MemberId id;
-
-        private EdirMemberBuilder() {
-        }
-
-
-
-        public EdirMemberBuilder fullName(FullName fullName) {
-            this.fullName = fullName;
-            return this;
-        }
-
-        public EdirMemberBuilder age(Age age) {
-            this.age = age;
-            return this;
-        }
-
-        public EdirMemberBuilder gender(Gender gender) {
-            this.gender = gender;
-            return this;
-        }
-
-        public EdirMemberBuilder memberStatus(MemberStatus memberStatus) {
-            this.memberStatus = memberStatus;
-            return this;
-        }
-
-        public EdirMemberBuilder address(Address address) {
-            this.address = address;
-            return this;
-        }
-
-        public EdirMemberBuilder phoneNumber(PhoneNumber phoneNumber) {
-            this.phoneNumber = phoneNumber;
-            return this;
-        }
-
-        public EdirMemberBuilder joined(ZonedDateTime joined) {
-            this.joined = joined;
-            return this;
-        }
-
-        public EdirMemberBuilder Left(ZonedDateTime Left) {
-            this.Left = Left;
-            return this;
-        }
-
-        public EdirMemberBuilder isDeceased(Boolean isDeceased) {
-            this.isDeceased = isDeceased;
-            return this;
-        }
-
-        public EdirMemberBuilder id(MemberId id) {
-            this.id = id;
-            return this;
-        }
-
-        public EdirMember build() {
-            EdirMember edirMember = new EdirMember(null, fullName, age, gender, address, phoneNumber);
-            edirMember.setId(id);
-            edirMember.isDeceased = this.isDeceased;
-            edirMember.joined = this.joined;
-            edirMember.memberStatus = this.memberStatus;
-            edirMember.Left = this.Left;
-            return edirMember;
-        }
-    }
-
 
     public FullName getFullName() {
         return fullName;

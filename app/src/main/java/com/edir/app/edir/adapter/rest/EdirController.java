@@ -1,22 +1,48 @@
 package com.edir.app.edir.adapter.rest;
 
-import com.edir.app.edir.application.dto.EdirDto;
-import com.edir.app.edir.application.usecase.SetupEdirUseCase;
+import com.edir.app.edir.application.edir.command.UpInsertEdirCommand;
+import com.edir.app.edir.application.edir.query.EdirQueryService;
+import com.edir.app.edir.application.edir.query.EdirView;
+import com.edir.app.edir.application.edir.usecase.AppointMemberUseCase;
+import com.edir.app.edir.application.edir.usecase.MemberDeceasedUseCase;
+import com.edir.app.edir.application.edir.usecase.RevokeAppointmentUseCase;
+import com.edir.app.edir.application.edir.usecase.UpInsertEdirUseCase;
+import com.edir.app.edir.domain.valueobjects.MemberId;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+import static com.edir.app.shared.EdirConstant.REST_VERSION;
 
 @RestController
+@RequestMapping(REST_VERSION + "edir")
+@AllArgsConstructor
 public class EdirController {
-    private final SetupEdirUseCase setupEdirUseCase;
+    private final UpInsertEdirUseCase upInsertEdirUseCase;
+    private final EdirQueryService edirQueryService;
 
-    public EdirController(SetupEdirUseCase setupEdirUseCase) {
-        this.setupEdirUseCase = setupEdirUseCase;
-    }
 
     @PostMapping
-    public void registerEdir(@RequestBody @Valid EdirDto edirDto){
-        setupEdirUseCase.registerEdir(edirDto);
+    public ResponseEntity<UUID> registerEdir(@Valid @RequestBody UpInsertEdirCommand upInsertEdirCommand) {
+        UUID edirId = upInsertEdirUseCase.execute(upInsertEdirCommand);
+        return ResponseEntity.status(HttpStatus.CREATED).body(edirId);
+    }
+
+    @PutMapping()
+    public ResponseEntity<UUID> updateEdirInformation(@Valid @RequestBody UpInsertEdirCommand upInsertEdirCommand){
+        UUID edirId = upInsertEdirUseCase.execute(upInsertEdirCommand);
+        return ResponseEntity.status(HttpStatus.OK).body(edirId);
+    }
+
+    @GetMapping()
+    public ResponseEntity<EdirView> getEdir() {
+        if (edirQueryService.getEdir().isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(edirQueryService.getEdir().get());
     }
 }

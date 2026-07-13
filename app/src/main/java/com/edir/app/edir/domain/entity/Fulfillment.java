@@ -22,7 +22,7 @@ public class Fulfillment extends BaseEntity<FulfillmentId> {
                        MemberId memberId,
                        Money expectedAmount,
                        Money carriedOverDebt) {
-        this.setId(fulfillmentId);
+        super(fulfillmentId);
         this.memberId = memberId;
         this.expectedAmount = expectedAmount;
         this.carriedOverDebt = carriedOverDebt;

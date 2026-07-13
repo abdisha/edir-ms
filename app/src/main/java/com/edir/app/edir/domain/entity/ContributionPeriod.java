@@ -25,7 +25,7 @@ public class ContributionPeriod extends AggregateRoot<ContributionPeriodId> {
                               DateRange dateRange,
                               Money penaltyFee,
                               Boolean isClosed) {
-        this.setId(contributionPeriodId);
+        super(contributionPeriodId);
         this.edirId = edirId;
         this.standardAmount=standardAmount;
         this.dateRange = dateRange;

@@ -20,53 +20,51 @@ import java.util.stream.Collectors;
 
 @Component
 public class EdirMapper {
-
     public Edir edirEntityToEdir(EdirEntity edirEntity) {
-        return Edir.builder()
-                .id(new EdirId(edirEntity.getId()))
-                .edirName(new EdirName(edirEntity.getName()))
-                .about(edirEntity.getName())
-                .address(
-                        new Address(
-                                edirEntity.getCity(),
-                                edirEntity.getSubCity(),
-                                edirEntity.getWorda()
-                        )
-                )
-                .directorId(new MemberId(edirEntity.getDirector()))
-                .treasurerId(new MemberId(edirEntity.getTreasurer()))
-                .secretaryId(new MemberId(edirEntity.getSecretary()))
-                .phoneNumber(new PhoneNumber(edirEntity.getPhoneNumber()))
-                .edirMemebersSet(toEdirMembers(edirEntity.getMembers()))
-                .build();
+        return Edir.rehydrate(
+                new EdirId(edirEntity.getId()),
+                new EdirName(edirEntity.getName()),
+                edirEntity.getDescription(),
+                new Address(
+                        edirEntity.getCity(),
+                        edirEntity.getSubCity(),
+                        edirEntity.getWorda()),
+                new PhoneNumber(edirEntity.getPhoneNumber()),
+                edirEntity.getDirector() == null ? null : new MemberId(edirEntity.getDirector()),
+                edirEntity.getSecretary() == null ? null : new MemberId(edirEntity.getSecretary()),
+                edirEntity.getTreasurer() == null ? null : new MemberId(edirEntity.getTreasurer()),
+                toEdirMembers(edirEntity.getMembers())
+        );
     }
 
     private Set<EdirMember> toEdirMembers(List<MemberEntity> members) {
         return members.stream().map(
-                memberEntity -> EdirMember.builder()
-                        .id(new MemberId(memberEntity.getId()))
-                        .fullName(new FullName(
-                                        memberEntity.getFirstName(),
-                                        memberEntity.getMiddleName(),
-                                        memberEntity.getLastName()
-                        ))
-                        .age(new Age(memberEntity.getAge()))
-                        .gender(memberEntity.getGender())
-                        .address(
-                                new Address(
-                                        memberEntity.getCity(),
-                                        memberEntity.getSubCity(),
-                                        memberEntity.getWorda())
-                        ).phoneNumber(new PhoneNumber(memberEntity.getPhoneNumber()))
-                        .joined(memberEntity.getJoinedDate())
-                        .isDeceased(memberEntity.getIsDeceased())
-                        .memberStatus(memberEntity.getMemberStatus()).build()
+                memberEntity -> EdirMember.rehydrate(
+                        new MemberId(memberEntity.getId()),
+                        new FullName(
+                                memberEntity.getFirstName(),
+                                memberEntity.getMiddleName(),
+                                memberEntity.getLastName()
+                        ),
+                        new Age(memberEntity.getAge()),
+                        memberEntity.getGender(),
+                        new Address(
+                                memberEntity.getCity(),
+                                memberEntity.getSubCity(),
+                                memberEntity.getWorda()
+                        ),
+                        new PhoneNumber(memberEntity.getPhoneNumber()),
+                        memberEntity.getMemberStatus(),
+                        memberEntity.getJoinedDate(),
+                        memberEntity.getLeftDate(),
+                        memberEntity.getIsDeceased()
+
+                )
         ).collect(Collectors.toSet());
     }
 
-
-    public  EdirEntity edirToEdirEntity(Edir edir) {
-        return EdirEntity.builder()
+    public EdirEntity edirToEdirEntity(Edir edir) {
+           EdirEntity edirEntity =  EdirEntity.builder()
                 .id(edir.getId().value())
                 .name(edir.getEdirName().name())
                 .description(edir.getAbout())
@@ -92,13 +90,16 @@ public class EdirMapper {
                         ).collect(Collectors.toList())
 
                 )
-                .director(edir.getDirectorId().value())
-                .treasurer(edir.getTreasurerId().value())
-                .secretary(edir.getSecretaryId().value())
+                .director(edir.getDirectorId() == null ? null : edir.getDirectorId().value())
+                .treasurer(edir.getTreasurerId() == null ? null : edir.getTreasurerId().value())
+                .secretary(edir.getSecretaryId() == null ? null : edir.getSecretaryId().value())
                 .city(edir.getAddress().city())
                 .subCity(edir.getAddress().subCity())
                 .worda(edir.getAddress().worda())
                 .build();
+
+           edirEntity.getMembers().forEach(m->m.setEdir(edirEntity));
+           return  edirEntity;
     }
 
 }

@@ -1,13 +1,16 @@
 package com.edir.app.edir.domain.entity;
 
-import com.edir.app.edir.domain.valueobjects.MemberId;
+import com.edir.app.edir.domain.exceptions.MemberIsAlreadyLeadershipException;
+import com.edir.app.edir.domain.exceptions.MemberAlreadyRegisteredException;
+import com.edir.app.edir.domain.exceptions.MemberInActiveException;
+import com.edir.app.edir.domain.exceptions.MemberNotFoundException;
+import com.edir.app.edir.domain.valueobjects.*;
 import com.edir.app.shared.domain.entity.AggregateRoot;
 import com.edir.app.shared.domain.valueobjects.Address;
-import com.edir.app.edir.domain.valueobjects.EdirId;
-import com.edir.app.edir.domain.valueobjects.EdirName;
 import com.edir.app.shared.domain.valueobjects.PhoneNumber;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,14 +22,42 @@ public class Edir extends AggregateRoot<EdirId> {
     private MemberId directorId;
     private MemberId secretaryId;
     private MemberId treasurerId;
-    private Set<EdirMember> edirMembers = new HashSet<>();
 
-    protected Edir(EdirId id,
-                   EdirName edirName,
-                   String about,
-                   Address address,
-                   PhoneNumber phoneNumber) {
-        this.setId(id);
+    private final Set<EdirMember> edirMembers = new HashSet<>();
+
+    Edir(EdirId edirId,
+         EdirName edirName,
+         String about,
+         Address address,
+         PhoneNumber phoneNumber,
+         MemberId directorId,
+         MemberId secretaryId,
+         MemberId treasurerId,
+         Set<EdirMember> edirMembers) {
+        super(Objects.requireNonNull(edirId,"Id cannot be null"));
+        this.edirName = edirName;
+        this.about = about;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.directorId = directorId;
+        this.secretaryId = secretaryId;
+        this.treasurerId = treasurerId;
+        this.edirMembers.addAll(edirMembers);
+    }
+
+    private Edir(EdirId id,
+                 EdirName edirName,
+                 String about,
+                 Address address,
+                 PhoneNumber phoneNumber) {
+
+        super(Objects.requireNonNull(id, "Id cannot be null"));
+        Objects.requireNonNull(edirName, "Edir name cannot be null");
+        Objects.requireNonNull(about, "About cannot be null");
+        Objects.requireNonNull(phoneNumber, "Phone number cannot be null");
+        Objects.requireNonNull(address, "Address cannot be null");
+
+
         this.about = about;
         this.edirName = edirName;
         this.address = address;
@@ -38,6 +69,7 @@ public class Edir extends AggregateRoot<EdirId> {
                                 Address address,
                                 PhoneNumber phoneNumber) {
 
+
         return new Edir(EdirId.generateId(),
                 edirName,
                 about,
@@ -45,97 +77,111 @@ public class Edir extends AggregateRoot<EdirId> {
                 phoneNumber);
     }
 
-    public void registerNewMember(EdirMember member) {
+    public static Edir rehydrate(EdirId edirId,
+                                 EdirName edirName,
+                                 String about,
+                                 Address address,
+                                 PhoneNumber phoneNumber,
+                                 MemberId directorId,
+                                 MemberId secretaryId,
+                                 MemberId treasurerId,
+                                 Set<EdirMember> edirMembers
+    ) {
+        return new Edir(edirId,
+                edirName,
+                about,
+                address,
+                phoneNumber,
+                directorId,
+                secretaryId,
+                treasurerId,
+                edirMembers);
+    }
+
+    public void updateEdirInformation(EdirName edirName,
+                                      String about,
+                                      PhoneNumber phoneNumber,
+                                      Address address) {
+        Objects.requireNonNull(edirName, "Edir name cannot be null");
+        Objects.requireNonNull(about, "About cannot be null");
+        Objects.requireNonNull(phoneNumber, "Phone number cannot be null");
+        Objects.requireNonNull(address, "Address cannot be null");
+
+        this.edirName = edirName;
+        this.about = about;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void registerMember(EdirMember member) {
+        if (isActiveMember(member.getId())) {
+            throw new MemberAlreadyRegisteredException(member.getId());
+        }
         edirMembers.add(member);
     }
 
-    public void updateMember(EdirMember member) {
-        edirMembers.remove(member);
-        edirMembers.add(member);
+    public void appointMember(MemberId memberId, MemberRole memberRole) {
+        validateLeaderShipCandidate(memberId);
+        ensureLeadershipPositionAvailable(memberId);
+        switch (memberRole) {
+            case DIRECTOR -> directorId = memberId;
+            case SECRETARY -> secretaryId= memberId;
+            case TREASURER -> treasurerId = memberId;
+        }
     }
 
-    public void MemberDeceased(MemberId memberId) {
-        edirMembers.stream().filter(id -> id.getId()
-                .equals(memberId)).forEach(EdirMember::markAsDeceased);
+    public void revokeAppointment(MemberId memberId) {
+        validateLeaderShipCandidate(memberId);
+
+        revokeLeaderShipRole(memberId);
     }
 
-    public void MemberLeft(MemberId memberId) {
-        edirMembers.stream().filter(id -> id.getId().equals(memberId)).forEach(EdirMember::markAsLeft);
+    private void revokeLeaderShipRole(MemberId memberId) {
+        if (memberId.equals(directorId)) {
+            directorId = null;
+        }
+        if (memberId.equals(secretaryId)) {
+            secretaryId = null;
+        }
+        if (memberId.equals(treasurerId)) {
+            treasurerId = null;
+        }
     }
 
-    public static EdirBuilder builder() {
-        return new EdirBuilder();
+    public void markMemberAsDeceased(MemberId memberId) {
+        EdirMember member = findMemberById(memberId);
+        member.markAsDeceased();
+
+        revokeLeaderShipRole(memberId);
     }
-    public static final class EdirBuilder {
-        private EdirName edirName;
-        private String about;
-        private Address address;
-        private PhoneNumber phoneNumber;
-        private MemberId directorId;
-        private MemberId secretaryId;
-        private MemberId treasurerId;
-        private Set<EdirMember> edirMemebersSet;
-        private EdirId id;
 
-        private EdirBuilder() {
+    private void validateLeaderShipCandidate(MemberId memberId){
+        if (!isActiveMember(memberId)){
+            throw new MemberInActiveException(memberId);
         }
+    }
+    private void ensureLeadershipPositionAvailable(MemberId memberId) {
 
-
-
-        public EdirBuilder edirName(EdirName edirName) {
-            this.edirName = edirName;
-            return this;
+        if (memberId.equals(directorId)
+                || memberId.equals(secretaryId)
+                || memberId.equals(treasurerId)) {
+            throw new MemberIsAlreadyLeadershipException(memberId);
         }
+    }
 
-        public EdirBuilder about(String about) {
-            this.about = about;
-            return this;
-        }
+    private boolean isActiveMember(MemberId memberId) {
+        return edirMembers.stream()
+                .anyMatch(member ->
+                        member.getId()
+                                .equals(memberId)
+                                && member.getActive().equals(MemberStatus.ACTIVE));
+    }
 
-        public EdirBuilder address(Address address) {
-            this.address = address;
-            return this;
-        }
-
-        public EdirBuilder phoneNumber(PhoneNumber phoneNumber) {
-            this.phoneNumber = phoneNumber;
-            return this;
-        }
-
-        public EdirBuilder directorId(MemberId directorId) {
-            this.directorId = directorId;
-            return this;
-        }
-
-        public EdirBuilder secretaryId(MemberId secretaryId) {
-            this.secretaryId = secretaryId;
-            return this;
-        }
-
-        public EdirBuilder treasurerId(MemberId treasurerId) {
-            this.treasurerId = treasurerId;
-            return this;
-        }
-
-        public EdirBuilder edirMemebersSet(Set<EdirMember> edirMemebersSet) {
-            this.edirMemebersSet = edirMemebersSet;
-            return this;
-        }
-
-        public EdirBuilder id(EdirId id) {
-            this.id = id;
-            return this;
-        }
-
-        public Edir build() {
-            Edir edir = new Edir(null, edirName, about, address, phoneNumber);
-            edir.setId(id);
-            edir.secretaryId = this.secretaryId;
-            edir.edirMembers = this.edirMemebersSet;
-            edir.directorId = this.directorId;
-            edir.treasurerId = this.treasurerId;
-            return edir;
-        }
+    private EdirMember findMemberById(MemberId memberId) {
+        return edirMembers.stream()
+                .filter(m -> m.getId().equals(memberId))
+                .findFirst()
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
     }
 
 
@@ -168,7 +214,7 @@ public class Edir extends AggregateRoot<EdirId> {
     }
 
     public Set<EdirMember> getEdirMembers() {
-        return edirMembers.stream().collect(Collectors.toUnmodifiableSet());
+        return Set.copyOf(edirMembers);
     }
 
 

@@ -1,7 +1,10 @@
 package com.edir.app.shared.adapter.dto;
 
+import java.util.Map;
+
 public record ErrorDto(
-        String code,
-        String message
+        String message,
+        String statusCode,
+        Map<String,String> errors
 ) {
 }
