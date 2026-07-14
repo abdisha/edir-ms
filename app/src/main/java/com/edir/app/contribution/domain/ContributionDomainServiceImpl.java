@@ -2,22 +2,39 @@ package com.edir.app.contribution.domain;
 
 import com.edir.app.contribution.domain.entity.Contribution;
 import com.edir.app.contribution.domain.entity.MemberContribution;
-import com.edir.app.contribution.domain.exceptions.ContributionIsAlreadyClosed;
-import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.Money;
+
+import java.time.ZonedDateTime;
 
 public class ContributionDomainServiceImpl implements ContributionDomainService {
 
-    public void makePayment(Contribution contribution,
-                            MemberContribution memberContribution,
-                            Money amount,
-                            String receiptNo,
-                            MemberId memberId
-    ){
-        if(contribution.isClosed()){
-            throw new ContributionIsAlreadyClosed("The contribution is already closed");
-        }
+    public void close(Contribution contribution,
+        MemberContribution memberContribution,
+        ZonedDateTime closingDate) {
 
-        memberContribution.makePayment(amount,receiptNo,memberId,"reason");
+        if (memberContribution.hasOutstandingContribution()) {
+            var penalty = calculate(
+                contribution,
+                memberContribution,
+                closingDate
+            );
+
+            memberContribution.applyPenalty(penalty);
+        }
+        memberContribution.close();
+
     }
+
+    public Money calculate( Contribution contribution,
+        MemberContribution memberContribution,
+        ZonedDateTime closingDate) {
+
+        if (!closingDate.isAfter(contribution.getDueDate())) {
+            return Money.zero();
+        }
+        return contribution.getPenaltyPolicy().calculate(memberContribution
+                .getOutstandingContribution());
+    }
+
+
 }

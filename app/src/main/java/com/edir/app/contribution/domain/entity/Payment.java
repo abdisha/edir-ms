@@ -35,7 +35,7 @@ public class Payment extends BaseEntity<PaymentId> {
         this.note = note;
     }
 
-    public static Payment createPayment(
+    public static Payment receive(
             Money amount,
             ZonedDateTime paidAt,
             MemberId receipterId,
@@ -50,6 +50,14 @@ public class Payment extends BaseEntity<PaymentId> {
                 receiptNumber,
                 note
         );
+    }
+
+    public Money amount() {
+        return amount;
+    }
+
+    public ZonedDateTime paidAt() {
+        return paidAt;
     }
 
 }

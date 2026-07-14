@@ -4,8 +4,7 @@ public class OpenContributionNotFoundException extends RuntimeException{
     public OpenContributionNotFoundException(String message) {
         super(message);
     }
-
-    public OpenContributionNotFoundException(String message, Throwable cause) {
-        super(message, cause);
+    public OpenContributionNotFoundException() {
+        super("Open contribution not found");
     }
 }

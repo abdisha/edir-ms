@@ -36,17 +36,19 @@ public record PenaltyPolicy(
         );
     }
 
-    public Money calculate(Money outstandingAmount) {
-        switch (penaltyType) {
-            case FIXED:
-                return amount;
-            case PERCENTAGE:
-                return outstandingAmount
-                        .multiply(amount.amount())
-                        .divide(BigDecimal.valueOf(100));
-            default:
-                return Money.zero();
-        }
+    public Money calculate(Money outstanding) {
+        return switch (penaltyType) {
+
+            case FIXED -> amount;
+
+            case PERCENTAGE ->
+                outstanding.multiply(
+                    amount.amount()
+                        .divide(BigDecimal.valueOf(100))
+                );
+
+            case NONE -> Money.zero();
+        };
 
     }
 

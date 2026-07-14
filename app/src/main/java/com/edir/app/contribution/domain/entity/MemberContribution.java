@@ -2,11 +2,12 @@ package com.edir.app.contribution.domain.entity;
 
 import com.edir.app.contribution.domain.valueobjects.ContributionId;
 import com.edir.app.contribution.domain.valueobjects.MemberContributionId;
+import com.edir.app.contribution.domain.valueobjects.MemberContributionStatus;
+import com.edir.app.contribution.domain.valueobjects.Settlement;
 import com.edir.app.shared.domain.entity.AggregateRoot;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.Money;
 
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -18,6 +19,7 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
     private Money contribution;
     private Money penalty;
     private Money outstandingPenalty;
+    private MemberContributionStatus status;
     private final Set<Payment> payments = new HashSet<>();
 
     private MemberContribution(MemberContributionId memberContributionId,
@@ -102,22 +104,31 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
         );
     }
 
-    public Money getOutstandingContribution(){
-        return outstandingContribution;
+
+
+    public void receivePayment(Payment payment, Settlement settlement){
+        payments.add(payment);
+
+        outstandingPenalty = outstandingPenalty
+            .subtract(settlement.penaltyPaid());
+
+        outstandingContribution = outstandingContribution
+            .subtract(settlement.rolledContributionPaid());
+
+        outstandingContribution = outstandingContribution
+            .subtract(settlement.currentContributionPaid());
     }
 
-    public void makePayment(Money amount,
-                            String receiptNo,
-                            MemberId memberId,
-                            String reason){
-        // example:  outstanding = 500 -600
-        outstandingContribution = outstandingContribution.subtract(amount);
-        if(outstandingContribution.isZero())
-        payments.add(Payment.createPayment(amount,
-                ZonedDateTime.now(),
-                memberId,
-                receiptNo,
-                reason));
+    public void applyPenalty(Money penalty) {
+        if (penalty.isZero()) {
+            return;
+        }
+
+        this.outstandingPenalty =
+            this.outstandingPenalty.add(penalty);
+    }
+    public void close() {
+        status = MemberContributionStatus.CLOSED;
     }
 
     public Money getOutstandingPenalty() {
@@ -127,5 +138,15 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
     public Set<Payment> getPayments(){
         return Set.copyOf(payments);
     }
+    public Money getOutstandingContribution(){
+        return outstandingContribution;
+    }
+    public boolean hasOutstandingContribution() {
+        return !outstandingContribution.isZero();
+    }
 
+
+    public Money getRolledOverContribution() {
+        return outstandingContribution;
+    }
 }

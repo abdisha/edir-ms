@@ -13,7 +13,11 @@ public interface JpaMemberContributionRepository extends JpaRepository<MemberCon
     Optional<MemberContribution> findMemberContributionByMemberIdAndContributionId(UUID memberId, UUID contributionId);
 
     @Query(
-        value = "select m from MemberContributionEntity m where m.memberId = :memberId order by m.id desc limit 1"
+        value = """
+            select m from MemberContributionEntity m
+                        where m.memberId = :memberId
+                                     order by m.id desc limit 1
+            """
     )
-    Optional<MemberContribution> findMemberContribution(UUID memberId);
+    Optional<MemberContribution> findLastMemberContribution(UUID memberId);
 }

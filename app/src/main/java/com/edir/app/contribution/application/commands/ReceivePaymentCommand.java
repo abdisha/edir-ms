@@ -11,6 +11,6 @@ public record ReceivePaymentCommand(
         ZonedDateTime paymentDate,
         String paymentMethod,
         String receiptNumber,
-        String note
+        String remark
 ) {
 }

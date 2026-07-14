@@ -1,13 +1,13 @@
 package com.edir.app.contribution.application;
 
 import com.edir.app.contribution.application.commands.ReceivePaymentCommand;
-import com.edir.app.contribution.application.exceptions.OpenContributionNotFoundException;
+import com.edir.app.contribution.application.exceptions.MemberContributionNotFoundException;
 import com.edir.app.contribution.application.usecases.ReceivePaymentUseCase;
-import com.edir.app.contribution.domain.ContributionDomainServiceImpl;
-import com.edir.app.contribution.domain.entity.Contribution;
+import com.edir.app.contribution.domain.MemberContributionService;
 import com.edir.app.contribution.domain.entity.MemberContribution;
-import com.edir.app.contribution.domain.ports.ContributionRepository;
+import com.edir.app.contribution.domain.entity.Payment;
 import com.edir.app.contribution.domain.ports.MemberContributionRepository;
+import com.edir.app.contribution.domain.valueobjects.MemberContributionId;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.Money;
 import lombok.AllArgsConstructor;
@@ -18,28 +18,32 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class ReceivePaymentService implements ReceivePaymentUseCase {
-    private final ContributionRepository contributionRepository;
-    private final MemberContributionRepository memberContributionRepository;
-    private final ContributionDomainServiceImpl contributionDomainServiceImpl;
+    private final MemberContributionRepository memberRepository;
+    private final MemberContributionService memberContributionService;
 
     @Override
-    public void execute(ReceivePaymentCommand receivePaymentCommand) {
-        Contribution contribution = contributionRepository.findOpenContribution()
-                .orElseThrow(() ->
-                        new OpenContributionNotFoundException("No open contribution found"));
+    public void execute(ReceivePaymentCommand command) {
+        MemberContribution ledger = memberRepository
+            .findById(new MemberContributionId(command.memberId()))
+            .orElseThrow(
+                ()-> new MemberContributionNotFoundException(command.memberId())
+            );
 
-        MemberContribution memberContribution = memberContributionRepository
-                .findByContributionIdAndMemberId(
-                        contribution.getId(),
-                        new MemberId(receivePaymentCommand.memberId()));
+        Payment payment = Payment
+            .receive(Money.of(command.amount()),
+                    command.paymentDate(),
+                    new MemberId(command.receipterId()),
+                    command.receiptNumber(),
+                    command.remark()
+            );
 
-        contributionDomainServiceImpl.makePayment(
-                contribution,
-                memberContribution,
-                new Money(receivePaymentCommand.amount()),
-                receivePaymentCommand.receiptNumber(),
-                new MemberId(receivePaymentCommand.memberId())
+        memberContributionService.receivePayment(
+            ledger,
+            payment
         );
+
+        memberRepository.save(ledger);
+
 
     }
 }

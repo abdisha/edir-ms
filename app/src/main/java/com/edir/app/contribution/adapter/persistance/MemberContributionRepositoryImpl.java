@@ -41,6 +41,6 @@ public class MemberContributionRepositoryImpl implements MemberContributionRepos
 
     @Override
     public Optional<MemberContribution> findLatestByMember(UUID memberId) {
-        return jpaMemberContributionRepository.findbyMemberId(memberId);
+        return jpaMemberContributionRepository.findLastMemberContribution(memberId);
     }
 }

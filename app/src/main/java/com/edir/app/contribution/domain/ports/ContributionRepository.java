@@ -9,5 +9,4 @@ public interface ContributionRepository {
     UUID save(Contribution contribution);
     Optional<Contribution> find(UUID id);
     Optional<Contribution> findOpenContribution();
-
 }
