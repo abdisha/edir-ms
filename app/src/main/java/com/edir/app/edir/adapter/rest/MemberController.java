@@ -1,13 +1,13 @@
 package com.edir.app.edir.adapter.rest;
 
 import com.edir.app.edir.adapter.rest.request.AppointmentRequest;
-import com.edir.app.edir.application.edir.command.RegisterMemberCommand;
-import com.edir.app.edir.application.edir.query.MemberDetailView;
-import com.edir.app.edir.application.edir.query.MemberQueryService;
-import com.edir.app.edir.application.edir.usecase.AppointMemberUseCase;
-import com.edir.app.edir.application.edir.usecase.MemberDeceasedUseCase;
-import com.edir.app.edir.application.edir.usecase.RegisterMemberUseCase;
-import com.edir.app.edir.application.edir.usecase.RevokeAppointmentUseCase;
+import com.edir.app.edir.application.command.RegisterMemberCommand;
+import com.edir.app.edir.application.query.MemberDetailView;
+import com.edir.app.edir.application.query.MemberQueryService;
+import com.edir.app.edir.application.usecase.AppointMemberUseCase;
+import com.edir.app.edir.application.usecase.MemberDeceasedUseCase;
+import com.edir.app.edir.application.usecase.RegisterMemberUseCase;
+import com.edir.app.edir.application.usecase.RevokeAppointmentUseCase;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

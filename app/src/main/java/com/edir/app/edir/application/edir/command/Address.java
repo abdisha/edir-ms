@@ -1,9 +1,0 @@
-package com.edir.app.edir.application.edir.command;
-
-import jakarta.validation.constraints.NotNull;
-
-public record Address(
-        @NotNull String city,
-        @NotNull String subcity,
-        String worda) {
-}

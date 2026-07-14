@@ -19,10 +19,12 @@ public record Money(BigDecimal amount) {
     }
 
     public Money subtract(Money other) {
+        //amount=300 - other=200 =100
+        //amount =200 -other =250 = -50
         BigDecimal result = amount.subtract(other.amount);
 
         if (result.compareTo(BigDecimal.ZERO) < 0) {
-            throw new DomainException("Money amount cannot be negative.");
+            return Money.zero();
         }
 
         return new Money(result);

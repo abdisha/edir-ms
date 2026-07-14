@@ -1,8 +1,9 @@
 package com.edir.app.edir.adapter.persistance.query;
 
 import com.edir.app.edir.adapter.persistance.jpa.EdirJpaRepository;
-import com.edir.app.edir.application.edir.query.MemberDetailView;
-import com.edir.app.edir.application.edir.query.MemberQueryRepository;
+import com.edir.app.edir.application.api.MemberSummary;
+import com.edir.app.edir.application.query.MemberDetailView;
+import com.edir.app.edir.application.query.MemberQueryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     }
 
     @Override
-    public Optional<List<MemberDetailView>> findMembers() {
-        return Optional.empty();
+    public Optional<List<MemberSummary>> findActiveMembers() {
+        return jpaRepository.findActiveMember();
     }
 }

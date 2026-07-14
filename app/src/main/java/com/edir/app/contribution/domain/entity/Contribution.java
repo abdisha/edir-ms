@@ -1,5 +1,6 @@
 package com.edir.app.contribution.domain.entity;
 
+import com.edir.app.contribution.domain.events.ContributionCreatedEvent;
 import com.edir.app.contribution.domain.valueobjects.ContributionId;
 import com.edir.app.contribution.domain.valueobjects.DateRange;
 import com.edir.app.contribution.domain.valueobjects.PenaltyPolicy;
@@ -10,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class Contribution extends AggregateRoot<ContributionId> {
+    private String name;
     private String description;
     private DateRange period;
     private ZonedDateTime dueDate;
@@ -17,75 +19,92 @@ public class Contribution extends AggregateRoot<ContributionId> {
     private Boolean isClosed;
     private PenaltyPolicy penaltyPolicy;
 
-    private Contribution(ContributionId contributionId,
+    private Contribution(ContributionId contributionId, String name,
                          String description,
                          DateRange period,
                          Money amount,
                          ZonedDateTime dueDate,
                          PenaltyPolicy penaltyPolicy) {
-        super(Objects.requireNonNull(contributionId,"Id cannot be null"));
+        super(Objects.requireNonNull(contributionId, "Id cannot be null"));
+        this.name = name;
         this.description = description;
-        this.period = Objects.requireNonNull(period,"Date range cannot be null");
-        this.contributionAmount = Objects.requireNonNull(amount,"Amount cannot be null");
+        this.period = Objects.requireNonNull(period, "Date range cannot be null");
+        this.contributionAmount = Objects.requireNonNull(amount, "Amount cannot be null");
         this.dueDate = dueDate;
-        this.penaltyPolicy = Objects.requireNonNull(penaltyPolicy,"Penalty policy cannot be null");
+        this.penaltyPolicy = Objects.requireNonNull(penaltyPolicy, "Penalty policy cannot be null");
     }
 
-    private Contribution(ContributionId contributionId,
-                        String description,
-                        DateRange period,
-                        Money amount) {
-        super(Objects.requireNonNull(contributionId,"Id cannot be null"));
+    private Contribution(ContributionId contributionId, String name,
+                         String description,
+                         DateRange period,
+                         Money amount) {
+        super(Objects.requireNonNull(contributionId, "Id cannot be null"));
+        this.name = name;
         this.description = description;
-        this.period = Objects.requireNonNull(period,"Date range cannot be null");
-        this.contributionAmount = Objects.requireNonNull(amount,"Amount cannot be null");
+        this.period = Objects.requireNonNull(period, "Date range cannot be null");
+        this.contributionAmount = Objects.requireNonNull(amount, "Amount cannot be null");
     }
 
-    public static Contribution createContribution(String description,
+    public static Contribution createContribution(String name, String description,
                                                   DateRange dateRange,
-                                                  Money amount){
-        return new Contribution(
-                ContributionId.generateId(),
-                description,
-                dateRange,
-                amount);
+                                                  Money amount) {
+        Contribution contribution = new Contribution(
+            ContributionId.generateId(),
+            name,
+            description,
+            dateRange,
+            amount);
+
+        contribution.registerEvent(new ContributionCreatedEvent(contribution.getId().value(), name));
+
+        return contribution;
     }
 
-    public static Contribution createContributionWithPenaltyPolicy( String description,
-                                                                    DateRange dateRange,
-                                                                    Money amount,
-                                                                    ZonedDateTime dueDate,
-                                                                    PenaltyPolicy penaltyPolicy) {
-        return  new Contribution(
-                ContributionId.generateId(),
-                description,
-                dateRange,
-                amount,
-                dueDate,
-                penaltyPolicy
-        );
+    public static Contribution createContributionWithPenaltyPolicy(
+        String name,
+        String description,
+        DateRange dateRange,
+        Money amount,
+        ZonedDateTime dueDate,
+        PenaltyPolicy penaltyPolicy) {
+        return new Contribution(
+            ContributionId.generateId(),
+            name,
+            description,
+            dateRange,
+            amount,
+            dueDate,
+            penaltyPolicy);
     }
 
     public static Contribution rehydrate(ContributionId contributionId,
+                                         String name,
                                          String description,
                                          DateRange dateRange,
                                          Money amount,
                                          ZonedDateTime dueDate,
-                                         PenaltyPolicy penaltyPolicy){
+                                         PenaltyPolicy penaltyPolicy) {
         return new Contribution(
-                contributionId,
-                description,
-                dateRange,
-                amount,
-                dueDate,
-                penaltyPolicy
-        );
+            contributionId,
+            name,
+            description,
+            dateRange,
+            amount,
+            dueDate,
+            penaltyPolicy);
     }
 
-    public void closeContribution(){
+    public void closeContribution() {
         this.isClosed = true;
     }
 
+    public boolean isClosed() {
+        return this.isClosed;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     public String getDescription() {
         return description;
