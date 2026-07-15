@@ -43,7 +43,7 @@ export function EdirForm({
     });
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-3xl space-y-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             {/* Header Section */}
             <div className="border-b pb-6">
                 <h2 className="text-xl font-semibold text-foreground">Edir Information</h2>
@@ -51,21 +51,38 @@ export function EdirForm({
                     Update the profile and configuration details for your organization.
                 </p>
             </div>
-
+        <div className={'max-w-full px-5'}>
             <div className="grid gap-8">
                 {/* Basic Info Group */}
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-1">
                     <div className="space-y-2">
                         <Label htmlFor="edirName">Edir Name</Label>
                         <Input
                             aria-label={'edirName'}
                             id="edirName"
                             placeholder="Bole Medhanialem Edir"
+                            className={'w-1/3'}
                             {...register("edirName")}
                         />
                         {errors.edirName && (
                             <p className="text-xs text-destructive">{errors.edirName.message}</p>
                         )}
+                    </div>
+
+                    {/* Description */}
+                    <div className="space-y-2">
+                        <Label htmlFor="description">Description</Label>
+                        <span className={'block text-sm text-muted-foreground'}>
+                            Give more detail description about your edir.
+                        </span>
+                        <Textarea
+                            aria-label={'description'}
+                            id="description"
+                            rows={4}
+                            className="resize-none w-1/2"
+                            placeholder="Provide a brief background or purpose of the Edir..."
+                            {...register("description")}
+                        />
                     </div>
 
                     <div className="space-y-2">
@@ -74,6 +91,7 @@ export function EdirForm({
                             aria-label={'phoneNumber'}
                             id="phoneNumber"
                             placeholder="+251 911 223344"
+                            className={'w-1/5'}
                             {...register("phoneNumber")}
                         />
                         {errors.phoneNumber && (
@@ -86,14 +104,17 @@ export function EdirForm({
                 <div className="space-y-2">
                     <Label>Established Date</Label>
                     <Controller
+                        defaultValue={new Date()}
+                        rules={{ required: true }}
+
                         name="establishedDate"
                         control={control}
                         render={({ field }) => (
                             <Popover>
-                                <PopoverTrigger className={'w-1/2'}>
+                                <PopoverTrigger className={'w-1/5'}>
                                     <Button
                                         variant="outline"
-                                        className="w-full justify-start text-left font-normal md:w-1/2"
+                                        className="w-full justify-start text-left font-normal"
                                     >
                                         <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" />
                                         {field.value ? format(field.value, "PPP") : "Select date"}
@@ -135,26 +156,21 @@ export function EdirForm({
                     </div>
                 </div>
 
-                {/* Description */}
-                <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                        aria-label={'description'}
-                        id="description"
-                        rows={4}
-                        className="resize-none"
-                        placeholder="Provide a brief background or purpose of the Edir..."
-                        {...register("description")}
-                    />
-                </div>
+
             </div>
 
             {/* Footer Actions */}
-            <div className="flex justify-end border-t pt-6">
+            <div className="flex justify-start border-t pt-6">
                 <Button type="submit" disabled={loading} size="lg">
                     {loading ? "Saving..." : submitText}
                 </Button>
             </div>
+            <div className="flex justify-start border-t pt-6">
+                <Button type="submit" disabled={loading} size="lg">
+                    {loading ? "Saving..." : submitText}
+                </Button>
+            </div>
+        </div>
         </form>
     );
 }

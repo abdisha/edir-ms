@@ -25,6 +25,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
             e.city,
             e.subCity,
             e.worda,
+            e.establishedDate,
             e.phoneNumber,
             COUNT(m)
         )

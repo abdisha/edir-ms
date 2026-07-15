@@ -1,7 +1,7 @@
 import {api} from "@/shared/api/client.ts";
-import type {Edir} from "../types/edir";
+import type {EdirResponse} from "../types/edir";
 
-export async function getEdir(): Promise<Edir> {
+export async function getEdir(): Promise<EdirResponse> {
     const response = await api.get("/edir");
 
     return response.data;
