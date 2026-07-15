@@ -1,4 +1,4 @@
-package com.edir.app.edir.domain.valueobjects;
+package com.edir.app.shared.domain.valueobjects;
 
 import java.util.Objects;
 import java.util.UUID;

@@ -76,7 +76,7 @@ Manage member contributions and contribution periods.
 - A contribution period has a start date and an end date.
 - Members are expected to pay their contributions before the due date.
 - Late contributions are automatically penalized
--  
+- 
 
 ---
 

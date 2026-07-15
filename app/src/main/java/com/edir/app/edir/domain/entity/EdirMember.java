@@ -4,7 +4,6 @@ package com.edir.app.edir.domain.entity;
 import com.edir.app.edir.domain.valueobjects.MemberStatus;
 import com.edir.app.shared.domain.entity.BaseEntity;
 import com.edir.app.shared.domain.valueobjects.*;
-import com.edir.app.edir.domain.valueobjects.MemberId;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
