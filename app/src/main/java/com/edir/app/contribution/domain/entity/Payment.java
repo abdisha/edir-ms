@@ -1,8 +1,8 @@
 package com.edir.app.contribution.domain.entity;
 
 import com.edir.app.contribution.domain.valueobjects.PaymentId;
-import com.edir.app.contribution.domain.valueobjects.PaymentMethod;
 import com.edir.app.shared.domain.entity.BaseEntity;
+import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.Money;
 
 import java.time.ZonedDateTime;
@@ -14,8 +14,7 @@ public class Payment extends BaseEntity<PaymentId> {
 
     private final ZonedDateTime paidAt;
 
-    private final PaymentMethod method;
-
+    private final MemberId receipterId;
     private final String receiptNumber;
 
     private final String note;
@@ -23,8 +22,7 @@ public class Payment extends BaseEntity<PaymentId> {
     private Payment(
             PaymentId id,
             Money amount,
-            ZonedDateTime paidAt,
-            PaymentMethod method,
+            ZonedDateTime paidAt, MemberId receipterId,
             String receiptNumber,
             String note) {
 
@@ -32,15 +30,15 @@ public class Payment extends BaseEntity<PaymentId> {
 
         this.amount = Objects.requireNonNull(amount);
         this.paidAt = Objects.requireNonNull(paidAt);
-        this.method = Objects.requireNonNull(method);
+        this.receipterId = receipterId;
         this.receiptNumber = receiptNumber;
         this.note = note;
     }
 
-    public static Payment create(
+    public static Payment receive(
             Money amount,
             ZonedDateTime paidAt,
-            PaymentMethod method,
+            MemberId receipterId,
             String receiptNumber,
             String note) {
 
@@ -48,10 +46,54 @@ public class Payment extends BaseEntity<PaymentId> {
                 PaymentId.generateId(),
                 amount,
                 paidAt,
-                method,
+                receipterId,
                 receiptNumber,
                 note
         );
+    }
+    public static Payment rehydrate(
+        PaymentId id,
+        Money amount,
+        ZonedDateTime paidAt,
+        MemberId receipterId,
+        String receiptNumber,
+        String note) {
+
+        return new Payment(
+           id,
+            amount,
+            paidAt,
+            receipterId,
+            receiptNumber,
+            note
+        );
+    }
+    public Money getAmount() {
+        return amount;
+    }
+
+    public ZonedDateTime getPaidAt() {
+        return paidAt;
+    }
+
+    public MemberId getReceipterId() {
+        return receipterId;
+    }
+
+    public String getReceiptNumber() {
+        return receiptNumber;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public Money amount() {
+        return amount;
+    }
+
+    public ZonedDateTime paidAt() {
+        return paidAt;
     }
 
 }

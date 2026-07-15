@@ -14,7 +14,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "edir", schema = "edir_schema")
+@Table(name = "edir", schema = "edir")
 @Entity()
 public class EdirEntity {
     @Id

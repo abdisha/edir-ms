@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "member", schema = "edir_schema")
+@Table(name = "member", schema = "edir")
 public class MemberEntity {
     @Id
     @Column(unique = true)

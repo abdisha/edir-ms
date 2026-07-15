@@ -1,12 +1,14 @@
 package com.edir.app.edir.adapter.persistance.jpa;
 
 import com.edir.app.edir.adapter.persistance.entity.EdirEntity;
-import com.edir.app.edir.application.edir.query.EdirView;
-import com.edir.app.edir.application.edir.query.MemberDetailView;
+import com.edir.app.edir.application.api.MemberSummary;
+import com.edir.app.edir.application.query.EdirView;
+import com.edir.app.edir.application.query.MemberDetailView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,7 +18,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
     Optional<EdirEntity> findFirstBy();
 
     @Query(value = """
-        SELECT new com.edir.app.edir.application.edir.query.EdirView(
+        SELECT new com.edir.app.edir.application.query.EdirView(
             e.id,
             e.name,
             e.description,
@@ -40,8 +42,8 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
     Optional<EdirView> findEdir();
 
     @Query(
-            value = """ 
-                    SELECT new com.edir.app.edir.application.edir.query.MemberDetailView(
+            value = """
+                    SELECT new com.edir.app.edir.application.query.MemberDetailView(
                             m.id,
                             m.firstName,
                             m.middleName,
@@ -51,7 +53,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
                             m.city,
                             m.subCity,
                             m.worda,
-                            m.phoneNumber, 
+                            m.phoneNumber,
                             m.joinedDate,
                             m.leftDate,
                             m.memberStatus,
@@ -63,4 +65,18 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
                     """
     )
     Optional<MemberDetailView> findMember(UUID memberId);
+
+    @Query(
+        value = """
+                   SELECT new com.edir.app.edir.application.api.MemberSummary(
+                    m.id,
+                   concat(  m.firstName , " ",m.middleName ," ",m.lastName) as fullName
+
+                   ) FROM EdirEntity  as e
+                    join e.members m
+                    where m.memberStatus =MemberStatus.ACTIVE
+
+            """
+    )
+    Optional<List<MemberSummary>> findActiveMember();
 }

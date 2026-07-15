@@ -1,9 +1,9 @@
 package com.edir.app.edir.adapter.rest;
 
-import com.edir.app.edir.application.edir.command.UpInsertEdirCommand;
-import com.edir.app.edir.application.edir.query.EdirQueryService;
-import com.edir.app.edir.application.edir.query.EdirView;
-import com.edir.app.edir.application.edir.usecase.UpInsertEdirUseCase;
+import com.edir.app.edir.application.command.UpInsertEdirCommand;
+import com.edir.app.edir.application.query.EdirQueryService;
+import com.edir.app.edir.application.query.EdirView;
+import com.edir.app.edir.application.usecase.UpInsertEdirUseCase;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

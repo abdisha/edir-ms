@@ -1,18 +1,17 @@
 package com.edir.app.edir.adapter.rest;
 
-import com.edir.app.edir.adapter.rest.request.AppointmentRequest;
-import com.edir.app.edir.application.edir.command.Address;
-import com.edir.app.edir.application.edir.command.UpInsertEdirCommand;
-import com.edir.app.edir.domain.valueobjects.MemberRole;
+import com.edir.app.config.IntegrationTest;
+import com.edir.app.edir.application.command.Address;
+import com.edir.app.edir.application.command.UpInsertEdirCommand;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.UUID;
 
-import static com.edir.app.shared.EdirConstant.REST_VERSION;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
