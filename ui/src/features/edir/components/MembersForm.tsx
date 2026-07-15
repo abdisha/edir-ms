@@ -1,23 +1,15 @@
-import { User, MapPin } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
+import {MapPin, User} from "lucide-react";
+import {Controller, useForm} from "react-hook-form";
 
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/shared/components/ui/card";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/shared/components/ui/card.tsx";
 
-import { Button } from "@/shared/components/ui/button";
+import {Button} from "@/shared/components/ui/button.tsx";
 
-import { Input } from "@/shared/components/ui/input";
+import {Input} from "@/shared/components/ui/input.tsx";
 
-import { Label } from "@/shared/components/ui/label";
-import type {Member} from "@/features/members/types/members.ts";
-
-
+import {Label} from "@/shared/components/ui/label.tsx";
+import type {Member} from "@/features/edir/types/members.ts";
 
 
 export type MemberFormValues = Omit<Member, "id">;

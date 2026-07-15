@@ -1,17 +1,18 @@
-export interface Edir{
-    id:string;
-    name:string;
-    description:string;
-    establishedYear:number;
-    createdAt:string;
-    updatedAt:string;
-
+export interface EdirResponse {
+    uuid: string
+    edirName: string
+    description: string
+    city: string
+    subcity: string
+    worda: string
+    establishedDate: Date
+    phoneNumber: string
+    membersCount: number
 }
-export interface UpdateEdirRequest{
+
+export interface UpdateEdirRequest extends CreateEdirRequest {
     id:string;
-    name:string;
-    description:string;
-    establishedYear:number;
+
 }
 
 export interface CreateEdirRequest {
@@ -27,4 +28,3 @@ export interface Address {
     subcity: string
     worda: string
 }
-

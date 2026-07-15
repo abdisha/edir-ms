@@ -1,24 +1,11 @@
-import {
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-} from "@tanstack/react-table";
+import {flexRender, getCoreRowModel, useReactTable,} from "@tanstack/react-table";
 
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/shared/components/ui/table";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/shared/components/ui/table.tsx";
 
 
-
-import { columns } from "./columns";
-import type {Member} from "@/features/members/types/members.ts";
-
+import {columns} from "./columns.tsx";
+import type {Member} from "@/features/edir/types/members.ts";
 
 
 interface Props {

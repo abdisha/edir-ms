@@ -1,26 +1,59 @@
 import {EdirForm} from "@/features/edir/components/EdirForm.tsx";
-import {useState} from "react";
 import {useNavigate} from "react-router";
-import type {CreateEdirRequest} from "@/features/edir/types/edir.ts";
+import {useEdir} from "@/features/edir/hooks/useEdir.ts";
+import {SpinnerPage} from "@/pages/SpinnerPage.tsx";
+import {PageError} from "@/pages/PageError.tsx";
+import {useUpdateEdir} from "@/features/edir/hooks/useUpdateEdir.ts";
+import {useEffect} from "react";
 
 const EditEdirPage = () => {
-    const [edir] = useState<CreateEdirRequest>(null)
      const navigate = useNavigate();
+    const{data,isLoading,isError}=useEdir();
+    const context=useUpdateEdir()
+
+    useEffect(()=>{
+        if(context.isSuccess){
+            navigate("/home");
+        }
+    },[context.isSuccess])
+
+    if(isLoading){
+        return <SpinnerPage/>
+    }
+    if(isError){
+        return <PageError/>
+    }
+
 
     return (
         <>
         <EdirForm
             submitText="Save Changes"
             defaultValues={{
-                edirName: edir.edirName,
-                description: edir.description,
-                establishedDate: edir.establishedDate,
-                phoneNumber: edir.phoneNumber,
-                address: edir.address,
+                edirName: data.edirName,
+                description: data.description,
+                establishedDate: data.establishedDate,
+                phoneNumber: data.phoneNumber,
+                address: {
+                    city: data.city,
+                    subcity: data.subcity,
+                    worda: data.worda,
+                },
             }}
+            onCancel={()=>navigate('/home')}
             onSubmit={(values) => {
-                console.log(values);
-                navigate('/edirpage');
+                 context.mutate({
+                    id: data.uuid,
+                    edirName: values.edirName,
+                    description: values.description,
+                    establishedDate: values.establishedDate,
+                    phoneNumber:values.phoneNumber,
+                    address:{
+                        city:values.address.city,
+                        subcity:values.address.subcity,
+                        worda:values.address.worda,
+                    }
+                });
             }}
         />
         </>

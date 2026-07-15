@@ -1,35 +1,13 @@
-import {
-    ArrowLeft,
-    CalendarDays,
-    Edit,
-    MapPin,
-    Phone,
-    Trash2,
-    User,
-    Wallet,
-    Users,
-    Clock,
-} from "lucide-react";
+import {ArrowLeft, CalendarDays, Clock, Edit, MapPin, Phone, Trash2, User, Users, Wallet,} from "lucide-react";
 
-import { Link } from "react-router";
+import {Link} from "react-router";
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/shared/components/ui/card";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/shared/components/ui/card.tsx";
 
-import {
-    Button
-} from "@/shared/components/ui/button";
+import {Button} from "@/shared/components/ui/button.tsx";
 
-import {
-    Badge
-} from "@/shared/components/ui/badge";
-import type {Member} from "@/features/members/types/members.ts";
-
+import {Badge} from "@/shared/components/ui/badge.tsx";
+import type {Member} from "@/features/edir/types/members.ts";
 
 
 const member: Member = {

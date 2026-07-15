@@ -1,10 +1,10 @@
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/shared/components/ui/card";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/shared/components/ui/card.tsx";
 import {Button} from "@/shared/components/ui/button.tsx";
 import {Plus, Users} from "lucide-react";
 import {Separator} from "@/shared/components/ui/separator.tsx";
 import {useNavigate} from "react-router";
-import type {Member} from "@/features/members/types/members.ts";
-import {MemberTable} from "@/features/members/components/MembersTable.tsx";
+import type {Member} from "@/features/edir/types/members.ts";
+import {MemberTable} from "@/features/edir/components/MembersTable.tsx";
 
 
 const members:Member[]=[
