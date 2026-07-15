@@ -1,47 +1,45 @@
 import {CalendarDays, ClipboardList, Edit, Landmark, Users, Wallet,} from "lucide-react";
 
 import EmptyEdirState from "@/features/edir/components/EmptyEdirState";
-
 import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/shared/components/ui/card";
-
 import {Button} from "@/shared/components/ui/button";
-
 import {Badge} from "@/shared/components/ui/badge";
-
-
-import type {Edir} from "@/features/edir/types/edir";
+import {useEdir} from "@/features/edir/hooks/useEdir.ts";
+import {SpinnerPage} from "@/pages/SpinnerPage.tsx";
+import {PageError} from "@/pages/PageError.tsx";
+import {useDelayedLoading} from "@/shared/hooks/useDelayedLoading.tsx";
 
 
 const EdirPage = () => {
 
-    // Temporary mock data
-    const edir: Edir | null = {
-        id: "1",
-        name: "Bole Medhanialem Edir",
-        description:
-            "Bole Medhanialem Edir is a community-based mutual support organization established to provide financial and social assistance to its members. The Edir helps members during difficult times by organizing contributions, managing community events, and supporting families when they need it most.",
-        establishedYear: 2005,
-        createdAt: "",
-        updatedAt: "",
-    };
+    const {
+        data,
+        isPending,
+        isLoading,
+        refetch,
+        isError
+    } = useEdir();
+    const showSpinner = useDelayedLoading(isPending);
 
+    if (showSpinner || isLoading)
+        return <SpinnerPage message={"Loading Edir information..."+showSpinner}/>;
 
+    if (isError)
+        return <PageError
+            title={"Couldn't connect to server"}
+            description={"Please try again later."}
+            onRetry={refetch}
+        />;
 
-
-
-    if (!edir) {
+    if (!data) {
         return <EmptyEdirState />;
     }
 
 
     return (
-
-        <div className=" space-y-8">
-
-
+        <div className="pace-y-8">
             {/* Hero Section */}
             <Card className="overflow-hidden">
-
                 <div className="h-2 bg-linear-to-r from-blue-800 via-blue-500/70 to-blue-200/30"/>
                 <CardContent className="p-8">
                     <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
@@ -51,10 +49,10 @@ const EdirPage = () => {
                             </Badge>
                             <div>
                                 <h1 className="text-4xl font-bold tracking-tight">
-                                    {edir.name}
+                                    {data.name}
                                 </h1>
                                 <p className="mt-4 leading-7 text-muted-foreground">
-                                    {edir.description}
+                                    {data.description}
                                 </p>
                             </div>
                             <div className="flex flex-wrap gap-6 text-sm">
@@ -63,13 +61,9 @@ const EdirPage = () => {
                                         className="h-5 w-5 text-primary"
                                     />
                                     <span>
-                    Established {edir.establishedYear}
+                    Established {data.establishedYear}
                   </span>
-
                                 </div>
-
-
-
                                 <div className="flex items-center gap-2">
 
                                     <Users

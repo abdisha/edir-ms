@@ -13,6 +13,7 @@ import com.edir.app.shared.domain.valueobjects.Address;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.PhoneNumber;
 
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,6 +21,7 @@ import java.util.Set;
 public class Edir extends AggregateRoot<EdirId> {
     private EdirName edirName;
     private String about;
+    private ZonedDateTime establishedDate;
     private Address address;
     private PhoneNumber phoneNumber;
     private MemberId directorId;
@@ -30,6 +32,7 @@ public class Edir extends AggregateRoot<EdirId> {
 
     Edir(EdirId edirId,
          EdirName edirName,
+         ZonedDateTime establishedDate,
          String about,
          Address address,
          PhoneNumber phoneNumber,
@@ -39,6 +42,7 @@ public class Edir extends AggregateRoot<EdirId> {
          Set<EdirMember> edirMembers) {
         super(Objects.requireNonNull(edirId,"Id cannot be null"));
         this.edirName = edirName;
+        this.establishedDate=establishedDate;
         this.about = about;
         this.address = address;
         this.phoneNumber = phoneNumber;
@@ -49,6 +53,7 @@ public class Edir extends AggregateRoot<EdirId> {
     }
 
     private Edir(EdirId id,
+                 ZonedDateTime establishedDate,
                  EdirName edirName,
                  String about,
                  Address address,
@@ -62,18 +67,21 @@ public class Edir extends AggregateRoot<EdirId> {
 
 
         this.about = about;
+        this.establishedDate = establishedDate;
         this.edirName = edirName;
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
 
     public static Edir register(EdirName edirName,
+                                ZonedDateTime establishedDate,
                                 String about,
                                 Address address,
                                 PhoneNumber phoneNumber) {
 
 
         return new Edir(EdirId.generateId(),
+                establishedDate,
                 edirName,
                 about,
                 address,
@@ -82,6 +90,7 @@ public class Edir extends AggregateRoot<EdirId> {
 
     public static Edir rehydrate(EdirId edirId,
                                  EdirName edirName,
+                                 ZonedDateTime establishedDate,
                                  String about,
                                  Address address,
                                  PhoneNumber phoneNumber,
@@ -92,6 +101,7 @@ public class Edir extends AggregateRoot<EdirId> {
     ) {
         return new Edir(edirId,
                 edirName,
+                establishedDate,
                 about,
                 address,
                 phoneNumber,
@@ -163,6 +173,7 @@ public class Edir extends AggregateRoot<EdirId> {
             throw new MemberInActiveException(memberId);
         }
     }
+
     private void ensureLeadershipPositionAvailable(MemberId memberId) {
 
         if (memberId.equals(directorId)
@@ -171,7 +182,6 @@ public class Edir extends AggregateRoot<EdirId> {
             throw new MemberIsAlreadyLeadershipException(memberId);
         }
     }
-
     private boolean isActiveMember(MemberId memberId) {
         return edirMembers.stream()
                 .anyMatch(member ->
@@ -190,6 +200,10 @@ public class Edir extends AggregateRoot<EdirId> {
 
     public EdirName getEdirName() {
         return edirName;
+    }
+
+    public ZonedDateTime getEstablishedDate() {
+        return establishedDate;
     }
 
     public String getAbout() {

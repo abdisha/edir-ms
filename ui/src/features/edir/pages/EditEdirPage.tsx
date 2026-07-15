@@ -1,10 +1,10 @@
 import {EdirForm} from "@/features/edir/components/EdirForm.tsx";
 import {useState} from "react";
 import {useNavigate} from "react-router";
-import type {Edir} from "@/features/edir/types/edir.ts";
+import type {CreateEdirRequest} from "@/features/edir/types/edir.ts";
 
 const EditEdirPage = () => {
-    const [edir] = useState<Edir>(null)
+    const [edir] = useState<CreateEdirRequest>(null)
      const navigate = useNavigate();
 
     return (
@@ -12,9 +12,11 @@ const EditEdirPage = () => {
         <EdirForm
             submitText="Save Changes"
             defaultValues={{
-                name: edir.name,
+                edirName: edir.edirName,
                 description: edir.description,
-                establishedYear: edir.establishedYear,
+                establishedDate: edir.establishedDate,
+                phoneNumber: edir.phoneNumber,
+                address: edir.address,
             }}
             onSubmit={(values) => {
                 console.log(values);

@@ -54,6 +54,7 @@ public class UpInsertEdirService implements UpInsertEdirUseCase {
         return edirRepository.save(
                 Edir.register(
                         new EdirName(upInsertEdirCommand.edirName()),
+                        upInsertEdirCommand.establishedDate(),
                         upInsertEdirCommand.description(),
                         address,
                         new PhoneNumber(upInsertEdirCommand.phoneNumber())
