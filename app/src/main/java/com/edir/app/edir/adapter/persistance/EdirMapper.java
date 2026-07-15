@@ -19,6 +19,7 @@ public class EdirMapper {
         return Edir.rehydrate(
                 new EdirId(edirEntity.getId()),
                 new EdirName(edirEntity.getName()),
+                edirEntity.getEstablishedDate(),
                 edirEntity.getDescription(),
                 new Address(
                         edirEntity.getCity(),
@@ -62,6 +63,7 @@ public class EdirMapper {
            EdirEntity edirEntity =  EdirEntity.builder()
                 .id(edir.getId().value())
                 .name(edir.getEdirName().name())
+                .establishedDate(edir.getEstablishedDate())
                 .description(edir.getAbout())
                 .phoneNumber(edir.getPhoneNumber().phoneNumber())
                 .members(

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,15 +22,17 @@ class EdirControllerTest extends IntegrationTest {
     void shouldReturn400WhenNameIsBlank() throws Exception {
 
         UpInsertEdirCommand request = new UpInsertEdirCommand(
-                "",
-                "100.0",
-                new Address(
-                        "city",
-                        "subcity",
-                        "worda"
+            "",
+            ZonedDateTime.now().minusYears(10),
+            "Edir is community support system",
+            new Address(
+                "city",
+                "subcity",
+                "worda"
 
-                ),
-                "0912345678"
+            ),
+
+            "0912345678"
         );
 
         mockMvc.perform(post("/api/v0/edir")
@@ -45,6 +48,7 @@ class EdirControllerTest extends IntegrationTest {
 
         UpInsertEdirCommand request = new UpInsertEdirCommand(
                 "Edir Name",
+               ZonedDateTime.now().minusYears(10),
                 "Edir is community support system",
                 new Address(
                         "city",
@@ -52,6 +56,7 @@ class EdirControllerTest extends IntegrationTest {
                         "worda"
 
                 ),
+
                 "0912345678"
         );
 
@@ -69,15 +74,17 @@ class EdirControllerTest extends IntegrationTest {
     @Test
     void shouldReturnFullEdir() throws Exception {
         UpInsertEdirCommand request = new UpInsertEdirCommand(
-                "Edir Name",
-                "Edir is community support system",
-                new Address(
-                        "city",
-                        "subcity",
-                        "worda"
+            "Edir Name",
+            ZonedDateTime.now().minusYears(10),
+            "Edir is community support system",
+            new Address(
+                "city",
+                "subcity",
+                "worda"
 
-                ),
-                "0912345678"
+            ),
+
+            "0912345678"
         );
 
          mockMvc.perform(post("/api/v0/edir")

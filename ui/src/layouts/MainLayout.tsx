@@ -6,7 +6,6 @@ import {Button} from "@/shared/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/shared/components/ui/navigation-menu";
@@ -71,8 +70,8 @@ export default function MainLayout() {
                   const Icon = item.icon;
 
                   return (
-                      <NavigationMenuItem key={item.href}>
-                        <NavigationMenuLink>
+                      <NavigationMenuItem  key={item.href}>
+
                           <NavLink
                               to={item.href}
                               className={({ isActive }) =>
@@ -87,7 +86,6 @@ export default function MainLayout() {
                             <Icon className="h-4 w-4" />
                             {item.title}
                           </NavLink>
-                        </NavigationMenuLink>
                       </NavigationMenuItem>
                   );
                 })}
@@ -96,8 +94,8 @@ export default function MainLayout() {
 
             {/* Right Side */}
             <div className="flex items-center ">
-              <Button  size="lg" className="sm:w-auto" variant="default">
-                <Link to="/login" className="flex items-center gap-2 py-2">
+              <Button size="lg" className="sm:w-auto" variant="default">
+                <Link  to="/login" className="flex items-center gap-2 py-2">
                   <LogIn className="h-4 w-3" />
                   Login
                 </Link>

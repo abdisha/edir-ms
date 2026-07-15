@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class EdirEntity {
     private String name;
     @Column(length = 500)
     private String description;
+    private ZonedDateTime establishedDate;
     @Column(length = 50)
     private String city;
     @Column(length = 50)

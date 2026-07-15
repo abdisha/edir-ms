@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.edir.app.shared.EdirConstant.REST_VERSION;
@@ -35,10 +36,7 @@ public class EdirController {
     }
 
     @GetMapping()
-    public ResponseEntity<EdirView> getEdir() {
-        if (edirQueryService.getEdir().isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(edirQueryService.getEdir().get());
+    public ResponseEntity<Optional<EdirView>> getEdir() {
+        return ResponseEntity.status(HttpStatus.OK).body(edirQueryService.getEdir());
     }
 }
