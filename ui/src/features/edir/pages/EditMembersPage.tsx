@@ -1,4 +1,4 @@
-import {MemberForm} from "@/features/members/components/MembersForm.tsx";
+import {MemberForm} from "@/features/edir/components/MembersForm.tsx";
 
 const member= {
 

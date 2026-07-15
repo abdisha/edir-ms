@@ -1,20 +1,12 @@
 import type {ColumnDef} from "@tanstack/react-table";
-import {
-    MoreHorizontal,
-    Pencil,
-    Trash2,
-    Phone,
-    MapPin,
-    User,
-    Eye,
-} from "lucide-react";
+import {Eye, MapPin, MoreHorizontal, Pencil, Phone, Trash2, User,} from "lucide-react";
 
-import { Link } from "react-router";
+import {Link} from "react-router";
 
 
-import { Button } from "@/shared/components/ui/button";
+import {Button} from "@/shared/components/ui/button.tsx";
 
-import { Badge } from "@/shared/components/ui/badge";
+import {Badge} from "@/shared/components/ui/badge.tsx";
 
 
 import {
@@ -22,11 +14,8 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/shared/components/ui/dropdown-menu";
-import type {Member} from "@/features/members/types/members.ts";
-
-
-
+} from "@/shared/components/ui/dropdown-menu.tsx";
+import type {Member} from "@/features/edir/types/members.ts";
 
 
 export const columns: ColumnDef<Member>[] = [

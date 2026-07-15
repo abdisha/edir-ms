@@ -10,11 +10,9 @@ export interface EdirResponse {
     membersCount: number
 }
 
-export interface UpdateEdirRequest{
+export interface UpdateEdirRequest extends CreateEdirRequest {
     id:string;
-    name:string;
-    description:string;
-    establishedYear:number;
+
 }
 
 export interface CreateEdirRequest {
@@ -30,4 +28,3 @@ export interface Address {
     subcity: string
     worda: string
 }
-

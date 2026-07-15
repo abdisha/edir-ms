@@ -44,7 +44,7 @@ const EdirPage = () => {
                             <Badge>Active Edir</Badge>
                             <div>
                                 <h1 className="text-4xl font-bold tracking-tight">
-                                    {data.name}
+                                    {data.edirName}
                                 </h1>
                                 <p className="mt-4 leading-7 text-muted-foreground">
                                     {data.description}
@@ -53,7 +53,11 @@ const EdirPage = () => {
                             <div className="flex flex-wrap gap-6 text-sm">
                                 <div className="flex items-center gap-2">
                                     <CalendarDays className="h-5 w-5 text-primary" />
-                                    <span>Established {data.establishedDate}</span>
+                                    <span>Established  {new Date(data.establishedDate).toLocaleDateString("en-US", {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                    })}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Users className="h-5 w-5 text-primary" />
@@ -105,11 +109,11 @@ const EdirPage = () => {
                 </CardHeader>
                 <CardContent className="grid gap-4 md:grid-cols-3">
                     {[
-                        { icon: Users, title: "Add Member", desc: "Register a new Edir member" },
-                        { icon: Wallet, title: "Record Contribution", desc: "Track member payments" },
-                        { icon: ClipboardList, title: "Create Meeting", desc: "Manage Edir events" },
+                        { icon: Users, title: "Add Member", desc: "Register a new Edir member",link:'/add-members' },
+                        { icon: Wallet, title: "Record Contribution", desc: "Track member payments", link:'/add-members' },
+                        { icon: ClipboardList, title: "Create Meeting", desc: "Manage Edir events", link:'/add-members' },
                     ].map((action, i) => (
-                        <Button key={i} variant="outline" className="h-24 justify-start">
+                        <Button key={i} onClick={()=>navigate(action.link)} variant="outline" className="h-24 justify-start">
                             <action.icon className="mr-4 h-8 w-8 text-primary" />
                             <div className="text-left">
                                 <div className="font-semibold">{action.title}</div>

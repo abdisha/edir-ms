@@ -40,12 +40,19 @@ const EditEdirPage = () => {
                     worda: data.worda,
                 },
             }}
+            onCancel={()=>navigate('/home')}
             onSubmit={(values) => {
-                context.mutate({
+                 context.mutate({
                     id: data.uuid,
-                    name: values.edirName,
+                    edirName: values.edirName,
                     description: values.description,
-                    establishedYear: values.establishedDate.getFullYear(),
+                    establishedDate: values.establishedDate,
+                    phoneNumber:values.phoneNumber,
+                    address:{
+                        city:values.address.city,
+                        subcity:values.address.subcity,
+                        worda:values.address.worda,
+                    }
                 });
             }}
         />
