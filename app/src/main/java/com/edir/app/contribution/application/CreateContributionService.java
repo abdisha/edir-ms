@@ -28,7 +28,7 @@ public class CreateContributionService implements CreateContributionUseCase {
     private final DomainEventPublisher publisher;
 
     @Override
-    public void execute(CreateContributionCommand command) {
+    public UUID execute(CreateContributionCommand command) {
         Optional<Contribution> openContribution = contributionRepository.findOpenContribution();
         log.info("Checking existing open contribution");
         if (openContribution.isPresent()) {
@@ -60,7 +60,7 @@ public class CreateContributionService implements CreateContributionUseCase {
         log.info("Contribution created successfully,with contribution id: {}", contributionId);
 
         publisher.publishEvent(contribution);
-
+        return contributionId;
     }
 
 

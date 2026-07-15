@@ -14,10 +14,10 @@ import java.util.Objects;
 
 
 public class Contribution extends AggregateRoot<ContributionId> {
-    private String name;
-    private String description;
-    private DateRange period;
-    private ZonedDateTime dueDate;
+    private final String name;
+    private final String description;
+    private final DateRange period;
+    private  ZonedDateTime dueDate;
     private Money contributionAmount;
     private ContributionStatus status;
     private PenaltyPolicy penaltyPolicy;
@@ -27,6 +27,7 @@ public class Contribution extends AggregateRoot<ContributionId> {
                          DateRange period,
                          Money amount,
                          ZonedDateTime dueDate,
+                         ContributionStatus status,
                          PenaltyPolicy penaltyPolicy) {
         super(Objects.requireNonNull(contributionId, "Id cannot be null"));
         this.name = name;
@@ -34,6 +35,7 @@ public class Contribution extends AggregateRoot<ContributionId> {
         this.period = Objects.requireNonNull(period, "Date range cannot be null");
         this.contributionAmount = Objects.requireNonNull(amount, "Amount cannot be null");
         this.dueDate = dueDate;
+        this.status = status;
         this.penaltyPolicy = Objects.requireNonNull(penaltyPolicy, "Penalty policy cannot be null");
     }
 
@@ -51,6 +53,7 @@ public class Contribution extends AggregateRoot<ContributionId> {
             dateRange,
             amount,
             dueDate,
+            ContributionStatus.OPEN,
             penaltyPolicy);
     }
 
@@ -60,6 +63,7 @@ public class Contribution extends AggregateRoot<ContributionId> {
                                          DateRange dateRange,
                                          Money amount,
                                          ZonedDateTime dueDate,
+                                         ContributionStatus status,
                                          PenaltyPolicy penaltyPolicy) {
         return new Contribution(
             contributionId,
@@ -68,6 +72,7 @@ public class Contribution extends AggregateRoot<ContributionId> {
             dateRange,
             amount,
             dueDate,
+            status,
             penaltyPolicy);
     }
 
@@ -85,6 +90,14 @@ public class Contribution extends AggregateRoot<ContributionId> {
 
     public ContributionStatus getStatus() {
         return status;
+    }
+
+    public ZonedDateTime getPeriodStartDate() {
+        return period.startDate();
+    }
+
+    public ZonedDateTime getPeriodEndDate() {
+        return period.endDate();
     }
 
     public String getName() {

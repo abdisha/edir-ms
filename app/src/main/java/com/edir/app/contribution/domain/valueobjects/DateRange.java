@@ -1,5 +1,7 @@
 package com.edir.app.contribution.domain.valueobjects;
 
+import com.edir.app.contribution.domain.exceptions.InvalidDateRangeException;
+
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -10,7 +12,7 @@ public record DateRange(ZonedDateTime startDate, ZonedDateTime endDate) {
         Objects.requireNonNull(endDate, "End date cannot be null");
 
         if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException(
+            throw new InvalidDateRangeException(
                     "Start date must be before or equal to end date."
             );
         }

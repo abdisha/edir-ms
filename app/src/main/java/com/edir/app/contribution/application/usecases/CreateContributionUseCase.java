@@ -2,6 +2,8 @@ package com.edir.app.contribution.application.usecases;
 
 import com.edir.app.contribution.application.commands.CreateContributionCommand;
 
+import java.util.UUID;
+
 public interface CreateContributionUseCase {
-    void execute(CreateContributionCommand createContributionCommand);
+    UUID execute(CreateContributionCommand createContributionCommand);
 }

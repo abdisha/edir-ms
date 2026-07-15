@@ -4,6 +4,7 @@ import com.edir.app.contribution.domain.MemberContributionService;
 import com.edir.app.contribution.domain.entity.MemberContribution;
 import com.edir.app.contribution.domain.events.ContributionCreatedEvent;
 import com.edir.app.contribution.domain.ports.MemberContributionRepository;
+import com.edir.app.contribution.domain.valueobjects.MemberContributionId;
 import com.edir.app.edir.application.api.ActiveMemberQuery;
 import com.edir.app.edir.application.api.MemberSummary;
 import com.edir.app.shared.domain.valueobjects.MemberId;
@@ -32,7 +33,7 @@ public class ContributionCreatedListener {
         for (MemberSummary member : result.get()) {
 
             Optional<MemberContribution> previous =
-                memberContributionRepository.findLatestByMember(member.memberId());
+                memberContributionRepository.findLatestByMember(new MemberContributionId(member.memberId()));
 
             MemberContribution ledger =
                 initialize.initialize(

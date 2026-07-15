@@ -11,10 +11,9 @@ import java.util.UUID;
 
 public interface MemberContributionRepository {
     UUID save(MemberContribution memberContribution);
-    Optional<MemberContribution> find(MemberId id);
-    Optional<MemberContribution> findByContributionIdAndMemberId(ContributionId contributionId,
-                                                                 MemberId memberId);
+
+    Optional<MemberContribution> findByMemberId(MemberId id);
     Optional<MemberContribution> findLatestByMember(MemberContributionId memberId);
-    Optional<MemberContribution> findById(MemberContributionId memberContributionId);
+    Optional<MemberContribution> findByMemberId(MemberContributionId memberContributionId);
     List<MemberContribution> findByContributionId(ContributionId id);
 }

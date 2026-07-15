@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public interface ContributionRepository {
     UUID save(Contribution contribution);
-    Optional<Contribution> find(UUID id);
+    Optional<Contribution> findById(UUID id);
     Optional<Contribution> findOpenContribution();
 }

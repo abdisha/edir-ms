@@ -51,6 +51,42 @@ public class Payment extends BaseEntity<PaymentId> {
                 note
         );
     }
+    public static Payment rehydrate(
+        PaymentId id,
+        Money amount,
+        ZonedDateTime paidAt,
+        MemberId receipterId,
+        String receiptNumber,
+        String note) {
+
+        return new Payment(
+           id,
+            amount,
+            paidAt,
+            receipterId,
+            receiptNumber,
+            note
+        );
+    }
+    public Money getAmount() {
+        return amount;
+    }
+
+    public ZonedDateTime getPaidAt() {
+        return paidAt;
+    }
+
+    public MemberId getReceipterId() {
+        return receipterId;
+    }
+
+    public String getReceiptNumber() {
+        return receiptNumber;
+    }
+
+    public String getNote() {
+        return note;
+    }
 
     public Money amount() {
         return amount;

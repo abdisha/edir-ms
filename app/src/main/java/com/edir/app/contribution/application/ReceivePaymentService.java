@@ -24,7 +24,7 @@ public class ReceivePaymentService implements ReceivePaymentUseCase {
     @Override
     public void execute(ReceivePaymentCommand command) {
         MemberContribution ledger = memberRepository
-            .findById(new MemberContributionId(command.memberId()))
+            .findByMemberId(new MemberContributionId(command.memberId()))
             .orElseThrow(
                 ()-> new MemberContributionNotFoundException(command.memberId())
             );
@@ -43,7 +43,5 @@ public class ReceivePaymentService implements ReceivePaymentUseCase {
         );
 
         memberRepository.save(ledger);
-
-
     }
 }

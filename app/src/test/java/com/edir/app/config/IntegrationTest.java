@@ -1,4 +1,4 @@
-package com.edir.app.edir.adapter.rest;
+package com.edir.app.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import tools.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
-abstract class IntegrationTest {
+public abstract class IntegrationTest {
 
     @Autowired
     protected MockMvc mockMvc;

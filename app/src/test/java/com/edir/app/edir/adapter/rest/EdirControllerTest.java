@@ -1,5 +1,6 @@
 package com.edir.app.edir.adapter.rest;
 
+import com.edir.app.config.IntegrationTest;
 import com.edir.app.edir.application.command.Address;
 import com.edir.app.edir.application.command.UpInsertEdirCommand;
 import org.junit.jupiter.api.Test;

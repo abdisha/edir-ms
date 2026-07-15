@@ -131,6 +131,22 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
         status = MemberContributionStatus.CLOSED;
     }
 
+    public ContributionId getContributionId() {
+        return contributionId;
+    }
+
+    public Money getContribution() {
+        return contribution;
+    }
+
+    public Money getPenalty() {
+        return penalty;
+    }
+
+    public MemberContributionStatus getStatus() {
+        return status;
+    }
+
     public Money getOutstandingPenalty() {
         return outstandingPenalty;
     }
@@ -149,4 +165,9 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
     public Money getRolledOverContribution() {
         return outstandingContribution;
     }
+
+    public MemberId getMemberId() {
+        return memberId;
+    }
+
 }
