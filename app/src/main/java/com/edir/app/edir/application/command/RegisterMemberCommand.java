@@ -22,7 +22,7 @@ public record RegisterMemberCommand(
         Address address,
         @NotNull
         @Pattern(
-                regexp = "^(09|07)\\d{8}$",
+                regexp = "/^(\\+251|0)?9\\d{8}$/",
                 message = "Invalid phone number"
         )
         String phoneNumber

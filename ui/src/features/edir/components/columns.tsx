@@ -47,11 +47,7 @@ export const columns: ColumnDef<Member>[] = [
 
                 <Link
                     to={`/members/${member.id}`}
-                    className="
-          flex items-center gap-3
-          group
-          "
-                >
+                    className=" flex items-center gap-3 group">
 
 
                     <div
