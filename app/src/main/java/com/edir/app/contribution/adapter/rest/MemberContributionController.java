@@ -16,7 +16,7 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(REST_VERSION + "membercontributions")
+@RequestMapping(REST_VERSION + "member-contributions")
 public class MemberContributionController {
 
     private final ReceivePaymentUseCase receivePaymentUseCase;
