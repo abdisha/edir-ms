@@ -16,7 +16,6 @@ public record CreateContributionCommand(
     ZonedDateTime startDate,
     @NotNull
     ZonedDateTime endDate,
-
     @NotNull
     ZonedDateTime dueDate,
     @Max(100000)

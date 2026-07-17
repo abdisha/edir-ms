@@ -22,40 +22,40 @@ import java.util.UUID;
 @Table(name = "contributions",schema = "contributions")
 public class ContributionEntity {
 
-    private static final long serialVersionUID = 1L; // Added serialVersionUID
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @NotNull // ID should always be present
+    @NotNull
     private UUID id;
 
-    @NotNull // Name should not be null
-    @Size(max = 100) // Explicit size constraint
+    @NotNull
+    @Size(max = 100)
     @Column(length = 100)
     private String name;
 
-    @Size(max = 200) // Explicit size constraint
+    @Size(max = 200)
     @Column(length = 200)
-    private String description; // Description can be null
+    private String description;
 
-    @NotNull // Start date should not be null
+    @NotNull
     private ZonedDateTime startDate;
 
-    private ZonedDateTime endDate; // End date can be null
+    private ZonedDateTime endDate;
 
-    @NotNull // Due date should not be null
+    @NotNull
     private ZonedDateTime dueDate;
 
     @NotNull
-    @Column(precision = 19, scale = 4) // Contribution amount should not be null
+    @Column(precision = 19, scale = 4)
     private BigDecimal contributionAmount;
     @Column(precision = 19, scale = 4)
-    private BigDecimal penaltyAmount; // Penalty amount can be null
+    private BigDecimal penaltyAmount;
 
-    @NotNull // Penalty type should not be null
+    @NotNull
     @Enumerated(EnumType.STRING)
     private PenaltyType penaltyType;
 
-    @NotNull // Status should not be null
+    @NotNull
     @Enumerated(EnumType.STRING)
     private ContributionStatus status;
 }

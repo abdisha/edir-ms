@@ -12,7 +12,7 @@ public enum EventItemStatus {
         return value;
     }
 
-    public EventItemStatus from(String status){
+    public static EventItemStatus from(String status){
         return switch (status){
             case "ISS" -> EventItemStatus.ISSUED;
             case "RET" -> EventItemStatus.RETURNED;
