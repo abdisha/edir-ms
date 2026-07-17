@@ -2,9 +2,9 @@ package com.edir.app.edir.adapter.rest;
 
 import com.edir.app.config.IntegrationTest;
 import com.edir.app.edir.adapter.rest.request.AppointmentRequest;
-import com.edir.app.edir.application.command.Address;
-import com.edir.app.edir.application.command.RegisterMemberCommand;
-import com.edir.app.edir.application.command.UpInsertEdirCommand;
+import com.edir.app.edir.application.ports.in.commands.Address;
+import com.edir.app.edir.application.ports.in.commands.RegisterMemberCommand;
+import com.edir.app.edir.application.ports.in.commands.UpInsertEdirCommand;
 import com.edir.app.edir.domain.valueobjects.MemberRole;
 import com.edir.app.shared.domain.valueobjects.Gender;
 import org.junit.jupiter.api.BeforeEach;

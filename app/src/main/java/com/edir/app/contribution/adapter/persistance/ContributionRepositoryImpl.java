@@ -3,7 +3,7 @@ package com.edir.app.contribution.adapter.persistance;
 import com.edir.app.contribution.adapter.ContributionDataMapper;
 import com.edir.app.contribution.adapter.persistance.jpa.JpaContributionRepository;
 import com.edir.app.contribution.domain.entity.Contribution;
-import com.edir.app.contribution.domain.ports.ContributionRepository;
+import com.edir.app.contribution.application.ports.out.ContributionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 

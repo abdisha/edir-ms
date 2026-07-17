@@ -20,8 +20,6 @@ import java.util.UUID;
 @Table(name = "funeral_event",schema = "funeral_event")
 public class FuneralEventEntity {
 
-
-
     @Id
     @Column(unique = true)
     private UUID funeralEventId;
@@ -29,9 +27,11 @@ public class FuneralEventEntity {
     private String name;
     private ZonedDateTime funeralDate;
     @NotNull
+    private UUID mournerId;
+    @NotNull
     @Column(precision = 19, scale = 4)
-    private BigDecimal giveOut;
-    private ZonedDateTime giveOutDate;
+    private BigDecimal payOut;
+    private ZonedDateTime payOutDate;
     private Boolean isClosed;
     @OneToMany(mappedBy = "funeral_event",orphanRemoval = true)
     private List<EventItemEntity> itemEntities = new ArrayList<>();

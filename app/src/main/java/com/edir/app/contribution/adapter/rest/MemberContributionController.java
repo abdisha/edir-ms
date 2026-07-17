@@ -1,7 +1,7 @@
 package com.edir.app.contribution.adapter.rest;
 
-import com.edir.app.contribution.application.commands.ReceivePaymentCommand;
-import com.edir.app.contribution.application.usecases.ReceivePaymentUseCase;
+import com.edir.app.contribution.application.ports.in.commands.ReceivePaymentCommand;
+import com.edir.app.contribution.application.ports.in.usecases.ReceivePaymentUseCase;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

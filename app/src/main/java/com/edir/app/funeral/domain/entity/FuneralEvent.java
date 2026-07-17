@@ -1,5 +1,8 @@
 package com.edir.app.funeral.domain.entity;
 
+import com.edir.app.funeral.domain.exceptions.FuneralAlreadyClosedExceptions;
+import com.edir.app.funeral.domain.exceptions.FuneralEventCannotBeClosedException;
+import com.edir.app.funeral.domain.valueobjects.EventItemStatus;
 import com.edir.app.funeral.domain.valueobjects.FuneralId;
 import com.edir.app.shared.domain.entity.AggregateRoot;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
@@ -13,11 +16,11 @@ import java.util.Set;
 
 
 public class FuneralEvent extends AggregateRoot<FuneralId> {
-    private String name;
-    private ZonedDateTime funeralDate;
-    private MemberId mournerId;
-    private Money giveOut;
-    private ZonedDateTime givenOutDate;
+    private final String name;
+    private final ZonedDateTime funeralDate;
+    private final MemberId mournerId;
+    private Money payOut;
+    private ZonedDateTime payOutDate;
     private Boolean isClosed;
     private final Set<EventItem> lendOutItems = new HashSet<>();
 
@@ -25,28 +28,28 @@ public class FuneralEvent extends AggregateRoot<FuneralId> {
                          String name,
                          ZonedDateTime funeralDate,
                          MemberId mournerId,
-                         Money giveOut,
-                         ZonedDateTime givenOutDate,
+                         Money payOut,
+                         ZonedDateTime payOutDate,
                          Boolean isClosed, Set<EventItem> lendOutItems) {
         super(funeralId);
         this.name = Objects.requireNonNull(name, "Name cannot be null");
         this.funeralDate = Objects.requireNonNull(funeralDate, "Funeral date cannot be null");
         this.mournerId = Objects.requireNonNull(mournerId, "Mourner id cannot be null");
-        this.giveOut = giveOut != null ? giveOut : Money.zero();
-        this.givenOutDate = givenOutDate != null ? givenOutDate : ZonedDateTime.now();
+        this.payOut = payOut != null ? payOut : Money.zero();
+        this.payOutDate = payOutDate != null ? payOutDate : ZonedDateTime.now();
         this.isClosed = isClosed != null ? isClosed : false;
     }
 
     private FuneralEvent(FuneralId funeralId,
                          String name,
-                         ZonedDateTime funeralDate, // This constructor is for initial creation
+                         ZonedDateTime funeralDate,
                          MemberId mournerId) {
         super(funeralId);
         this.name = Objects.requireNonNull(name, "Name cannot be null");
         this.funeralDate = Objects.requireNonNull(funeralDate, "Funeral date cannot be null");
         this.mournerId = Objects.requireNonNull(mournerId, "Mourner id cannot be null");
-        this.giveOut = Objects.requireNonNull(giveOut, "Give out cannot be null");
-        this.givenOutDate = Objects.requireNonNull(givenOutDate, "Given out date cannot be null");
+        this.payOut = Objects.requireNonNull(payOut, "Give out cannot be null");
+        this.payOutDate = Objects.requireNonNull(payOutDate, "Given out date cannot be null");
         this.isClosed = Objects.requireNonNull(isClosed, "Is closed cannot be null");
     }
 
@@ -84,6 +87,11 @@ public class FuneralEvent extends AggregateRoot<FuneralId> {
     public void issueFuneralItem(ItemCode code,
                                  String name,
                                  Integer quantity) {
+
+        if (isClosed){
+            throw new FuneralAlreadyClosedExceptions(getId());
+        }
+
         EventItem existingItem = lendOutItems.stream()
             .filter(item -> item.getItemCode().code().equals(code.code()))
             .findFirst()
@@ -101,7 +109,7 @@ public class FuneralEvent extends AggregateRoot<FuneralId> {
         }
     }
 
-    public void returnFuneralItem(ItemCode code, Integer quantity){
+    public void returnFuneralItem(ItemCode code, Integer quantity) {
         EventItem existingItem = lendOutItems
             .stream()
             .filter(item -> item.getItemCode().code().equals(code.code()))
@@ -111,13 +119,25 @@ public class FuneralEvent extends AggregateRoot<FuneralId> {
             existingItem.returnItem(quantity);
         }
 
-        if(existingItem.getRemainingQuantity()==0){
+        assert existingItem != null;
+        if (existingItem.getRemainingQuantity() == 0) {
             existingItem.markAsReturned();
         }
     }
 
-    public void closeFuneralEvent(){
-        if(isAllItemsReturned()){
+    public void payOut(Money amount) {
+        if(isClosed){
+            throw new FuneralAlreadyClosedExceptions(getId());
+        }
+
+        this.payOut = amount;
+        this.payOutDate = ZonedDateTime.now();
+
+    }
+
+    public void closeFuneralEvent() {
+        if (!isAllItemsReturned()) {
+            throw new FuneralEventCannotBeClosedException("All items must be returned before closing");
         }
         isClosed = true;
     }
@@ -138,12 +158,12 @@ public class FuneralEvent extends AggregateRoot<FuneralId> {
         return mournerId;
     }
 
-    public Money getGiveOut() {
-        return giveOut;
+    public Money getPayOut() {
+        return payOut;
     }
 
-    public ZonedDateTime getGivenOutDate() {
-        return givenOutDate;
+    public ZonedDateTime getPayOutDate() {
+        return payOutDate;
     }
 
     public Boolean getClosed() {

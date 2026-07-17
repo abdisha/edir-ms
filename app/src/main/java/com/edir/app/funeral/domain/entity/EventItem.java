@@ -5,6 +5,7 @@ import com.edir.app.funeral.domain.valueobjects.EventItemId;
 import com.edir.app.funeral.domain.valueobjects.EventItemStatus;
 import com.edir.app.shared.domain.entity.BaseEntity;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
+import com.edir.app.shared.domain.valueobjects.Money;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -21,14 +22,16 @@ public class EventItem extends BaseEntity<EventItemId> {
                       ItemCode itemCode,
                       String name,
                       Integer quantity,
+                      Integer returnedQuantity,
+                      EventItemStatus status,
                       ZonedDateTime issuedDate) {
         super(eventItemId);
         this.itemCode = Objects.requireNonNull(itemCode, "ItemCode cannot be null");
         this.name = Objects.requireNonNull(name, "Name cannot be null");
         this.quantity = Objects.requireNonNull(quantity, "Quantity cannot be null");
         this.issuedDate = Objects.requireNonNull(issuedDate, "Issued date cannot be null");
-        this.returnedQuantity = 0;
-        this.status = EventItemStatus.ISSUED;
+        this.returnedQuantity = returnedQuantity != null ? returnedQuantity : 0;
+        this.status = status;
     }
 
     public static EventItem addEventItem(ItemCode itemCode,
@@ -39,6 +42,8 @@ public class EventItem extends BaseEntity<EventItemId> {
             itemCode,
             name,
             quantity,
+            0,
+            EventItemStatus.ISSUED,
             issuedDate);
     }
 
@@ -46,12 +51,16 @@ public class EventItem extends BaseEntity<EventItemId> {
                                       ItemCode itemCode,
                                       String name,
                                       Integer quantity,
+                                      Integer returnedQuantity,
+                                      EventItemStatus status,
                                       ZonedDateTime issuedDate) {
 
         return new EventItem(eventItemId,
             itemCode,
             name,
             quantity,
+            returnedQuantity,
+            status,
             issuedDate);
     }
 
@@ -59,8 +68,10 @@ public class EventItem extends BaseEntity<EventItemId> {
         if (quantity < returnedQuantity) {
             throw new ReturnedExceedsActualQuantityException(itemCode);
         }
+
         this.returnedQuantity = quantity;
-        if(this.returnedQuantity == this.quantity){
+
+        if(this.returnedQuantity.equals(this.quantity)){
             this.status = EventItemStatus.RETURNED;
         }
     }
@@ -97,5 +108,9 @@ public class EventItem extends BaseEntity<EventItemId> {
     public void markAsReturned() {
         this.returnedQuantity=this.quantity;
         this.status = EventItemStatus.RETURNED;
+    }
+
+    public EventItemStatus getStatus() {
+            return status;
     }
 }
