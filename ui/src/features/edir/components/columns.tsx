@@ -5,16 +5,14 @@ import {Link} from "react-router";
 
 
 import {Button} from "@/shared/components/ui/button.tsx";
-
 import {Badge} from "@/shared/components/ui/badge.tsx";
-
-
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu.tsx";
+
 import type {Member} from "@/features/edir/types/members.ts";
 
 
@@ -22,8 +20,6 @@ export const columns: ColumnDef<Member>[] = [
 
     {
         id: "member",
-
-
         header: "Member",
 
 
