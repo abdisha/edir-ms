@@ -21,26 +21,14 @@ export const columns: ColumnDef<Member>[] = [
     {
         id: "member",
         header: "Member",
-
-
         cell: ({ row }) => {
-
-
             const member = row.original;
-
-
             const fullName =
                 `${member.firstName} ${member.lastName}`;
-
-
             const initials =
                 `${member.firstName.charAt(0)}
         ${member.lastName.charAt(0)}`;
-
-
-
             return (
-
                 <Link
                     to={`/members/${member.id}`}
                     className=" flex items-center gap-3 group">
