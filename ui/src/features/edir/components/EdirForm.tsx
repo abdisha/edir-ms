@@ -3,7 +3,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {CalendarIcon, MapPin} from "lucide-react";
 import {format} from "date-fns";
 
-import {type CreateEdirFormValues, createEdirSchema,} from "@/features/schemas/edir.schema.ts";
+import {type CreateEdirFormValues, createEdirSchema,} from "@/features/edir/schemas/edir.schema.ts";
 
 import {Button} from "@/shared/components/ui/button";
 import {Input} from "@/shared/components/ui/input";

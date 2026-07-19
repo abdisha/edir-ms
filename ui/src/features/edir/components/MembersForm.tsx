@@ -2,7 +2,7 @@ import {CreditCard, MapPin, Phone, User} from "lucide-react";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 
-import {type MemberFormValues, memberSchema,} from "@/features/schemas/member.schema.ts";
+import {type MemberFormValues, memberSchema,} from "@/features/edir/schemas/member.schema.ts";
 
 import {Button} from "@/shared/components/ui/button";
 import {Checkbox} from "@/shared/components/ui/checkbox";

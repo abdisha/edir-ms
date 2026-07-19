@@ -1,6 +1,6 @@
 package com.edir.app.funeral.adapter.persistance.jpa;
 
-import com.edir.app.funeral.adapter.persistance.FuneralEventEntity;
+import com.edir.app.funeral.adapter.persistance.entity.FuneralEventEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

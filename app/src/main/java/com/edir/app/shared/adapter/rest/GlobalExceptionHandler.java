@@ -1,5 +1,6 @@
 package com.edir.app.shared.adapter.rest;
 
+import com.edir.app.shared.ApplicationException;
 import com.edir.app.shared.adapter.dto.ApiErrorResponse;
 import com.edir.app.shared.adapter.dto.ErrorResponse;
 import com.edir.app.shared.adapter.dto.FieldValidationErrorResponse;
@@ -76,10 +77,24 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler({DomainException.class, IllegalArgumentException.class})
+    @ExceptionHandler({DomainException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ApiErrorResponse handleDomainException(DomainException ex) {
+        String message = ex.getMessage();
+
+        return  new ErrorResponse(
+            message,
+            HttpStatus.BAD_REQUEST.toString(),
+            Arrays.toString(ex.getStackTrace())
+        );
+
+    }
+
+    @ExceptionHandler({ApplicationException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ApiErrorResponse handleApplicationException(ApplicationException ex) {
         String message = ex.getMessage();
 
         return  new ErrorResponse(

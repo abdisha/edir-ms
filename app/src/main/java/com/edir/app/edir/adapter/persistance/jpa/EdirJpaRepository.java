@@ -14,11 +14,10 @@ import java.util.UUID;
 
 @Repository
 public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
-    Optional<EdirEntity> findById(String uuid);
     Optional<EdirEntity> findFirstBy();
 
     @Query(value = """
-        SELECT new com.edir.app.edir.application.query.EdirView(
+        SELECT new com.edir.app.edir.application.ports.out.query.EdirView(
             e.id,
             e.name,
             e.description,
@@ -44,7 +43,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
 
     @Query(
             value = """
-                    SELECT new com.edir.app.edir.application.query.MemberDetailView(
+                    SELECT new com.edir.app.edir.application.ports.out.query.MemberDetailView(
                             m.id,
                             m.firstName,
                             m.middleName,
@@ -75,7 +74,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
 
                    ) FROM EdirEntity  as e
                     join e.members m
-                    where m.memberStatus =MemberStatus.ACTIVE
+                    where m.memberStatus = com.edir.app.edir.domain.valueobjects.MemberStatus.ACTIVE
 
             """
     )
