@@ -6,20 +6,18 @@ import {Button, buttonVariants} from "@/shared/components/ui/button"
 import {HugeiconsIcon} from "@hugeicons/react"
 import {ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon} from "@hugeicons/core-free-icons"
 
-
 function Calendar({
-                      className,
-                      classNames,
-                      showOutsideDays = true,
-                      captionLayout = "label",
-                      buttonVariant = "ghost",
-                      locale,
-                      formatters,
-                      components,
-                      initialFocus,
-                    ...props  }: React.ComponentProps<typeof DayPicker> & {
-    buttonVariant?: React.ComponentProps<typeof Button>["variant"],
-    initialFocus?: boolean
+  className,
+  classNames,
+  showOutsideDays = true,
+  captionLayout = "label",
+  buttonVariant = "ghost",
+  locale,
+  formatters,
+  components,
+  ...props
+}: React.ComponentProps<typeof DayPicker> & {
+  buttonVariant?: React.ComponentProps<typeof Button>["variant"]
 }) {
   const defaultClassNames = getDefaultClassNames()
 

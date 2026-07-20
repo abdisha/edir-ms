@@ -1,7 +1,7 @@
 package com.edir.app.contribution.adapter.rest;
 
-import com.edir.app.contribution.application.commands.CreateContributionCommand;
-import com.edir.app.contribution.application.usecases.CreateContributionUseCase;
+import com.edir.app.contribution.application.ports.in.commands.CreateContributionCommand;
+import com.edir.app.contribution.application.ports.in.usecases.CreateContributionUseCase;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

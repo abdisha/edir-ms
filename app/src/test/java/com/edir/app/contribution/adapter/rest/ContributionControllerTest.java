@@ -1,7 +1,7 @@
 package com.edir.app.contribution.adapter.rest;
 
 import com.edir.app.config.IntegrationTest;
-import com.edir.app.contribution.application.commands.CreateContributionCommand;
+import com.edir.app.contribution.application.ports.in.commands.CreateContributionCommand;
 import com.edir.app.contribution.domain.valueobjects.PenaltyType;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

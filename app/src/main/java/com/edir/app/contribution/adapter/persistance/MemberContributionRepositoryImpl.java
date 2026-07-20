@@ -3,7 +3,7 @@ package com.edir.app.contribution.adapter.persistance;
 import com.edir.app.contribution.adapter.ContributionDataMapper;
 import com.edir.app.contribution.adapter.persistance.jpa.JpaMemberContributionRepository;
 import com.edir.app.contribution.domain.entity.MemberContribution;
-import com.edir.app.contribution.domain.ports.MemberContributionRepository;
+import com.edir.app.contribution.application.ports.out.MemberContributionRepository;
 import com.edir.app.contribution.domain.valueobjects.ContributionId;
 import com.edir.app.contribution.domain.valueobjects.MemberContributionId;
 import com.edir.app.shared.domain.valueobjects.MemberId;

@@ -1,6 +1,6 @@
 package com.edir.app.edir.application.api;
 
-import com.edir.app.edir.application.query.MemberQueryRepository;
+import com.edir.app.edir.application.ports.out.query.MemberQueryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

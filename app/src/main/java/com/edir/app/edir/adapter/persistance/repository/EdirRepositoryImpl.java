@@ -1,11 +1,9 @@
 package com.edir.app.edir.adapter.persistance.repository;
 
 import com.edir.app.edir.adapter.persistance.EdirMapper;
-import com.edir.app.edir.adapter.persistance.entity.EdirEntity;
 import com.edir.app.edir.adapter.persistance.jpa.EdirJpaRepository;
 import com.edir.app.edir.domain.entity.Edir;
-import com.edir.app.edir.domain.port.out.EdirRepository;
-import com.edir.app.edir.domain.valueobjects.EdirId;
+import com.edir.app.edir.application.ports.out.EdirRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
