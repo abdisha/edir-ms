@@ -5,14 +5,12 @@ import java.util.UUID;
 
 public class User {
     private UUID id;
-    private String userName;
     private String email;
     private String password;
-    private Set<String> roles;
+    private Set<Role> roles;
 
-    public User(UUID id, String userName, String email, String password, Set<String> roles) {
+    public User(UUID id, String email, String password, Set<Role> roles) {
         this.id = id;
-        this.userName = userName;
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -24,14 +22,6 @@ public class User {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getEmail() {
@@ -50,11 +40,15 @@ public class User {
         this.password = password;
     }
 
-    public Set<String> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<String> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void assignRole(Role role) {
+        this.roles.add(role);
     }
 }
