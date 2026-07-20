@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.edir.app.shared.EdirConstant.REST_VERSION;
+
 @RestController
 @RequestMapping(REST_VERSION+"auth")
 public class AuthenticationController {
