@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -20,8 +22,9 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "contributions",schema = "contributions")
-public class ContributionEntity {
+public class ContributionEntity implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

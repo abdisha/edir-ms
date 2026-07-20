@@ -15,6 +15,7 @@ const member: Member = {
     id: "1",
 
     firstName: "Abebe",
+    middleName: "Melaku",
 
     lastName: "Kebede",
 
@@ -25,7 +26,6 @@ const member: Member = {
     status: "ACTIVE",
 
     address: {
-
         city: "Addis Ababa",
 
         subcity: "Bole",

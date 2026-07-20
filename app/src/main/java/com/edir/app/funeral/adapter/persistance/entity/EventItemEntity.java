@@ -1,4 +1,4 @@
-package com.edir.app.funeral.adapter.persistance;
+package com.edir.app.funeral.adapter.persistance.entity;
 
 import com.edir.app.funeral.adapter.persistance.converter.EventItemStatusConverter;
 import com.edir.app.funeral.domain.valueobjects.EventItemStatus;

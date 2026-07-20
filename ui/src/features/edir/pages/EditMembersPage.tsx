@@ -19,11 +19,8 @@ const member= {
 const EditMembersPage =()=>{
     return (
         <MemberForm
-
             defaultValues={member}
-
             submitText="Update Member"
-
             onSubmit={(data)=>{
 
                 console.log(data);

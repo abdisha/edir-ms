@@ -1,7 +1,7 @@
 package com.edir.app.funeral.adapter;
 
-import com.edir.app.funeral.adapter.persistance.EventItemEntity;
-import com.edir.app.funeral.adapter.persistance.FuneralEventEntity;
+import com.edir.app.funeral.adapter.persistance.entity.EventItemEntity;
+import com.edir.app.funeral.adapter.persistance.entity.FuneralEventEntity;
 import com.edir.app.funeral.domain.entity.EventItem;
 import com.edir.app.funeral.domain.entity.FuneralEvent;
 import com.edir.app.funeral.domain.valueobjects.EventItemId;

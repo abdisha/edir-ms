@@ -1,6 +1,8 @@
 package com.edir.app.contribution.application.exceptions;
 
-public class UnClosedContributionFoundException extends RuntimeException{
+import com.edir.app.shared.ApplicationException;
+
+public class UnClosedContributionFoundException extends ApplicationException {
     public UnClosedContributionFoundException(String message) {
         super(message);
     }

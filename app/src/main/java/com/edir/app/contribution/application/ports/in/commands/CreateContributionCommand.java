@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 public record CreateContributionCommand(
-
     String name,
     String description,
     @NotNull
@@ -22,7 +21,6 @@ public record CreateContributionCommand(
     @Min(10)
     BigDecimal contributionAmount,
     @Max(100000)
-    @Min(5)
     BigDecimal penaltyAmount,
     PenaltyType penaltyType
 

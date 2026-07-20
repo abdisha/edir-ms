@@ -8,12 +8,10 @@ export async function createEdir(request: CreateEdirRequest) {
 
 export async function getEdir(): Promise<EdirResponse> {
     const response = await api.get("/edir");
-
     return response.data;
 }
 
 export async function updateEdir(request: UpdateEdirRequest) {
     const response = await api.put("/edir", request);
-
     return response.data;
 }

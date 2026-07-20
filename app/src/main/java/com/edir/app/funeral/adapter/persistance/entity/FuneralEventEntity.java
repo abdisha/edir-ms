@@ -1,4 +1,4 @@
-package com.edir.app.funeral.adapter.persistance;
+package com.edir.app.funeral.adapter.persistance.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -33,6 +33,6 @@ public class FuneralEventEntity {
     private BigDecimal payOut;
     private ZonedDateTime payOutDate;
     private Boolean isClosed;
-    @OneToMany(mappedBy = "funeral_event",orphanRemoval = true)
+    @OneToMany(mappedBy = "funeralEvent",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<EventItemEntity> itemEntities = new ArrayList<>();
 }
