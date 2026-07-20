@@ -3,7 +3,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {CalendarIcon, MapPin} from "lucide-react";
 import {format} from "date-fns";
 
-import {type CreateEdirFormValues, createEdirSchema,} from "@/features/edir/edir.schema.ts";
+import {type CreateEdirFormValues, createEdirSchema,} from "@/features/edir/schemas/edir.schema.ts";
 
 import {Button} from "@/shared/components/ui/button";
 import {Input} from "@/shared/components/ui/input";
@@ -12,6 +12,7 @@ import {Label} from "@/shared/components/ui/label";
 import {Popover, PopoverContent, PopoverTrigger,} from "@/shared/components/ui/popover";
 import {Calendar} from "@/shared/components/ui/calendar";
 import {SpinnerCard} from "@/shared/components/SpinnerCard.tsx";
+import {IoPeople} from "react-icons/io5";
 
 interface EdirFormProps {
     defaultValues?: Partial<CreateEdirFormValues>,
@@ -50,9 +51,13 @@ export function EdirForm({
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 px-2">
             {/* Header Section */}
-            <div className="border-b pb-6">
-                <h2 className="text-xl font-semibold text-foreground">Edir Information</h2>
-                <p className="text-sm text-muted-foreground">
+            <div className="border-b pb-6 ">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+                        <IoPeople className="h-6 w-6 text-primary"/>
+                    </div>
+                    <h2 className="mt-3 text-2xl">Edir Information</h2>
+
+                <p className="mt-2 text-sm text-muted-foreground">
                     Create or update the profile and configuration details for your organization.
                 </p>
             </div>

@@ -1,6 +1,10 @@
 package com.edir.app.contribution.adapter.persistance.jpa;
 
 import com.edir.app.contribution.adapter.persistance.entity.MemberContributionEntity;
+import com.edir.app.contribution.application.ports.out.query.MemberContributionView;
+import com.edir.app.contribution.application.ports.out.query.PaymentView;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -23,4 +27,60 @@ public interface JpaMemberContributionRepository extends JpaRepository<MemberCon
     Optional<MemberContributionEntity> findMemberContributionEntitiesByMemberId(UUID memberId);
 
     List<MemberContributionEntity> findAllByContributionId(UUID contributionId);
+
+    @Query(
+        value = """
+            select new com.edir.app.contribution.application.ports.out.query.MemberContributionView(
+                          m.id,
+                          m.memberId,
+                          m.contributionId,
+                          m.contributionAmount,
+                          m.penaltyAmount,
+                          m.rolledOverContribution,
+                          m.rolledOverPenalty,
+                                    m.status
+                              )
+                              from MemberContributionEntity  as m
+                                          where m.contributionId =:contributionId
+            """
+    )
+    Page<MemberContributionView> findAllMemberContributionByContributionId(UUID contributionId, Pageable pageable);
+
+
+    @Query(
+        value = """
+            select new com.edir.app.contribution.application.ports.out.query.MemberContributionView(
+                          m.id,
+                          m.memberId,
+                          m.contributionId,
+                          m.contributionAmount,
+                          m.penaltyAmount,
+                          m.rolledOverContribution,
+                          m.rolledOverPenalty,
+                                    m.status
+                              )
+                              from MemberContributionEntity  as m
+                                          where m.id =:id
+            """
+    )
+    Optional<MemberContributionView> findAllMemberContributionByd(UUID id);
+
+
+    @Query(
+        value = """
+            select new com.edir.app.contribution.application.ports.out.query.PaymentView(
+                                    p.id,
+                                    p.amount    ,
+                                    p.paidAt,
+                                    p.receipterId,
+                                    p.note
+                              )
+                              from MemberContributionEntity  as m
+                                          join m.paymentEntities as p
+                                          where m.id =:id
+            """
+    )
+    List<PaymentView> findAllPaymentsByMemberContributionId(UUID id);
+
+
 }

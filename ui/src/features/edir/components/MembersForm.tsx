@@ -1,392 +1,421 @@
-import {MapPin, User} from "lucide-react";
+import {CreditCard, MapPin, Phone, User} from "lucide-react";
 import {Controller, useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
 
+import {type MemberFormValues, memberSchema,} from "@/features/edir/schemas/member.schema.ts";
 
-import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/shared/components/ui/card.tsx";
+import {Button} from "@/shared/components/ui/button";
+import {Checkbox} from "@/shared/components/ui/checkbox";
+import {Input} from "@/shared/components/ui/input";
 
-import {Button} from "@/shared/components/ui/button.tsx";
+import {
+    Field,
+    FieldContent,
+    FieldDescription,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+    FieldLegend,
+    FieldSeparator,
+    FieldSet
+} from "@/shared/components/ui/field";
 
-import {Input} from "@/shared/components/ui/input.tsx";
-
-import {Label} from "@/shared/components/ui/label.tsx";
-import type {Member} from "@/features/edir/types/members.ts";
-
-
-export type MemberFormValues = Omit<Member, "id">;
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/shared/components/ui/select";
 
 interface MemberFormProps {
-
     defaultValues?: Partial<MemberFormValues>;
 
     loading?: boolean;
 
     submitText?: string;
 
-    onSubmit: (
-        values: MemberFormValues
-    ) => void | Promise<void>;
+    onCancel?(): void;
 
+    onSubmit(
+        values: MemberFormValues
+    ): void | Promise<void>;
 }
 
-
-
-
 export function MemberForm({
-                               defaultValues,
-                               loading = false,
-                               submitText = "Save Member",
-                               onSubmit,
-                           }: MemberFormProps) {
+    defaultValues,
+    loading = false,
+    submitText = "Save Member",
+    onCancel,
+    onSubmit,
+}: MemberFormProps) {
+    const form = useForm<MemberFormValues>({
+        resolver: zodResolver(memberSchema) as any,
 
+        defaultValues: {
+            firstName: "",
+            middleName: "",
+            lastName: "",
+            gender: "F",
+            age: 18,
+            phoneNumber: "",
+            applyRegistrationFee: false,
 
-    const {
-        control,
-        handleSubmit,
-        formState:{
-            errors
-        }
-    } = useForm<MemberFormValues>({
-
-        defaultValues:{
-            firstName:"",
-            lastName:"",
-            age:0,
-            phoneNumber:"",
-
-            address:{
-                city:"",
-                woreda:"",
-                zone:"",
-                subcity:""
+            address: {
+                city: "",
+                subcity: "",
+                woreda: ""
             },
 
-            ...defaultValues
-
-        }
-
+            ...defaultValues,
+        },
     });
 
-
-
     return (
+        <FieldSet className="w-full">
+            <form
+                id="form-member"
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="mx-auto max-w-xl space-y-10"
+            >
+                {/* Header */}
 
-        <Card className="mx-auto w-full max-w-4xl shadow-lg">
+                <FieldLegend className="space-y-1 text-center">
+                    Member Information
+                </FieldLegend>
+                <FieldDescription className="text-center text-sm text-muted-foreground">
+                    Register a new member or update existing
+                    member information.
+                </FieldDescription>
 
+                <FieldSeparator className="my-4"> Personal Information </FieldSeparator>
 
-            <CardHeader>
+                {/* ========================= */}
+                {/* PERSONAL INFORMATION */}
+                {/* ========================= */}
 
+                <section className="space-y-4">
 
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+                    <div className="flex items-center gap-2">
 
-                    <User className="h-6 w-6 text-primary"/>
+                        <User className="h-5 w-5 text-primary" />
+
+                        <h2 className="text-xl font-semibold">
+                            Personal Information
+                        </h2>
+
+                    </div>
+
+                    {/* <div className="grid gap-6 md:grid-cols-2"> */}
+                    <FieldGroup className="grid gap-6 md:grid-cols-2">
+                        {/* First Name */}
+                        <Controller
+                            name="firstName"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="firstName">
+                                        First Name
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id="firstName"
+                                        placeholder="Abebe"
+                                        autoComplete="off"
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+
+                        />
+                        {/* Middle Name */}
+                        <Controller
+                            name="middleName"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="middleName">
+                                        Middle Name
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id="middleName"
+                                        placeholder="Kebede"
+                                        autoComplete="off"
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+
+                        {/* Last Name */}
+                        <Controller
+                            name="lastName"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="lastName">
+                                        Last Name
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id="lastName"
+                                        placeholder="Bekele"
+                                        autoComplete="off"
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+
+                        {/* Phone */}
+                        <Controller
+                            name="phoneNumber"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>
+                                        Phone Number
+                                    </FieldLabel>
+                                    <div className="relative">
+
+                                        <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                    </div>
+                                    <Input
+                                        className="pl-10"
+                                        placeholder="+251911223344"
+                                        {...field}
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+
+                                </Field>
+                            )}
+                        />
+                        {/* Gender */}
+                        <Controller
+                            name="gender"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>
+                                        Gender
+                                    </FieldLabel>
+                                    <Select {...field} value={field.name ?? ""}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select gender" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="M">Male</SelectItem>
+                                            <SelectItem value="F">Female</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+
+                        {/* Age */}
+                        <Controller
+                            name="age"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>
+                                        Age
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        type="number"
+                                        placeholder="30"
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                    </FieldGroup>
+                </section>
+
+                <FieldSeparator className="my-4"> Address </FieldSeparator>
+
+                {/* ========================= */}
+                {/* ADDRESS */}
+                {/* ========================= */}
+
+                <section className="space-y-4">
+
+                    <div className="flex items-center gap-2">
+
+                        <MapPin className="h-5 w-5 text-primary" />
+
+                        <h2 className="text-xl font-semibold">
+                            Address
+                        </h2>
+
+                    </div>
+
+                    <FieldGroup className="grid gap-6 md:grid-cols-2">
+
+                        {/* City */}
+                        <Controller
+                            name="address.city"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>
+                                        City
+                                    </FieldLabel>
+                                    <Input
+                                        placeholder="Addis Ababa"
+                                        {...field}
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />                          {/* Subcity */}
+
+                        <Controller
+                            name="address.subcity"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>
+                                        Subcity
+                                    </FieldLabel>
+                                    <Input
+                                        placeholder="Bole"
+                                        {...field}
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+
+                        {/* Woreda */}
+
+                        <Controller
+                            name="address.woreda"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>
+                                        Woreda
+                                    </FieldLabel>
+                                    <Input
+                                        placeholder="Woreda 03"
+                                        {...field}
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+
+                    </FieldGroup>
+                </section>
+
+                <FieldSeparator className="my-4"> Registration </FieldSeparator>
+
+                {/* ========================= */}
+                {/* REGISTRATION */}
+                {/* ========================= */}
+
+                <section className="space-y-4">
+
+                    <div className="flex items-center gap-2">
+
+                        <CreditCard className="h-5 w-5 text-primary" />
+
+                        <h2 className="text-xl font-semibold">
+                            Registration
+                        </h2>
+
+                    </div>
+
+                    <div className="rounded-xl border bg-muted/30 p-6">
+                        <Controller
+                            name="applyRegistrationFee"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field
+                                    orientation="horizontal"
+                                    className="space-y-1">
+                                    <Checkbox
+                                        aria-invalid={fieldState.invalid}
+                                        id="applyRegistrationFee"
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                    <FieldContent>
+                                        <FieldLabel
+                                            htmlFor="applyRegistrationFee">
+                                            Apply Registration Fee
+                                        </FieldLabel>
+                                        <FieldDescription>
+                                            Charge the one-time registration fee when
+                                            creating this member.
+                                        </FieldDescription>
+                                    </FieldContent>
+                                    <div className="rounded-md border bg-background px-3 py-2">
+
+                                        <p className="text-sm font-medium">
+                                            Registration Fee
+                                        </p>
+
+                                        <p className="text-2xl font-bold text-primary">
+                                            5,000 ETB
+                                        </p>
+
+                                    </div>
+                                </Field>
+                            )}
+                        />
+
+                    </div>
+
+                </section>
+
+                <FieldSeparator className="my-4"> Actions </FieldSeparator>
+
+                {/* ========================= */}
+                {/* ACTIONS */}
+                {/* ========================= */}
+
+                <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={onCancel}
+                    >
+                        Cancel
+                    </Button>
+
+                    <Button
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading
+                            ? "Saving Member..."
+                            : submitText}
+                    </Button>
 
                 </div>
 
-
-                <CardTitle className="mt-4 text-2xl">
-                    Member Information
-                </CardTitle>
-
-
-                <CardDescription>
-                    Register a new Edir member or update existing member information.
-                </CardDescription>
-
-
-            </CardHeader>
-
-
-
-            <CardContent>
-
-
-                <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="space-y-8"
-                >
-
-
-
-                    {/* Personal Information */}
-
-                    <div>
-
-                        <h3 className="mb-4 flex items-center gap-2 font-semibold">
-
-                            <User className="h-5 w-5 text-primary"/>
-
-                            Personal Information
-
-                        </h3>
-
-
-                        <div className="grid gap-5 md:grid-cols-2">
-
-
-
-                            {/* First Name */}
-
-                            <FormInput
-                                label="First Name"
-                                name="firstName"
-                                control={control}
-                                error={errors.firstName?.message}
-                                placeholder="Abebe"
-                            />
-
-
-
-                            {/* Last Name */}
-
-                            <FormInput
-                                label="Last Name"
-                                name="lastName"
-                                control={control}
-                                error={errors.lastName?.message}
-                                placeholder="Kebede"
-                            />
-
-
-
-
-
-                            {/* Age */}
-
-                            <FormInput
-                                label="Age"
-                                name="age"
-                                type="number"
-                                control={control}
-                                error={errors.age?.message}
-                                placeholder="30"
-                            />
-
-
-
-
-
-                            {/* Phone */}
-
-                            <FormInput
-                                label="Phone Number"
-                                name="phoneNumber"
-                                control={control}
-                                error={errors.phoneNumber?.message}
-                                placeholder="+251911223344"
-                            />
-
-
-
-                        </div>
-
-                    </div>
-
-
-
-
-
-                    {/* Address */}
-
-                    <div>
-
-
-                        <h3 className="mb-4 flex items-center gap-2 font-semibold">
-
-                            <MapPin className="h-5 w-5 text-primary"/>
-
-                            Address
-
-                        </h3>
-
-
-
-                        <div className="grid gap-5 md:grid-cols-2">
-
-
-
-                            <FormInput
-
-                                label="City"
-
-                                name="address.city"
-
-                                control={control}
-
-                                placeholder="Addis Ababa"
-
-                            />
-
-
-
-
-                            <FormInput
-
-                                label="Subcity"
-
-                                name="address.subcity"
-
-                                control={control}
-
-                                placeholder="Bole"
-
-                            />
-
-
-
-
-                            <FormInput
-
-                                label="Woreda"
-
-                                name="address.woreda"
-
-                                control={control}
-
-                                placeholder="Woreda 03"
-
-                            />
-
-
-
-
-
-                            <FormInput
-
-                                label="Zone"
-
-                                name="address.zone"
-
-                                control={control}
-
-                                placeholder="Zone 1"
-
-                            />
-
-
-
-                        </div>
-
-
-                    </div>
-
-
-
-
-
-                    <div className="flex justify-end border-t pt-6">
-
-
-                        <Button
-                            disabled={loading}
-                            type="submit"
-                        >
-
-                            {submitText}
-
-                        </Button>
-
-
-                    </div>
-
-
-
-                </form>
-
-
-            </CardContent>
-
-
-        </Card>
-
-    )
-
-}
-
-
-
-
-
-
-interface FormInputProps {
-
-    label:string;
-
-    name:any;
-
-    control:any;
-
-    placeholder?:string;
-
-    type?:string;
-
-    error?:string;
-
-}
-
-
-
-function FormInput({
-                       label,
-                       name,
-                       control,
-                       placeholder,
-                       type="text",
-                       error
-                   }:FormInputProps){
-
-
-    return (
-
-        <div className="space-y-2">
-
-
-            <Label>
-                {label}
-            </Label>
-
-
-            <Controller
-
-                name={name}
-
-                control={control}
-
-                render={({field})=>(
-
-                    <Input
-
-                        type={type}
-
-                        placeholder={placeholder}
-
-                        {...field}
-
-                        value={
-                            field.value ?? ""
-                        }
-
-                    />
-
-                )}
-
-            />
-
-
-            {
-                error && (
-
-                    <p className="text-sm text-destructive">
-                        {error}
-                    </p>
-
-                )
-
-            }
-
-
-        </div>
-
-
-    )
-
+            </form>
+        </FieldSet>
+    );
 }

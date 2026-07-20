@@ -9,9 +9,10 @@ export interface Address {
 export interface Member {
     id: string;
     firstName: string;
+    middleName: string;
     lastName: string;
     age: number;
-    status:'ACTIVE'| 'INACTIVE';
+    status:'ACTIVE'|'INACTIVE';
     phoneNumber: string;
     address: Address;
 }

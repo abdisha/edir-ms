@@ -10,4 +10,12 @@ public enum Gender {
     public String getGender() {
         return gender;
     }
+
+    public static Gender from(String gender){
+        return switch (gender) {
+            case "F" -> FEMALE;
+            case "M" -> MALE;
+            default -> throw new IllegalArgumentException("Invalid gender: " + gender);
+        };
+    }
 }

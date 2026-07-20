@@ -2,8 +2,8 @@ package com.edir.app.edir.adapter.persistance.query;
 
 import com.edir.app.edir.adapter.persistance.jpa.EdirJpaRepository;
 import com.edir.app.edir.application.api.MemberSummary;
-import com.edir.app.edir.application.query.MemberDetailView;
-import com.edir.app.edir.application.query.MemberQueryRepository;
+import com.edir.app.edir.application.ports.out.query.MemberDetailView;
+import com.edir.app.edir.application.ports.out.query.MemberQueryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

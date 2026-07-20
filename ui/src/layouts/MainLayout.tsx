@@ -1,5 +1,5 @@
 import {Link, NavLink, Outlet} from "react-router";
-import {BarChart3, Handshake, Home, LogIn, SettingsIcon, Users2Icon,} from "lucide-react";
+import {BarChart3, CalendarsIcon, Handshake, Home, LogIn, SettingsIcon, ShelvingUnit, Users2Icon,} from "lucide-react";
 
 import {cn} from "@/lib/utils";
 import {Button} from "@/shared/components/ui/button";
@@ -25,6 +25,16 @@ const navigation = [
     title: "Contributions",
     href: "/contributions",
     icon: Handshake,
+  },
+  {
+    title: "Funeral Event",
+    href: "/contributions",
+    icon: CalendarsIcon,
+  },
+  {
+    title: "Inventory",
+    href: "/contributions",
+    icon: ShelvingUnit,
   },
   {
     title: "Reports",
