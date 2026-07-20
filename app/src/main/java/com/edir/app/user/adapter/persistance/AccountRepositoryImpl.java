@@ -8,13 +8,14 @@ import com.edir.app.user.application.AccountRepository;
 import com.edir.app.user.domain.Role;
 import com.edir.app.user.domain.User;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Repository
+@Component
 public class AccountRepositoryImpl implements AccountRepository {
     private final JpaUserRepository userRepository;
     private final JpaRoleRepository roleRepository;

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,6 +21,11 @@ public class AccountService implements AccountUseCase {
                           PasswordEncoder encoder) {
         this.accountRepository = accountRepository;
         this.encoder = encoder;
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return accountRepository.findByEmail(email);
     }
 
     @Override

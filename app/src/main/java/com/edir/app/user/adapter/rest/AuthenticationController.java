@@ -1,5 +1,6 @@
 package com.edir.app.user.adapter.rest;
 
+import com.edir.app.user.adapter.rest.dto.LoginRequestDto;
 import com.edir.app.user.adapter.utils.CookieUtils;
 import com.edir.app.user.application.AccountService;
 import com.edir.app.user.application.PasswordEncoder;

@@ -1,8 +1,9 @@
 package com.edir.app.user.adapter.rest.dto;
 
+import lombok.Getter;
+
+@Getter
 public class UserRegisterRequestDto {
     private String email;
     private String password;
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
 }

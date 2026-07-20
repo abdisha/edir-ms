@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "user_management")
 public class UserEntity {
     @Id
     private UUID id;
