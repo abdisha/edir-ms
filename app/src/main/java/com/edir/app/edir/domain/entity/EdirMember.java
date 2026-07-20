@@ -73,6 +73,7 @@ public class EdirMember extends BaseEntity<MemberId> {
                                       Address address,
                                       PhoneNumber phoneNumber) {
 
+
         return new EdirMember(MemberId.generateId(),
                 fullName,
                 age,

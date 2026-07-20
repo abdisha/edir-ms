@@ -16,7 +16,7 @@ import {
 
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/shared/components/ui/select";
 
-import {type ContributionFormValues, contributionSchema} from "../schemas/contribution.schemas.ts";
+import {type ContributionFormValues, contributionSchema} from "../schemas/contribution.schema.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Switch} from "@/shared/components/ui/switch.tsx";
 import {Popover, PopoverContent, PopoverTrigger} from "@/shared/components/ui/popover.tsx";

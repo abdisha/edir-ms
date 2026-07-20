@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static com.edir.app.shared.EdirConstant.REST_VERSION;
@@ -27,6 +28,7 @@ class MemberControllerTest extends IntegrationTest {
     void setup() throws Exception {
         UpInsertEdirCommand request = new UpInsertEdirCommand(
                 "Bole Edir Name",
+            ZonedDateTime.now().minusYears(20),
                 "Some Description of bole edir",
                 new Address(
                         "city",

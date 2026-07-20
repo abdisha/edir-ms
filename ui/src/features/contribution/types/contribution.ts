@@ -10,6 +10,7 @@ export interface AddContributionRequest {
 }
 
 export interface ContributionResponse{
+    contributionStatus: string;
     id: string
     name: string,
     description: string,
@@ -35,3 +36,25 @@ export interface UpdateContribution{
     penaltyType: string
 }
 
+
+export interface Page {
+    content: MemberContribution[]
+    pageNumber: number
+    pageSize: number
+    totalElements: number
+    totalPages: number
+}
+
+export interface MemberContribution {
+    id: string;
+    memberId: string;
+    contributionId: string;
+    contributionAmount: number;
+    penaltyAmount: number;
+    rolledOverContribution: number;
+    rolledOverPenalty: number;
+    status:
+        | "PENDING"
+        | "PARTIALLY_PAID"
+        | "PAID";
+}

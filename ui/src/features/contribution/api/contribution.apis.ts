@@ -12,8 +12,7 @@ export async function createContribution(request: AddContributionRequest) {
 }
 
 export async function getContribution(): Promise<ContributionResponse> {
-    const response = await api.get(endpoint);
-
+    const response = await api.get(endpoint+"/active");
     return response.data;
 }
 

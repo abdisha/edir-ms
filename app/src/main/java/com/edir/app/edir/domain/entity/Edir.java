@@ -1,5 +1,6 @@
 package com.edir.app.edir.domain.entity;
 
+import com.edir.app.edir.domain.api.events.MemberJoinedEvent;
 import com.edir.app.edir.domain.exceptions.MemberAlreadyRegisteredException;
 import com.edir.app.edir.domain.exceptions.MemberInActiveException;
 import com.edir.app.edir.domain.exceptions.MemberIsAlreadyLeadershipException;
@@ -130,6 +131,12 @@ public class Edir extends AggregateRoot<EdirId> {
         if (isActiveMember(member.getId())) {
             throw new MemberAlreadyRegisteredException(member.getId());
         }
+        registerEvent(new MemberJoinedEvent(
+            member.getId(),
+            member.getFullName(),
+            member.getJoined()
+        ));
+
         edirMembers.add(member);
     }
 
