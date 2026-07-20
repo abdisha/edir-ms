@@ -68,7 +68,7 @@ public interface JpaMemberContributionRepository extends JpaRepository<MemberCon
 
     @Query(
         value = """
-            select new PaymentView(
+            select new com.edir.app.contribution.application.ports.out.query.PaymentView(
                                     p.id,
                                     p.amount    ,
                                     p.paidAt,
