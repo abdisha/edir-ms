@@ -11,12 +11,14 @@ import {PageError} from "@/pages/PageError.tsx";
 const MembersPage = () => {
     const navigation = useNavigate();
     const {data,error,isPending} = useGetMembers(0,10);
+
     if(isPending){
         return <SpinnerPage/>
     }
     if(error){
         return <PageError/>
     }
+
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -34,6 +36,7 @@ const MembersPage = () => {
                     Add Member
                 </Button>
             </CardHeader>
+
             <Separator/>
             <CardContent className="pt-6">
                 {

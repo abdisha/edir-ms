@@ -47,6 +47,7 @@ export interface Page {
 
 export interface MemberContribution {
     id: string;
+    fullName:string;
     memberId: string;
     contributionId: string;
     contributionAmount: number;

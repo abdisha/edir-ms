@@ -22,6 +22,8 @@ public class MemberContributionEntity {
     @Id
     private UUID id;
     private UUID memberId;
+    @Column(length = 200, nullable = false)
+    private String fullName;
     private UUID contributionId;
     @Column(precision = 19, scale = 4)
     private BigDecimal contributionAmount;

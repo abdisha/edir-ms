@@ -34,7 +34,7 @@ public class MemberContributionServiceImpl implements MemberContributionService 
 
         return MemberContribution.open(
             memberId,
-
+            fullName,
             contributionId,
             amount,
             rolledContribution,

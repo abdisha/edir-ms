@@ -23,6 +23,7 @@ public class MemberJoinedListener {
             contributionView -> {
                 helper.initializeMemberContribution(
                     event.id(),
+                    event.fullName(),
                     new ContributionId(contributionView.id()),
                     Money.of(contributionView.contributionAmount())
                 );

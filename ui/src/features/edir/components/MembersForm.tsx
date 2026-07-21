@@ -14,17 +14,12 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/s
 
 interface MemberFormProps {
     defaultValues?: Partial<MemberFormValues>;
-
     loading?: boolean;
-
     submitText?: string;
-
     onCancel?(): void;
-
     onSubmit(
         values: MemberFormValues
     ): void | Promise<void>;
-
 }
 
 export function MemberForm({
@@ -70,7 +65,7 @@ export function MemberForm({
                     className="mx-auto max-w-4xl"
                 >
                 {/* Header Card */}
-                <div className="mb-8 rounded-lg border bg-gradient-to-r from-primary/5 to-primary/10 p-6">
+                <div className="mb-8 rounded-lg border bg-linear-to-r from-primary/15 to-primary/5 p-6">
                     <div className="flex items-center gap-3">
                         <div className="rounded-lg bg-primary/10 p-2">
                             <Users  className="h-9 w-9 text-primary" />
