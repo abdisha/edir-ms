@@ -4,17 +4,18 @@ import {useNavigate} from "react-router";
 
 const AddMembersPage = () => {
     const context = useCreateMember();
-    const navigation = useNavigate();
+    const navigate = useNavigate();
 
     return (
         <>
             <MemberForm
-                onCancel={() => navigation(-1)}
+                onCancel={() => navigate(-1)}
                 loading={context.isPending}
                 submitText="Create Member"
                 onSubmit={(data) => {
                     context.mutate(data);
                 }}
+                onSuccess={() => navigate("/members")}
             />
         </>
     )

@@ -12,9 +12,9 @@ public enum Gender {
     }
 
     public static Gender from(String gender){
-        return switch (gender) {
-            case "F" -> FEMALE;
-            case "M" -> MALE;
+        return switch (gender.toUpperCase()) {
+            case "F", "FEMALE" -> FEMALE;
+            case "M","MALE" -> MALE;
             default -> throw new IllegalArgumentException("Invalid gender: " + gender);
         };
     }

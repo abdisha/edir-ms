@@ -2,12 +2,14 @@ package com.edir.app.edir.adapter.rest;
 
 import com.edir.app.edir.adapter.rest.request.AppointmentRequest;
 import com.edir.app.edir.application.ports.in.commands.RegisterMemberCommand;
-import com.edir.app.edir.application.ports.out.query.MemberDetailView;
-import com.edir.app.edir.application.ports.out.query.MemberQueryService;
 import com.edir.app.edir.application.ports.in.usecases.AppointMemberUseCase;
 import com.edir.app.edir.application.ports.in.usecases.MemberDeceasedUseCase;
 import com.edir.app.edir.application.ports.in.usecases.RegisterMemberUseCase;
 import com.edir.app.edir.application.ports.in.usecases.RevokeAppointmentUseCase;
+import com.edir.app.edir.application.ports.out.query.MemberDetailView;
+import com.edir.app.edir.application.ports.out.query.MemberQueryService;
+import com.edir.app.shared.domain.entity.PageQuery;
+import com.edir.app.shared.domain.entity.PageResult;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -39,9 +41,16 @@ public class MemberController {
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberDetailView> getMember(@PathVariable UUID memberId) {
         var result = memberQueryService.getMember(memberId);
-
         return result.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping()
+    public ResponseEntity<PageResult<MemberDetailView>> getMembers(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+
+       return ResponseEntity.ok( memberQueryService.getMembers(new PageQuery(page,size)));
     }
 
     @PutMapping("/{memberId}/revoke")

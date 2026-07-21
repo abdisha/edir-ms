@@ -8,4 +8,5 @@ public record PageResult<T>(
     int pageSize,
     long totalElements,
     int totalPages
-) {}
+) {
+}

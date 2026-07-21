@@ -5,10 +5,15 @@ export async function addMember(memberRequest: any) {
   return response.data;
 }
 
-export async function getMembers() {
-  const response = await api.get("members/");
+export async function getMembers(page:number=0,size:number=10) {
+  const response = await api.get("members?page="+page+"&size="+size);
   return response.data;
 }
+export async function getMember(uuid:string) {
+  const response = await api.get("members/"+uuid);
+  return response.data;
+}
+
 
 export async function revokeMember(id: string) {
   const result = await api.put(`members/${id}/revoke`);

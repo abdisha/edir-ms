@@ -1,4 +1,5 @@
 import {MemberForm} from "@/features/edir/components/MembersForm.tsx";
+import {useNavigate} from "react-router";
 
 const member= {
 
@@ -17,6 +18,8 @@ const member= {
 
 
 const EditMembersPage =()=>{
+    const navigate = useNavigate();
+
     return (
         <MemberForm
             defaultValues={member}
@@ -25,7 +28,8 @@ const EditMembersPage =()=>{
 
                 console.log(data);
             }}
-
+            onCancel={() => navigate(-1)}
+            onSuccess={() => navigate("/members")}
         />
     )
 }
