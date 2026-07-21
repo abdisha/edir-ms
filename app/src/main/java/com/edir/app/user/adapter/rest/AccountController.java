@@ -4,6 +4,7 @@ import com.edir.app.user.adapter.rest.dto.*;
 import com.edir.app.user.application.usecase.AccountUseCase;
 import com.edir.app.user.domain.Role;
 import com.edir.app.user.domain.User;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,13 +24,13 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@RequestBody UserRegisterRequestDto dto) {
-        User user = accountUseCase.registerUser(dto.getEmail(), dto.getPassword());
+    public ResponseEntity<UserResponseDto> register(@Valid @RequestBody UserRegisterRequestDto dto) {
+        User user = accountUseCase.registerUser(dto.getEmail(), dto.getFirstName(),dto.getLastName(), dto.getPassword());
         return ResponseEntity.ok(UserResponseDto.fromDomain(user));
     }
 
     @PostMapping("/roles")
-    @PreAuthorize("hasRole('ADMIN')") // Enforce execution guard checks via Spring filters
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RoleResponseDto> createRole(@RequestBody RoleCreateRequestDto dto) {
         Role role = accountUseCase.createRole(dto.getRoleName());
         return ResponseEntity.ok(new RoleResponseDto(role.name()));

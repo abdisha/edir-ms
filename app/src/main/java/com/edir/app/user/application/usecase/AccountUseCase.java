@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AccountUseCase {
     Optional<User> findByEmail(String email);
-    User registerUser(String email, String rawPassword);
+    User registerUser(String email, String firstName,String lastName,String rawPassword);
     Role createRole(String roleName);
     User assignRoleToUser(String email, String roleName);
 }

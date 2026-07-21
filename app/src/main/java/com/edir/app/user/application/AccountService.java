@@ -29,7 +29,7 @@ public class AccountService implements AccountUseCase {
     }
 
     @Override
-    public User registerUser(String email, String rawPassword) {
+    public User registerUser(String email,String firstName,String lastName, String rawPassword) {
         if (accountRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("Email already registered");
         }
@@ -41,7 +41,9 @@ public class AccountService implements AccountUseCase {
         accountRepository.findRoleByName("ROLE_USER")
             .ifPresent(defaultRoles::add);
 
-        User newUser = new User(UUID.randomUUID(), email, encryptedPassword, defaultRoles);
+        User newUser = new User(UUID.randomUUID(), email,
+            firstName,lastName,
+            encryptedPassword, defaultRoles);
         return accountRepository.saveUser(newUser);
     }
 

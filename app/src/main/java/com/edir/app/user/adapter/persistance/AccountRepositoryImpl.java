@@ -9,7 +9,6 @@ import com.edir.app.user.domain.Role;
 import com.edir.app.user.domain.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +29,8 @@ public class AccountRepositoryImpl implements AccountRepository {
     public User saveUser(User user) {
         UserEntity entity = new UserEntity();
         entity.setId(user.getId());
+        entity.setFirstName(user.getFirstName());
+        entity.setLastName(user.getLastName());
         entity.setEmail(user.getEmail());
         entity.setPassword(user.getPassword());
         entity.setRoles(user.getRoles().stream()
@@ -56,6 +57,8 @@ public class AccountRepositoryImpl implements AccountRepository {
         return new User(
             entity.getId(),
             entity.getEmail(),
+            entity.getFirstName(),
+            entity.getLastName(),
             entity.getPassword(),
             entity.getRoles().stream().map(r -> new Role(r.getName())).collect(Collectors.toSet())
         );

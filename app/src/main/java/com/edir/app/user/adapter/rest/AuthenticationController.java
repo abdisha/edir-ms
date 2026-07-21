@@ -1,6 +1,8 @@
 package com.edir.app.user.adapter.rest;
 
 import com.edir.app.user.adapter.rest.dto.LoginRequestDto;
+import com.edir.app.user.adapter.rest.dto.UserResponseDto;
+import com.edir.app.user.adapter.security.SecurityUser;
 import com.edir.app.user.adapter.utils.CookieUtils;
 import com.edir.app.user.application.AccountService;
 import com.edir.app.user.application.PasswordEncoder;
@@ -10,10 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import static com.edir.app.shared.EdirConstant.REST_VERSION;
 
@@ -35,12 +35,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequestDto loginDto) {
+    public ResponseEntity<UserResponseDto> login(@RequestBody LoginRequestDto loginDto) {
         User user = accountOutputPort.findByEmail(loginDto.getEmail())
             .orElseThrow(() -> new IllegalArgumentException("Bad credentials"));
 
-        // Match passcodes safely
-        if (!passwordEncoderPort.encode(loginDto.getPassword()).equals(user.getPassword())) {
+        if (!passwordEncoderPort.matches(loginDto.getPassword(),user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -49,7 +48,12 @@ public class AuthenticationController {
 
         return ResponseEntity.ok()
             .header(HttpHeaders.SET_COOKIE, cookie.toString())
-            .build();
+            .body( UserResponseDto.fromDomain(user));
+    }
+    @GetMapping("/me")
+    public UserResponseDto me(@AuthenticationPrincipal SecurityUser principal) {
+        return UserResponseDto.fromDomain(principal.getUser());
+
     }
 
     @PostMapping("/logout")

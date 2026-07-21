@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 public class SecurityUser implements UserDetails {
 
-    // Wrap your framework-free core domain model
     private final User user;
 
     public SecurityUser(User user) {
@@ -18,13 +17,13 @@ public class SecurityUser implements UserDetails {
     }
 
     // Maps your pure domain string roles (e.g. "ROLE_USER") to Spring Security authorities
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream()
             .map(role -> new SimpleGrantedAuthority(role.name()))
             .collect(Collectors.toList());
     }
-
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -53,5 +52,9 @@ public class SecurityUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public User getUser() {
+        return user;
     }
 }
