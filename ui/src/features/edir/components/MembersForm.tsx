@@ -25,7 +25,6 @@ interface MemberFormProps {
         values: MemberFormValues
     ): void | Promise<void>;
 
-    onSuccess?(): void;
 }
 
 export function MemberForm({
@@ -33,8 +32,7 @@ export function MemberForm({
     loading = false,
     submitText = "Save Member",
     onCancel,
-    onSubmit,
-    onSuccess,
+    onSubmit
 }: MemberFormProps) {
     const form = useForm<MemberFormValues>({
         resolver: zodResolver(memberSchema) as any,
@@ -61,7 +59,6 @@ export function MemberForm({
     const handleSubmit = async (values: MemberFormValues) => {
         await onSubmit(values);
         form.reset();
-        onSuccess?.();
     };
 
     return (

@@ -28,7 +28,7 @@ class EdirControllerTest extends IntegrationTest {
             new Address(
                 "city",
                 "subcity",
-                "worda"
+                "woreda"
 
             ),
 
@@ -53,7 +53,7 @@ class EdirControllerTest extends IntegrationTest {
                 new Address(
                         "city",
                         "subcity",
-                        "worda"
+                        "woreda"
 
                 ),
 
@@ -80,7 +80,7 @@ class EdirControllerTest extends IntegrationTest {
             new Address(
                 "city",
                 "subcity",
-                "worda"
+                "woreda"
 
             ),
 

@@ -47,12 +47,12 @@ const navigation = [
   },
   {
     title: "Funeral Event",
-    href: "/contributions",
+    href: "/funeral-event",
     icon: CalendarsIcon,
   },
   {
     title: "Inventory",
-    href: "/contributions",
+    href: "/inventory",
     icon: ShelvingUnit,
   },
   {

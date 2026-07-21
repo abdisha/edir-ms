@@ -41,7 +41,7 @@ export function EdirForm({
             establishedDate: new Date(),
             description: "",
             phoneNumber: "",
-            address: {city: "", subcity: "", worda: ""},
+            address: {city: "", subcity: "", woreda: ""},
             ...defaultValues,
         },
     });
@@ -198,15 +198,15 @@ export function EdirForm({
 
                         {/* Woreda */}
                         <Field>
-                            <FieldLabel htmlFor="worda">Woreda</FieldLabel>
+                            <FieldLabel htmlFor="woreda">Woreda</FieldLabel>
                             <Input
-                                aria-label={'worda'}
-                                id="worda"
+                                aria-label={'woreda'}
+                                id="woreda"
                                 placeholder="01"
-                                {...register("address.worda")}
+                                {...register("address.woreda")}
                             />
-                            {errors.address?.worda && (
-                                <FieldError errors={[errors.address.worda]} />
+                            {errors.address?.woreda && (
+                                <FieldError errors={[errors.address.woreda]} />
                             )}
                         </Field>
                     </FieldGroup>

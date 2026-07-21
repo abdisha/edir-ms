@@ -30,7 +30,7 @@ public class EdirEntity {
     @Column(length = 50)
     private String subCity;
     @Column(length = 50)
-    private String worda;
+    private String woreda;
     private UUID director;
     private UUID secretary;
     private UUID treasurer;

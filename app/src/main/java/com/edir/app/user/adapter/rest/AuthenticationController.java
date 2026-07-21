@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 import static com.edir.app.shared.EdirConstant.REST_VERSION;
 
 @RestController
@@ -36,9 +38,12 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto> login(@RequestBody LoginRequestDto loginDto) {
-        User user = accountOutputPort.findByEmail(loginDto.getEmail())
-            .orElseThrow(() -> new IllegalArgumentException("Bad credentials"));
+        Optional<User> result = accountOutputPort.findByEmail(loginDto.getEmail());
+        if (result.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
 
+        User user = result.get();
         if (!passwordEncoderPort.matches(loginDto.getPassword(),user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -51,8 +56,11 @@ public class AuthenticationController {
             .body( UserResponseDto.fromDomain(user));
     }
     @GetMapping("/me")
-    public UserResponseDto me(@AuthenticationPrincipal SecurityUser principal) {
-        return UserResponseDto.fromDomain(principal.getUser());
+    public ResponseEntity<UserResponseDto> me(@AuthenticationPrincipal SecurityUser principal) {
+        if (principal == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(UserResponseDto.fromDomain(principal.getUser()));
 
     }
 

@@ -9,13 +9,14 @@ const SetupEdirPage = () => {
     const createMutation = useCreateEdir();
     useEffect(()=>{
         if(createMutation.isSuccess) {
-            navigation('/edirpage');
+            navigation('/home');
         }
     },[createMutation.isSuccess])
     return (
         // SetupEdirPage.tsx
 
         <EdirForm
+            onCancel={()=>navigation(-1)}
             loading={createMutation.isPending}
             submitText="Create Edir"
             onSubmit={(values) => {

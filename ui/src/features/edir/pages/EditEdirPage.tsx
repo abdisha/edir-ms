@@ -40,7 +40,7 @@ const EditEdirPage = () => {
                 address: {
                     city: data.city,
                     subcity: data.subcity,
-                    worda: data.worda,
+                    woreda: data.woreda,
                 },
             }}
             onCancel={()=>navigate('/home')}
@@ -54,7 +54,7 @@ const EditEdirPage = () => {
                     address:{
                         city:values.address.city,
                         subcity:values.address.subcity,
-                        worda:values.address.worda,
+                        worda:values.address.woreda,
                     }
                 });
             }}

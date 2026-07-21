@@ -4,6 +4,7 @@ import com.edir.app.contribution.domain.entity.MemberContribution;
 import com.edir.app.contribution.domain.entity.Payment;
 import com.edir.app.contribution.domain.valueobjects.ContributionId;
 import com.edir.app.contribution.domain.valueobjects.Settlement;
+import com.edir.app.shared.domain.valueobjects.FullName;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.Money;
 import org.jspecify.annotations.NonNull;
@@ -16,6 +17,7 @@ public class MemberContributionServiceImpl implements MemberContributionService 
         ContributionId contributionId,
         Money amount,
         MemberId memberId,
+        FullName fullName,
         @NonNull Optional<MemberContribution> previousContribution
     ) {
 
@@ -32,6 +34,7 @@ public class MemberContributionServiceImpl implements MemberContributionService 
 
         return MemberContribution.open(
             memberId,
+
             contributionId,
             amount,
             rolledContribution,

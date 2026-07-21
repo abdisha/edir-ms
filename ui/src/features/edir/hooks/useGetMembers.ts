@@ -5,8 +5,7 @@ import {getMember, getMembers} from "@/features/edir/api/member-apis.ts";
 export function useGetMembers(page:number,size:number) {
     return useQuery({
         queryKey: queryKeys.members(page,size),
-        queryFn:()=> getMembers(page,size),
-        enabled:true
+        queryFn:()=> getMembers(page,size)
     });
 }
 

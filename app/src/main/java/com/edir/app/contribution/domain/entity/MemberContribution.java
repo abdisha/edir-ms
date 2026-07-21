@@ -5,6 +5,7 @@ import com.edir.app.contribution.domain.valueobjects.MemberContributionId;
 import com.edir.app.contribution.domain.valueobjects.MemberContributionStatus;
 import com.edir.app.contribution.domain.valueobjects.Settlement;
 import com.edir.app.shared.domain.entity.AggregateRoot;
+import com.edir.app.shared.domain.valueobjects.FullName;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.Money;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 public class MemberContribution  extends AggregateRoot<MemberContributionId> {
     private MemberId memberId;
     private ContributionId contributionId;
+    private FullName fullName;
     private Money outstandingContribution;
     private Money contribution;
     private Money penalty;
@@ -23,20 +25,24 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
     private final Set<Payment> payments = new HashSet<>();
 
     private MemberContribution(MemberContributionId memberContributionId,
+                               FullName fullName,
                                MemberId memberId,
                                ContributionId contributionId,
                                Money outstandingContribution,
                                Money contribution,
                                Money outstandingPenalty) {
         super(Objects.requireNonNull(memberContributionId, "MemberContributionId cannot be null"));
+        this.fullName = fullName;
         this.memberId = Objects.requireNonNull(memberId, "MemberId cannot be null");
         this.contributionId = Objects.requireNonNull(contributionId, "ContributionId cannot be null");
         this.outstandingContribution = Objects.requireNonNull(outstandingContribution, "Amount cannot be null");
         this.contribution = Objects.requireNonNull(contribution, "Excepted amount cannot be null");
         this.outstandingPenalty = outstandingPenalty;
+        penalty = Money.zero();
     }
 
     private MemberContribution(MemberContributionId memberContributionId,
+                               FullName fullName,
                                MemberId memberId,
                                ContributionId contributionId,
                                Money outstandingContribution,
@@ -46,6 +52,7 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
                                Set<Payment> payments) {
         super(Objects.requireNonNull(memberContributionId, "MemberContributionId cannot be null"));
         this.memberId = Objects.requireNonNull(memberId, "MemberId cannot be null");
+        this.fullName = fullName;
         this.contributionId = Objects.requireNonNull(contributionId, "ContributionId cannot be null");
         this.outstandingContribution = Objects.requireNonNull(outstandingContribution, "Amount cannot be null");
         this.contribution = Objects.requireNonNull(contribution, "Excepted amount cannot be null");
@@ -55,12 +62,14 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
     }
 
     public static MemberContribution open(MemberId memberId,
+                                          FullName fullName,
                                               ContributionId contributionId,
                                               Money rolledOverContribution,
                                               Money contribution,
                                               Money rolledOverPenalty) {
         return new MemberContribution(
             MemberContributionId.generateId(),
+            fullName,
             memberId,
             contributionId,
             rolledOverContribution,
@@ -69,13 +78,14 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
         );
     }
     public static MemberContribution createMemberContribution(MemberId memberId,
+                                                              FullName fullName,
                                                               ContributionId contributionId,
                                                               Money amount,
                                                               Money exceptedAmount,
-                                                              Money currentPenalty,
                                                               Money rolledOverPenalty) {
         return new MemberContribution(
                 MemberContributionId.generateId(),
+            fullName,
                 memberId,
                 contributionId,
                 amount,
@@ -86,6 +96,7 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
 
     public static MemberContribution rehydrate(MemberContributionId memberContributionId,
                                                MemberId memberId,
+                                               FullName fullName,
                                                ContributionId contributionId,
                                                Money amount,
                                                Money exceptedAmount,
@@ -94,8 +105,9 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
                                                Set<Payment> payments) {
         return new MemberContribution(
                 memberContributionId,
-                memberId,
-                contributionId,
+            fullName,
+            memberId,
+            contributionId,
                 amount,
                 exceptedAmount,
                 currentPenalty,

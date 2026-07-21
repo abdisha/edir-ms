@@ -4,6 +4,7 @@ import com.edir.app.contribution.application.services.ContributionHelper;
 import com.edir.app.contribution.domain.events.ContributionCreatedEvent;
 import com.edir.app.edir.application.api.ActiveMemberQuery;
 import com.edir.app.edir.application.api.MemberSummary;
+import com.edir.app.shared.domain.valueobjects.FullName;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import lombok.AllArgsConstructor;
 import org.springframework.modulith.events.ApplicationModuleListener;
@@ -27,7 +28,9 @@ public class ContributionCreatedListener {
         }
 
         for (MemberSummary member : result.get()) {
+            String [] names = member.FullName().split(" ");
             helper.initializeMemberContribution(new MemberId(member.memberId()),
+                new FullName(names[0],names[1],names[2] ),
                 event.contributionId(),
                 event.amount());
         }

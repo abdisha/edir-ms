@@ -25,7 +25,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
             e.description,
             e.city,
             e.subCity,
-            e.worda,
+            e.woreda,
             e.establishedDate,
             e.phoneNumber,
             COUNT(m)
@@ -38,7 +38,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
             e.description,
             e.city,
             e.subCity,
-            e.worda,
+            e.woreda,
             e.phoneNumber
         """)
     Optional<EdirView> findEdir();
@@ -54,7 +54,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
                             m.gender,
                             m.city,
                             m.subCity,
-                            m.worda,
+                            m.woreda,
                             m.phoneNumber,
                             m.joinedDate,
                             m.leftDate,
@@ -93,7 +93,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
                             m.gender,
                             m.city,
                             m.subCity,
-                            m.worda,
+                            m.woreda,
                             m.phoneNumber,
                             m.joinedDate,
                             m.leftDate,
