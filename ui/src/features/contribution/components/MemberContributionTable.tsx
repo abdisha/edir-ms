@@ -83,14 +83,14 @@ export function MemberContributionTable({
                             <TableHead>
                                 Status
                             </TableHead>
-                            <TableHead className="w-[60px]"/>
+                            <TableHead className="w-15"/>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data.map((item) => (
                             <TableRow key={item.id}>
                                 <TableCell className="font-medium">
-                                    {item.memberId}
+                                    {item.fullName}
                                 </TableCell>
                                 <TableCell>
                                     {item.contributionAmount.toLocaleString()} ETB

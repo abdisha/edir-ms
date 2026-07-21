@@ -19,7 +19,6 @@ public class EdirMember extends BaseEntity<MemberId> {
     private ZonedDateTime Left;
     private Boolean isDeceased;
 
-
     private EdirMember(MemberId memberId,
                        FullName fullName,
                        Age age,

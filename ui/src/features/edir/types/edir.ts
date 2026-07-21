@@ -4,7 +4,7 @@ export interface EdirResponse {
     description: string
     city: string
     subcity: string
-    worda: string
+    woreda: string
     establishedDate: Date
     phoneNumber: string
     membersCount: number
@@ -26,5 +26,5 @@ export interface CreateEdirRequest {
 export interface Address {
     city: string
     subcity: string
-    worda: string
+    woreda: string
 }

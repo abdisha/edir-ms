@@ -2,8 +2,8 @@ package com.edir.app.edir.application.services;
 
 import com.edir.app.edir.application.ports.in.commands.UpInsertEdirCommand;
 import com.edir.app.edir.application.ports.in.usecases.UpInsertEdirUseCase;
-import com.edir.app.edir.domain.entity.Edir;
 import com.edir.app.edir.application.ports.out.EdirRepository;
+import com.edir.app.edir.domain.entity.Edir;
 import com.edir.app.edir.domain.valueobjects.EdirName;
 import com.edir.app.shared.domain.valueobjects.Address;
 import com.edir.app.shared.domain.valueobjects.PhoneNumber;
@@ -33,7 +33,7 @@ public class UpInsertEdirService implements UpInsertEdirUseCase {
         Address address = new Address(
                 upInsertEdirCommand.address().city(),
                 upInsertEdirCommand.address().subcity(),
-                upInsertEdirCommand.address().worda()
+                upInsertEdirCommand.address().woreda()
         );
 
         Optional<Edir> result = edirRepository.find()

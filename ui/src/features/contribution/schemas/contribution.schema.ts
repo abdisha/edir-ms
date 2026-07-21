@@ -3,7 +3,7 @@ import {z} from "zod";
 export const contributionSchema = z
     .object({
         name: z.string().min(3, "Name is required"),
-        description: z.string().min(3, "Description is required"),
+        description: z.string(),
 
         startDate: z.date().min(1, "Start date is required"),
         endDate: z.date().min(1, "End date is required"),

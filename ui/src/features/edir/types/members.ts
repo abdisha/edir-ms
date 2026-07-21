@@ -12,7 +12,10 @@ export interface Member {
     middleName: string;
     lastName: string;
     age: number;
-    status:'ACTIVE'|'INACTIVE';
+    memberStatus:'ACTIVE'|'INACTIVE';
     phoneNumber: string;
-    address: Address;
+    city: string;
+    woreda: string;
+    zone: string;
+    subcity: string;
 }

@@ -4,6 +4,8 @@ import com.edir.app.edir.adapter.persistance.entity.EdirEntity;
 import com.edir.app.edir.application.api.MemberSummary;
 import com.edir.app.edir.application.ports.out.query.EdirView;
 import com.edir.app.edir.application.ports.out.query.MemberDetailView;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -23,7 +25,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
             e.description,
             e.city,
             e.subCity,
-            e.worda,
+            e.woreda,
             e.establishedDate,
             e.phoneNumber,
             COUNT(m)
@@ -36,7 +38,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
             e.description,
             e.city,
             e.subCity,
-            e.worda,
+            e.woreda,
             e.phoneNumber
         """)
     Optional<EdirView> findEdir();
@@ -52,7 +54,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
                             m.gender,
                             m.city,
                             m.subCity,
-                            m.worda,
+                            m.woreda,
                             m.phoneNumber,
                             m.joinedDate,
                             m.leftDate,
@@ -79,4 +81,29 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
             """
     )
     Optional<List<MemberSummary>> findActiveMember();
+
+    @Query(
+        value = """
+                    SELECT new com.edir.app.edir.application.ports.out.query.MemberDetailView(
+                            m.id,
+                            m.firstName,
+                            m.middleName,
+                            m.lastName,
+                            m.age,
+                            m.gender,
+                            m.city,
+                            m.subCity,
+                            m.woreda,
+                            m.phoneNumber,
+                            m.joinedDate,
+                            m.leftDate,
+                            m.memberStatus,
+                            m.isDeceased
+                    )
+                    FROM EdirEntity e
+                    JOIN e.members m
+                    """
+    )
+    Page<MemberDetailView> findMember(Pageable pageable);
+
 }

@@ -1,6 +1,7 @@
 package com.edir.app.contribution.domain.entity;
 
 import com.edir.app.contribution.domain.events.ContributionClosedEvent;
+import com.edir.app.contribution.domain.events.ContributionCreatedEvent;
 import com.edir.app.contribution.domain.exceptions.ContributionIsAlreadyClosed;
 import com.edir.app.contribution.domain.valueobjects.ContributionId;
 import com.edir.app.contribution.domain.valueobjects.ContributionStatus;
@@ -22,7 +23,8 @@ public class Contribution extends AggregateRoot<ContributionId> {
     private ContributionStatus status;
     private PenaltyPolicy penaltyPolicy;
 
-    private Contribution(ContributionId contributionId, String name,
+    private Contribution(ContributionId contributionId,
+                         String name,
                          String description,
                          DateRange period,
                          Money amount,
@@ -39,6 +41,29 @@ public class Contribution extends AggregateRoot<ContributionId> {
         this.penaltyPolicy = Objects.requireNonNull(penaltyPolicy, "Penalty policy cannot be null");
     }
 
+    private Contribution(
+                         String name,
+                         String description,
+                         DateRange period,
+                         Money amount,
+                         ZonedDateTime dueDate,
+                         ContributionStatus status,
+                         PenaltyPolicy penaltyPolicy) {
+        super(Objects.requireNonNull(ContributionId.generateId(), "Id cannot be null"));
+        this.name = name;
+        this.description = description;
+        this.period = Objects.requireNonNull(period, "Date range cannot be null");
+        this.contributionAmount = Objects.requireNonNull(amount, "Amount cannot be null");
+        this.dueDate = dueDate;
+        this.status = status;
+        this.penaltyPolicy = Objects.requireNonNull(penaltyPolicy, "Penalty policy cannot be null");
+        registerEvent(new ContributionCreatedEvent(
+            getId(),
+            getContributionAmount(),
+            name
+        ));
+    }
+
     public static Contribution createContributionWithPenaltyPolicy(
         String name,
         String description,
@@ -46,8 +71,7 @@ public class Contribution extends AggregateRoot<ContributionId> {
         Money amount,
         ZonedDateTime dueDate,
         PenaltyPolicy penaltyPolicy) {
-        return new Contribution(
-            ContributionId.generateId(),
+       return new Contribution(
             name,
             description,
             dateRange,
@@ -55,6 +79,7 @@ public class Contribution extends AggregateRoot<ContributionId> {
             dueDate,
             ContributionStatus.OPEN,
             penaltyPolicy);
+
     }
 
     public static Contribution rehydrate(ContributionId contributionId,

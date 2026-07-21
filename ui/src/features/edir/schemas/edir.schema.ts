@@ -50,7 +50,7 @@ export const createEdirSchema = z.object({
             .min(2, "Subcity is required"),
 
 
-        worda: z
+        woreda: z
             .string()
             .min(1, "Woreda is required"),
 

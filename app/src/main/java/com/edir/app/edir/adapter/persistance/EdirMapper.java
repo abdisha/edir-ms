@@ -24,7 +24,7 @@ public class EdirMapper {
                 new Address(
                         edirEntity.getCity(),
                         edirEntity.getSubCity(),
-                        edirEntity.getWorda()),
+                        edirEntity.getWoreda()),
                 new PhoneNumber(edirEntity.getPhoneNumber()),
                 edirEntity.getDirector() == null ? null : new MemberId(edirEntity.getDirector()),
                 edirEntity.getSecretary() == null ? null : new MemberId(edirEntity.getSecretary()),
@@ -47,7 +47,7 @@ public class EdirMapper {
                         new Address(
                                 memberEntity.getCity(),
                                 memberEntity.getSubCity(),
-                                memberEntity.getWorda()
+                                memberEntity.getWoreda()
                         ),
                         new PhoneNumber(memberEntity.getPhoneNumber()),
                         memberEntity.getMemberStatus(),
@@ -81,8 +81,8 @@ public class EdirMapper {
                                         .memberStatus(member.getActive())
                                         .phoneNumber(member.getPhoneNumber().phoneNumber())
                                         .city(member.getAddress().city())
-                                        .subCity(member.getAddress().subCity())
-                                        .worda(member.getAddress().worda())
+                                        .subCity(member.getAddress().subcity())
+                                        .woreda(member.getAddress().woreda())
                                         .build()
                         ).collect(Collectors.toList())
 
@@ -91,8 +91,8 @@ public class EdirMapper {
                 .treasurer(edir.getTreasurerId() == null ? null : edir.getTreasurerId().value())
                 .secretary(edir.getSecretaryId() == null ? null : edir.getSecretaryId().value())
                 .city(edir.getAddress().city())
-                .subCity(edir.getAddress().subCity())
-                .worda(edir.getAddress().worda())
+                .subCity(edir.getAddress().subcity())
+                .woreda(edir.getAddress().woreda())
                 .build();
 
            edirEntity.getMembers().forEach(m->m.setEdir(edirEntity));

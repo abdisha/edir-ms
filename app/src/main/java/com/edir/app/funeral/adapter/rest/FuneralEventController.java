@@ -8,7 +8,7 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 @RestController
 @RequestMapping(REST_VERSION+"/funeral-events")
 public class FuneralEventController {
-    //    @PostMapping
+//        @PostMapping
 //    public ResponseEntity<FuneralEventResponse> createFuneralEvent(@RequestBody CreateFuneralEventRequest request){
 //
 //    }

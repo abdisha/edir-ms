@@ -7,6 +7,7 @@ import com.edir.app.contribution.domain.entity.Contribution;
 import com.edir.app.contribution.domain.entity.MemberContribution;
 import com.edir.app.contribution.domain.entity.Payment;
 import com.edir.app.contribution.domain.valueobjects.*;
+import com.edir.app.shared.domain.valueobjects.FullName;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.Money;
 import org.jspecify.annotations.NonNull;
@@ -53,6 +54,7 @@ public class ContributionDataMapper {
     public MemberContributionEntity memberContributionToMemberContributionEntity(MemberContribution memberContribution) {
         return MemberContributionEntity.builder()
             .id(memberContribution.getId().value())
+            .fullName(memberContribution.getFullName().toString())
             .memberId(memberContribution.getMemberId().value())
             .contributionId(memberContribution.getContributionId().value())
             .rolledOverContribution(memberContribution.getOutstandingContribution().amount())
@@ -67,13 +69,17 @@ public class ContributionDataMapper {
     }
 
     public MemberContribution memberContributionToMemberContributionEntity(MemberContributionEntity memberContributionEntity) {
+        String [] names=  memberContributionEntity.getFullName().split(" ");
+
         return MemberContribution.rehydrate(
             new MemberContributionId(memberContributionEntity.getId()),
-            new MemberId(memberContributionEntity.getMemberId()),
+                       new MemberId(memberContributionEntity.getMemberId()),
+            new FullName(names[0],names[1],names[2]),
             new ContributionId(memberContributionEntity.getContributionId()),
             new Money(memberContributionEntity.getContributionAmount()),
             new Money(memberContributionEntity.getRolledOverContribution()),
             new Money(memberContributionEntity.getPenaltyAmount()),
+            memberContributionEntity.getStatus(),
             new Money(memberContributionEntity.getRolledOverPenalty()),
             toPayment(memberContributionEntity.getPaymentEntities())
 

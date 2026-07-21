@@ -21,7 +21,7 @@ export const memberSchema = z.object({
     .min(2, "Last name must be at least 2 characters.")
     .max(50, "Last name cannot exceed 50 characters."),
 
-  gender: z.enum(["", "M", "F"] as const, {
+  gender: z.enum(["", "Male", "Female"] as const, {
     error: "Gender is required.",
   }),
 

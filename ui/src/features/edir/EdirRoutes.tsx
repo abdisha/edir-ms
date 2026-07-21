@@ -9,6 +9,7 @@ import MemberDetailPage from "@/features/edir/pages/MemberDetailPage.tsx";
 export const EdirRoutes = [
     {
         path:'/',
+        index:true,
         element:<EdirPage/>
     }, {
         path:'/home',

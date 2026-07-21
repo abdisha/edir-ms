@@ -20,11 +20,9 @@ public class FuneralEventRepositoryImpl implements FuneralEventRepository {
 
     @Override
     public UUID save(FuneralEvent funeralEvent) {
-
-        return funeralEventJpaRepository.save(
-            mapper.funeralEventToFuneralEventEntity(funeralEvent)
-
-        ).getFuneralEventId();
+        return funeralEventJpaRepository
+            .save(mapper.funeralEventToFuneralEventEntity(funeralEvent))
+            .getFuneralEventId();
     }
 
     @Override

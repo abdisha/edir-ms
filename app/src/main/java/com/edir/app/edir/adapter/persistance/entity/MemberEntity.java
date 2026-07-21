@@ -40,7 +40,7 @@ public class MemberEntity {
     private String phoneNumber;
     private String city;
     private String subCity;
-    private String worda;
+    private String woreda;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

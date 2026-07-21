@@ -1,4 +1,4 @@
-package com.edir.app.inventory.entity;
+package com.edir.app.inventory.domain.entity;
 
 import java.util.List;
 import java.util.UUID;

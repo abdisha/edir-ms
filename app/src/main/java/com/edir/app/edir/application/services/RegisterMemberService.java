@@ -38,11 +38,11 @@ public class RegisterMemberService implements RegisterMemberUseCase {
                 registerMemberCommand.middleName(),
                 registerMemberCommand.lastName()),
                 new Age(registerMemberCommand.age()),
-                Gender.valueOf(registerMemberCommand.gender()),
+                Gender.from(registerMemberCommand.gender()),
                 new Address(
                         registerMemberCommand.address().city(),
                         registerMemberCommand.address().subcity(),
-                        registerMemberCommand.address().worda()
+                        registerMemberCommand.address().woreda()
                 ),
                 new PhoneNumber(registerMemberCommand.phoneNumber())
         );

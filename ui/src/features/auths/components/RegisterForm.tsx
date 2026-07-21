@@ -1,68 +1,225 @@
-import {Button} from "@/shared/components/ui/button"
-import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/shared/components/ui/card"
-import {Field, FieldDescription, FieldGroup, FieldLabel,} from "@/shared/components/ui/field"
-import {Input} from "@/shared/components/ui/input"
+import {Loader2, Lock, Mail, User} from "lucide-react";
 
-export function RegisterForm({
-                               className,
-                               ...props
-                           }: React.ComponentProps<"div">) {
+import {useForm} from "react-hook-form";
+
+import {zodResolver} from "@hookform/resolvers/zod";
+
+import {type RegisterFormValues, registerSchema,} from "../schemas/register.schema";
+
+
+import {Button} from "@/shared/components/ui/button";
+import {Input} from "@/shared/components/ui/input";
+
+import {Field, FieldError, FieldLabel,} from "@/shared/components/ui/field";
+
+interface RegisterFormProp {
+    submit: (values: RegisterFormValues) => Promise<void>
+    loading: boolean
+}
+
+export function RegisterForm({submit, loading = false}: RegisterFormProp) {
+
+
+    const form = useForm<RegisterFormValues>({
+        resolver: zodResolver(registerSchema),
+
+        defaultValues: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+        },
+    });
+
+
     return (
-        <Card {...props}>
-            <CardHeader>
-                <CardTitle>Create an account</CardTitle>
-                <CardDescription>
-                    Enter your information below to create your account
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <form>
-                    <FieldGroup>
-                        <Field>
-                            <FieldLabel htmlFor="name">Full Name</FieldLabel>
-                            <Input id="name" type="text" placeholder="John Doe" required />
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="email">Email</FieldLabel>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="m@example.com"
-                                required
-                            />
-                            <FieldDescription>
-                                We&apos;ll use this to contact you. We will not share your email
-                                with anyone else.
-                            </FieldDescription>
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="password">Password</FieldLabel>
-                            <Input id="password" type="password" required />
-                            <FieldDescription>
-                                Must be at least 8 characters long.
-                            </FieldDescription>
-                        </Field>
-                        <Field>
-                            <FieldLabel htmlFor="confirm-password">
-                                Confirm Password
-                            </FieldLabel>
-                            <Input id="confirm-password" type="password" required />
-                            <FieldDescription>Please confirm your password.</FieldDescription>
-                        </Field>
-                        <FieldGroup>
-                            <Field>
-                                <Button type="submit">Create Account</Button>
-                                <Button variant="outline" type="button">
-                                    Sign up with Google
-                                </Button>
-                                <FieldDescription className="px-6 text-center">
-                                    Already have an account? <a href="#">Sign in</a>
-                                </FieldDescription>
-                            </Field>
-                        </FieldGroup>
-                    </FieldGroup>
-                </form>
-            </CardContent>
-        </Card>
-    )
+
+        <form
+            onSubmit={form.handleSubmit(submit)}
+            className="space-y-6"
+        >
+            <div className="grid gap-5 md:grid-cols-2">
+
+                <Field>
+
+                    <FieldLabel>
+
+                        First Name
+
+                    </FieldLabel>
+
+                    <div className="relative">
+
+                        <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"/>
+
+                        <Input
+
+                            className="pl-10"
+
+                            placeholder="John"
+
+                            {...form.register("firstName")}
+
+                        />
+
+                    </div>
+
+                    <FieldError
+                        errors={[form.formState.errors.firstName]}
+                    />
+
+                </Field>
+
+                <Field>
+
+                    <FieldLabel>
+
+                        Last Name
+
+                    </FieldLabel>
+
+                    <div className="relative">
+
+                        <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"/>
+
+                        <Input
+
+                            className="pl-10"
+
+                            placeholder="Doe"
+
+                            {...form.register("lastName")}
+
+                        />
+
+                    </div>
+
+                    <FieldError
+                        errors={[form.formState.errors.lastName]}
+                    />
+
+                </Field>
+
+            </div>
+            <Field>
+
+                <FieldLabel>
+
+                    Email Address
+
+                </FieldLabel>
+
+                <div className="relative">
+
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"/>
+
+                    <Input
+
+                        type="email"
+
+                        placeholder="john@example.com"
+
+                        className="pl-10"
+
+                        {...form.register("email")}
+                    />
+                </div>
+                <FieldError
+                    errors={[form.formState.errors.email]}
+                />
+            </Field>
+            <Field>
+
+                <FieldLabel>
+
+                    Password
+
+                </FieldLabel>
+
+                <div className="relative">
+
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"/>
+
+                    <Input
+
+                        type="password"
+
+                        placeholder="••••••••"
+
+                        className="pl-10"
+
+                        {...form.register("password")}
+
+                    />
+
+                </div>
+
+                <FieldError
+                    errors={[form.formState.errors.password]}
+                />
+
+            </Field>
+
+            <Field>
+
+                <FieldLabel>
+
+                    Confirm Password
+
+                </FieldLabel>
+
+                <div className="relative">
+
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"/>
+
+                    <Input
+
+                        type="password"
+
+                        placeholder="••••••••"
+
+                        className="pl-10"
+
+                        {...form.register("confirmPassword")}
+
+                    />
+
+                </div>
+
+                <FieldError
+                    errors={[form.formState.errors.confirmPassword]}
+                />
+
+            </Field>
+
+            <Button
+                type="submit"
+                className="w-full"
+
+                disabled={loading}
+
+            >
+
+                {loading ? (
+
+                    <>
+
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+
+                        Creating Account...
+
+                    </>
+
+                ) : (
+
+                    "Create Account"
+
+                )}
+
+            </Button>
+
+        </form>
+
+    );
 }

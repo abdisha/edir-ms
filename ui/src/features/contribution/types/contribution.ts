@@ -1,9 +1,9 @@
 export interface AddContributionRequest {
     name: string
     description: string
-    startDate: string
-    endDate: string
-    dueDate: string
+    startDate: Date
+    endDate: Date
+    dueDate: Date
     contributionAmount: number
     penaltyAmount: number
     penaltyType: string
@@ -47,6 +47,7 @@ export interface Page {
 
 export interface MemberContribution {
     id: string;
+    fullName:string;
     memberId: string;
     contributionId: string;
     contributionAmount: number;

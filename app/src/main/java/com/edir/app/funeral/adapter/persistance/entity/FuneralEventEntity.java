@@ -19,7 +19,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "funeral_event",schema = "funeral_event")
 public class FuneralEventEntity {
-
     @Id
     @Column(unique = true)
     private UUID funeralEventId;

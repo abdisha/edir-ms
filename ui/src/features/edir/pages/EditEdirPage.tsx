@@ -5,6 +5,7 @@ import {SpinnerPage} from "@/pages/SpinnerPage.tsx";
 import {PageError} from "@/pages/PageError.tsx";
 import {useUpdateEdir} from "@/features/edir/hooks/useUpdateEdir.ts";
 import {useEffect} from "react";
+import EmptyEdirState from "@/features/edir/components/EmptyEdirState.tsx";
 
 const EditEdirPage = () => {
      const navigate = useNavigate();
@@ -23,7 +24,9 @@ const EditEdirPage = () => {
     if(isError){
         return <PageError/>
     }
-
+    if(!data){
+        return <EmptyEdirState></EmptyEdirState>
+    }
 
     return (
         <>
@@ -37,13 +40,13 @@ const EditEdirPage = () => {
                 address: {
                     city: data.city,
                     subcity: data.subcity,
-                    worda: data.worda,
+                    woreda: data.woreda,
                 },
             }}
             onCancel={()=>navigate('/home')}
             onSubmit={(values) => {
                  context.mutate({
-                    id: data.uuid,
+                    id: data?.uuid,
                     edirName: values.edirName,
                     description: values.description,
                     establishedDate: values.establishedDate,
@@ -51,7 +54,7 @@ const EditEdirPage = () => {
                     address:{
                         city:values.address.city,
                         subcity:values.address.subcity,
-                        worda:values.address.worda,
+                        worda:values.address.woreda,
                     }
                 });
             }}

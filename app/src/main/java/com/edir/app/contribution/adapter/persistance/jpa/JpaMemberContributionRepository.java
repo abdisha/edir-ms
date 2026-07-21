@@ -32,13 +32,14 @@ public interface JpaMemberContributionRepository extends JpaRepository<MemberCon
         value = """
             select new com.edir.app.contribution.application.ports.out.query.MemberContributionView(
                           m.id,
+                          m.fullName,
                           m.memberId,
                           m.contributionId,
                           m.contributionAmount,
                           m.penaltyAmount,
                           m.rolledOverContribution,
                           m.rolledOverPenalty,
-                                    m.status
+                          m.status
                               )
                               from MemberContributionEntity  as m
                                           where m.contributionId =:contributionId
@@ -51,6 +52,7 @@ public interface JpaMemberContributionRepository extends JpaRepository<MemberCon
         value = """
             select new com.edir.app.contribution.application.ports.out.query.MemberContributionView(
                           m.id,
+                                      m.fullName,
                           m.memberId,
                           m.contributionId,
                           m.contributionAmount,

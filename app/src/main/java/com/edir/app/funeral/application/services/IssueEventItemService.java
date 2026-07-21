@@ -25,7 +25,9 @@ public class IssueEventItemService implements IssueEventItemUseCase {
             .orElseThrow(
                 () -> new FuneralEventNotFoundExceptions(new FuneralId(itemCommand.funeralId()))
             );
-        funeralEvent.issueFuneralItem(new ItemCode(itemCommand.itemCode()),itemCommand.name(),itemCommand.quantity());
+        funeralEvent.issueFuneralItem(new ItemCode(itemCommand.itemCode())
+            ,itemCommand.name(),
+            itemCommand.quantity());
 
     }
 }

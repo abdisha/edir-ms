@@ -33,7 +33,7 @@ class MemberControllerTest extends IntegrationTest {
                 new Address(
                         "city",
                         "subcity",
-                        "worda"
+                        "woreda"
 
                 ),
                 "0912345678"
