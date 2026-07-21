@@ -13,13 +13,13 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class MemberContribution  extends AggregateRoot<MemberContributionId> {
-    private MemberId memberId;
-    private ContributionId contributionId;
-    private FullName fullName;
+public class MemberContribution extends AggregateRoot<MemberContributionId> {
+    private final MemberId memberId;
+    private final ContributionId contributionId;
+    private final FullName fullName;
     private Money outstandingContribution;
-    private Money contribution;
-    private Money penalty;
+    private final Money contribution;
+    private final Money penalty;
     private Money outstandingPenalty;
     private MemberContributionStatus status;
     private final Set<Payment> payments = new HashSet<>();
@@ -30,6 +30,7 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
                                ContributionId contributionId,
                                Money outstandingContribution,
                                Money contribution,
+                               MemberContributionStatus status,
                                Money outstandingPenalty) {
         super(Objects.requireNonNull(memberContributionId, "MemberContributionId cannot be null"));
         this.fullName = fullName;
@@ -39,6 +40,7 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
         this.contribution = Objects.requireNonNull(contribution, "Excepted amount cannot be null");
         this.outstandingPenalty = outstandingPenalty;
         penalty = Money.zero();
+        this.status =status;
     }
 
     private MemberContribution(MemberContributionId memberContributionId,
@@ -48,6 +50,7 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
                                Money outstandingContribution,
                                Money contribution,
                                Money penalty,
+                               MemberContributionStatus status,
                                Money outstandingPenalty,
                                Set<Payment> payments) {
         super(Objects.requireNonNull(memberContributionId, "MemberContributionId cannot be null"));
@@ -57,16 +60,17 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
         this.outstandingContribution = Objects.requireNonNull(outstandingContribution, "Amount cannot be null");
         this.contribution = Objects.requireNonNull(contribution, "Excepted amount cannot be null");
         this.penalty = penalty;
+        this.status = status;
         this.outstandingPenalty = outstandingPenalty;
         this.payments.addAll(payments);
     }
 
     public static MemberContribution open(MemberId memberId,
                                           FullName fullName,
-                                              ContributionId contributionId,
-                                              Money rolledOverContribution,
-                                              Money contribution,
-                                              Money rolledOverPenalty) {
+                                          ContributionId contributionId,
+                                          Money rolledOverContribution,
+                                          Money contribution,
+                                          Money rolledOverPenalty) {
         return new MemberContribution(
             MemberContributionId.generateId(),
             fullName,
@@ -74,25 +78,11 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
             contributionId,
             rolledOverContribution,
             contribution,
+            MemberContributionStatus.UNPAID,
             rolledOverPenalty
         );
     }
-    public static MemberContribution createMemberContribution(MemberId memberId,
-                                                              FullName fullName,
-                                                              ContributionId contributionId,
-                                                              Money amount,
-                                                              Money exceptedAmount,
-                                                              Money rolledOverPenalty) {
-        return new MemberContribution(
-                MemberContributionId.generateId(),
-            fullName,
-                memberId,
-                contributionId,
-                amount,
-                exceptedAmount,
-                rolledOverPenalty
-        );
-    }
+
 
     public static MemberContribution rehydrate(MemberContributionId memberContributionId,
                                                MemberId memberId,
@@ -101,24 +91,25 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
                                                Money amount,
                                                Money exceptedAmount,
                                                Money currentPenalty,
+                                               MemberContributionStatus status,
                                                Money rolledOverPenalty,
                                                Set<Payment> payments) {
         return new MemberContribution(
-                memberContributionId,
+            memberContributionId,
             fullName,
             memberId,
             contributionId,
-                amount,
-                exceptedAmount,
-                currentPenalty,
-                rolledOverPenalty,
-                payments
+            amount,
+            exceptedAmount,
+            currentPenalty,
+            status,
+            rolledOverPenalty,
+            payments
         );
     }
 
 
-
-    public void receivePayment(Payment payment, Settlement settlement){
+    public void receivePayment(Payment payment, Settlement settlement) {
         payments.add(payment);
 
         outstandingPenalty = outstandingPenalty
@@ -139,6 +130,7 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
         this.outstandingPenalty =
             this.outstandingPenalty.add(penalty);
     }
+
     public void close() {
         status = MemberContributionStatus.CLOSED;
     }
@@ -163,16 +155,21 @@ public class MemberContribution  extends AggregateRoot<MemberContributionId> {
         return outstandingPenalty;
     }
 
-    public Set<Payment> getPayments(){
+    public Set<Payment> getPayments() {
         return Set.copyOf(payments);
     }
-    public Money getOutstandingContribution(){
+
+    public Money getOutstandingContribution() {
         return outstandingContribution;
     }
+
     public boolean hasOutstandingContribution() {
         return !outstandingContribution.isZero();
     }
 
+    public FullName getFullName() {
+        return fullName;
+    }
 
     public Money getRolledOverContribution() {
         return outstandingContribution;

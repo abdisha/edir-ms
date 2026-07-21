@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public record MemberContributionView(
 UUID id,
+String fullName,
 UUID memberId,
 UUID contributionId,
 BigDecimal contributionAmount,

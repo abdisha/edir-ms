@@ -17,4 +17,9 @@ public record FullName(String firstName,String middle, String lastName) {
             throw new IllegalArgumentException("Last name cannot be empty");
         }
     }
+
+    @Override
+    public String toString() {
+        return firstName + " " + middle + " " + lastName;
+    }
 }
