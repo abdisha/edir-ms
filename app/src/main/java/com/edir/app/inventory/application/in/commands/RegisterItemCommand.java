@@ -1,4 +1,4 @@
-package com.edir.app.inventory.application.commands;
+package com.edir.app.inventory.application.in.commands;
 
 public record RegisterItemCommand(
     String itemCode,

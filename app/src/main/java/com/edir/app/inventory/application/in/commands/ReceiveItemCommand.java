@@ -1,4 +1,4 @@
-package com.edir.app.inventory.application.commands;
+package com.edir.app.inventory.application.in.commands;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

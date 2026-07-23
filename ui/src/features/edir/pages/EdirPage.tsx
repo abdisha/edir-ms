@@ -8,14 +8,12 @@ import {Badge} from "@/shared/components/ui/badge";
 import {useEdir} from "@/features/edir/hooks/useEdir.ts";
 import {SpinnerPage} from "@/pages/SpinnerPage.tsx";
 import {PageError} from "@/pages/PageError.tsx";
-import {useDelayedLoading} from "@/shared/hooks/useDelayedLoading.tsx";
 
 const EdirPage = () => {
     const navigate = useNavigate();
-    const { data, isPending, isLoading, refetch, isError } = useEdir();
-    const showSpinner = useDelayedLoading(isPending);
+    const { data, isLoading, refetch, isError } = useEdir();
 
-    if (showSpinner || isLoading) {
+    if (isLoading) {
         return <SpinnerPage message={`Loading Edir information...`} />;
     }
 

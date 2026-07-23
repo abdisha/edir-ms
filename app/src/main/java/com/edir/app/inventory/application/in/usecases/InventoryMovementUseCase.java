@@ -1,8 +1,8 @@
-package com.edir.app.inventory.application.usecases;
+package com.edir.app.inventory.application.in.usecases;
 
-import com.edir.app.inventory.application.commands.IssueItemCommand;
-import com.edir.app.inventory.application.commands.ReceiveItemCommand;
-import com.edir.app.inventory.application.commands.TransferCommand;
+import com.edir.app.inventory.application.in.commands.IssueItemCommand;
+import com.edir.app.inventory.application.in.commands.ReceiveItemCommand;
+import com.edir.app.inventory.application.in.commands.TransferCommand;
 import com.edir.app.inventory.domain.entity.Item;
 
 import java.util.UUID;

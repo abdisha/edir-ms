@@ -1,72 +1,91 @@
 package com.edir.app.inventory.application.services;
 
-import com.edir.app.inventory.application.commands.TransferCommand;
+import com.edir.app.inventory.application.exceptions.ItemNotFoundException;
+import com.edir.app.inventory.application.in.commands.AllocateItemCommand;
+import com.edir.app.inventory.application.in.commands.TransferCommand;
+import com.edir.app.inventory.application.in.usecases.InventoryAllocationUseCase;
 import com.edir.app.inventory.application.out.InventoryAllocationRepository;
-import com.edir.app.inventory.application.usecases.InventoryAllocationUseCase;
 import com.edir.app.inventory.domain.entity.InventoryAllocation;
+import com.edir.app.shared.application.usecase.UseCase;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class InventoryAllocationService implements InventoryAllocationUseCase {
+@AllArgsConstructor
+@UseCase
+@Transactional
+class InventoryAllocationService implements InventoryAllocationUseCase {
     private final InventoryAllocationRepository allocationRepository;
 
-    public InventoryAllocationService(InventoryAllocationRepository allocationRepository) {
-        this.allocationRepository = allocationRepository;
-    }
-
     @Override
-    public void allocateItemToMember(UUID item, Integer quantity, UUID memberId) {
+    public void allocateItemToMember(AllocateItemCommand command) {
         var allocation = InventoryAllocation.create(
-            item,
-            memberId,
-            quantity
+            command.item(),
+            command.memberId(),
+            command.quantity()
         );
         allocationRepository.save(allocation);
     }
 
     @Override
-    public void increaseAllocationQuantity(UUID item, Integer quantity, UUID memberId) {
-        Optional<InventoryAllocation> result = allocationRepository.findById(memberId, item);
+    public void increaseAllocationQuantity(AllocateItemCommand command) {
+        Optional<InventoryAllocation> result = allocationRepository
+            .findByMemberIdAndItemId(command.memberId(), command.item());
 
         if (result.isEmpty()) {
-            allocateItemToMember(item, quantity, memberId);
+            allocateItemToMember(command);
             return;
         }
 
         InventoryAllocation inventoryAllocation = result.get();
-        inventoryAllocation.receive(quantity);
+        inventoryAllocation.receive(command.quantity());
 
         allocationRepository.save(inventoryAllocation);
 
     }
 
     @Override
-    public void reduceAllocationQuantity(UUID item, Integer quantity, UUID memberId) {
-        Optional<InventoryAllocation> result = allocationRepository.findById(memberId, item);
+    public void reduceAllocationQuantity(AllocateItemCommand command) {
+        Optional<InventoryAllocation> result = allocationRepository
+            .findByMemberIdAndItemId(command.memberId(), command.item());
 
         if (result.isEmpty()) {
             return;
         }
 
         InventoryAllocation inventoryAllocation = result.get();
-        inventoryAllocation.issue(quantity);
+        inventoryAllocation.issue(command.quantity());
         allocationRepository.save(inventoryAllocation);
     }
 
     @Override
     public void transferAllocation(TransferCommand command) {
-        Optional<InventoryAllocation> result = allocationRepository.findById(command.from(), command.item().getItem());
+        InventoryAllocation source = allocationRepository.findByMemberIdAndItemId(
+            command.from(),
+            command.item().getItemId()
+        ).orElseThrow(
+            () -> new ItemNotFoundException("Item not found")
+        );
 
-        if (result.isEmpty()) {
-            return;
-        }
+        source.issue(command.quantity());
 
-        InventoryAllocation inventoryAllocation = result.get();
-        inventoryAllocation.transferTo(command.to());
+        InventoryAllocation target = allocationRepository.findByMemberIdAndItemId(
+            command.to(),
+            command.item().getItemId()
+        ).orElseGet(() -> InventoryAllocation.create(
+                command.item().getItemId(),
+                command.to(),
+                command.quantity()
+            )
+        );
 
-        allocationRepository.save(inventoryAllocation);
+        target.receive(command.quantity());
+
+        allocationRepository.save(source);
+        allocationRepository.save(target);
     }
 
     @Override

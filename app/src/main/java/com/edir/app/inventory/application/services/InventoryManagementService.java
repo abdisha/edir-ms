@@ -1,19 +1,26 @@
 package com.edir.app.inventory.application.services;
 
-import com.edir.app.inventory.application.commands.RegisterItemCommand;
+import com.edir.app.inventory.application.exceptions.ItemNotFoundException;
+import com.edir.app.inventory.application.in.commands.RegisterItemCommand;
+import com.edir.app.inventory.application.in.commands.UpdateItemCommand;
+import com.edir.app.inventory.application.in.usecases.InventoryManagementUseCase;
 import com.edir.app.inventory.application.out.ItemRepository;
-import com.edir.app.inventory.application.usecases.InventoryManagementUseCase;
 import com.edir.app.inventory.domain.entity.Item;
+import com.edir.app.inventory.domain.valueobjects.ItemStatus;
+import com.edir.app.shared.application.usecase.UseCase;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
+import java.util.Optional;
 import java.util.UUID;
 
-public class InventoryManagementService implements InventoryManagementUseCase {
+@AllArgsConstructor
+@Transactional
+@UseCase
+class InventoryManagementService implements InventoryManagementUseCase {
     private final ItemRepository repository;
 
-    public InventoryManagementService(ItemRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Item register(RegisterItemCommand command) {
@@ -22,14 +29,19 @@ public class InventoryManagementService implements InventoryManagementUseCase {
              new ItemCode(command.itemCode()),
              command.itemName(),
              0,
-             true
+             ItemStatus.ACTIVE
          );
         return repository.save(item) ;
     }
 
     @Override
-    public void updateItem(UUID id, String itemName) {
-        Item item = repository.findById(id);
-        item.updateName(itemName);
+    public void updateItem(UpdateItemCommand command) {
+        Optional<Item> result = repository.findById(command.itemId());
+        if (result.isEmpty()) {
+            throw new ItemNotFoundException("Item not found");
+        }
+        Item item = result.get();
+        item.updateName(command.itemName());
+        repository.save(item);
     }
 }
