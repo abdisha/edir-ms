@@ -6,7 +6,7 @@ import {PageError} from "@/pages/PageError.tsx";
 import {Button} from "@/shared/components/ui/button.tsx";
 import {ContributionBanner} from "@/features/contribution/components/ContributionBanner.tsx";
 import {MemberContributionTable} from "@/features/contribution/components/MemberContributionTable.tsx";
-import {useGetMemberContribution} from "@/features/contribution/hooks/useGetMemberContribution.ts";
+import {useGetMemberContributions} from "@/features/contribution/hooks/useGetMemberContributions.ts";
 import {ReceivePaymentDrawer} from "@/features/contribution/components/ReceivePaymentDrawer.tsx";
 import type {MemberContribution} from "@/features/contribution/types/contribution.ts";
 import {useState} from "react";
@@ -15,7 +15,7 @@ const ContributionPage =()=>{
     const navigation = useNavigate()
     const {data,isError,isLoading} = useGetContribution()
     const contributionId = data?.id ?? '';
-    const memberContribution= useGetMemberContribution(contributionId)
+    const memberContribution= useGetMemberContributions(contributionId)
 
     const [selectedMember, setSelectedMember] =
         useState<MemberContribution | null>(null);
@@ -45,32 +45,17 @@ const ContributionPage =()=>{
     return <div className="space-y-5">
         <ContributionBanner contribution={data}/>
         <div className="flex items-center justify-between">
-
             <div>
-
-                <h2 className="text-xl font-semibold">
-
-                    Member Contributions
-
-                </h2>
-
+                <h2 className="text-xl font-semibold">Member Contributions</h2>
                 <p className="text-muted-foreground">
-
                     Track payment status for each member.
-
                 </p>
-
             </div>
-
-            <Button variant="outline">
-
-                Export
-
-            </Button>
-
+            <Button variant="outline">Export</Button>
         </div>
 
         { memberContribution.data && <MemberContributionTable
+            onSelected={(item)=>navigation("/"+item.id+"/member-contribution-detail")}
             onReceivePayment={handleReceivePayment}
             loading={memberContribution.isLoading}
             onPageChange={() => {

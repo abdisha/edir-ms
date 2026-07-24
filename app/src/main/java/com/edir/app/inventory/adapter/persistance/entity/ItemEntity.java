@@ -16,12 +16,10 @@ import java.util.UUID;
 @Data
 @Builder
 @Entity
-@Table(name = "item", schema = "inventory")
+@Table(name = "inventory_item", schema = "inventory")
 public class ItemEntity {
     @Id
-    private UUID itemId;
-
-    @NotNull
+    private UUID id;
     @Column(length = 100)
     private String itemCode;
 
@@ -30,6 +28,8 @@ public class ItemEntity {
     private String name;
 
     @Convert(converter = ItemStatusConverter.class)
+    @Column(length = 4)
+    @NotNull
     private ItemStatus status;
 
     private Integer quantityAtHand;

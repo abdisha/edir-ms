@@ -10,6 +10,7 @@ public enum ItemStatus {
         if (value == null || StringUtils.containsWhitespace(value)) {
             throw new IllegalArgumentException("Empty Status t");
         }
+        this.value = value;
     }
 
     public String getValue() {
@@ -18,9 +19,9 @@ public enum ItemStatus {
 
     public static ItemStatus from(String value) {
         return switch (value.toUpperCase()) {
-            case "DA" -> DAMAGED;
-            case "AC" -> ACTIVE;
-            case "INC" -> INACTIVE;
+            case "DAMAGED",  "DA" -> DAMAGED;
+            case "ACTIVE","AC" -> ACTIVE;
+            case "INACTIVE","INC" -> INACTIVE;
             default -> throw new IllegalArgumentException("Invalid item status type: "+value);
         };
     }

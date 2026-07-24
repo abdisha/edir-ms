@@ -12,7 +12,7 @@ const useCreateMember = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: queryKeys.member,
+          queryKey: queryKeys.createMember,
         })
         .then(() => {
           toast.success("Member created successfully");

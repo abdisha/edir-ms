@@ -27,7 +27,7 @@ public class MemberContributionController {
     private final ReceivePaymentUseCase receivePaymentUseCase;
     private final MemberContributionQueryService queryService;
 
-    @PostMapping
+    @PostMapping("/receive-payment")
     @ApiResponse(responseCode = "204", description = "Payment received successfully")
     public ResponseEntity<Void> receivePayment(@Valid @RequestBody
                                                ReceivePaymentCommand command) {

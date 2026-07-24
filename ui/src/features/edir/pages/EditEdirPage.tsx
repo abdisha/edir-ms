@@ -54,7 +54,7 @@ const EditEdirPage = () => {
                     address:{
                         city:values.address.city,
                         subcity:values.address.subcity,
-                        worda:values.address.woreda,
+                        woreda:values.address.woreda,
                     }
                 });
             }}

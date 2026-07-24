@@ -31,7 +31,7 @@ public class InventoryDataMapper {
 
     public ItemEntity itemToItemEntity(Item item){
         return ItemEntity.builder()
-            .itemId(item.getItemId())
+            .id(item.getItemId())
             .itemCode(item.getItemCode().code())
             .name(item.getItemName())
             .status(item.getStatus())
@@ -41,7 +41,7 @@ public class InventoryDataMapper {
 
     public Item itemEntityToItem(ItemEntity entity){
         return new Item(
-            entity.getItemId(),
+            entity.getId(),
             new ItemCode(entity.getItemCode()),
             entity.getName(),
             entity.getQuantityAtHand(),
