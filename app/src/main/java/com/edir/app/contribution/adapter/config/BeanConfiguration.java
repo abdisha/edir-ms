@@ -6,6 +6,9 @@ import com.edir.app.contribution.domain.MemberContributionServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * This config file creates member contribution
+ */
 @Configuration
 public class BeanConfiguration {
 
@@ -20,3 +23,5 @@ public class BeanConfiguration {
     }
 
 }
+
+
