@@ -5,7 +5,7 @@ import com.edir.app.inventory.application.in.commands.AllocateItemCommand;
 import com.edir.app.inventory.application.in.commands.TransferCommand;
 import com.edir.app.inventory.application.in.usecases.InventoryAllocationUseCase;
 import com.edir.app.inventory.application.out.InventoryAllocationRepository;
-import com.edir.app.inventory.domain.entity.InventoryAllocation;
+import com.edir.app.inventory.domain.entity.Allocation;
 import com.edir.app.shared.application.usecase.UseCase;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
 
     @Override
     public void allocateItemToMember(AllocateItemCommand command) {
-        var allocation = InventoryAllocation.create(
+        var allocation = Allocation.create(
             command.item(),
             command.memberId(),
             command.quantity()
@@ -32,7 +32,7 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
 
     @Override
     public void increaseAllocationQuantity(AllocateItemCommand command) {
-        Optional<InventoryAllocation> result = allocationRepository
+        Optional<Allocation> result = allocationRepository
             .findByMemberIdAndItemId(command.memberId(), command.item());
 
         if (result.isEmpty()) {
@@ -40,30 +40,30 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
             return;
         }
 
-        InventoryAllocation inventoryAllocation = result.get();
-        inventoryAllocation.receive(command.quantity());
+        Allocation allocation = result.get();
+        allocation.receive(command.quantity());
 
-        allocationRepository.save(inventoryAllocation);
+        allocationRepository.save(allocation);
 
     }
 
     @Override
     public void reduceAllocationQuantity(AllocateItemCommand command) {
-        Optional<InventoryAllocation> result = allocationRepository
+        Optional<Allocation> result = allocationRepository
             .findByMemberIdAndItemId(command.memberId(), command.item());
 
         if (result.isEmpty()) {
             return;
         }
 
-        InventoryAllocation inventoryAllocation = result.get();
-        inventoryAllocation.issue(command.quantity());
-        allocationRepository.save(inventoryAllocation);
+        Allocation allocation = result.get();
+        allocation.issue(command.quantity());
+        allocationRepository.save(allocation);
     }
 
     @Override
     public void transferAllocation(TransferCommand command) {
-        InventoryAllocation source = allocationRepository.findByMemberIdAndItemId(
+        Allocation source = allocationRepository.findByMemberIdAndItemId(
             command.from(),
             command.item().getItemId()
         ).orElseThrow(
@@ -72,10 +72,10 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
 
         source.issue(command.quantity());
 
-        InventoryAllocation target = allocationRepository.findByMemberIdAndItemId(
+        Allocation target = allocationRepository.findByMemberIdAndItemId(
             command.to(),
             command.item().getItemId()
-        ).orElseGet(() -> InventoryAllocation.create(
+        ).orElseGet(() -> Allocation.create(
                 command.item().getItemId(),
                 command.to(),
                 command.quantity()
@@ -89,12 +89,12 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
     }
 
     @Override
-    public List<InventoryAllocation> getMemberAllocations(UUID memberId) {
+    public List<Allocation> getMemberAllocations(UUID memberId) {
         return allocationRepository.findByMemberId(memberId);
     }
 
     @Override
-    public List<InventoryAllocation> getItemAllocations(UUID item) {
+    public List<Allocation> getItemAllocations(UUID item) {
         return allocationRepository.findByItemId(item);
     }
 }

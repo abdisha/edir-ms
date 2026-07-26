@@ -2,15 +2,15 @@ package com.edir.app.inventory.adapter;
 
 import com.edir.app.inventory.adapter.persistance.entity.InventoryAllocationEntity;
 import com.edir.app.inventory.adapter.persistance.entity.ItemEntity;
-import com.edir.app.inventory.domain.entity.InventoryAllocation;
+import com.edir.app.inventory.domain.entity.Allocation;
 import com.edir.app.inventory.domain.entity.Item;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
 import org.springframework.stereotype.Component;
 
 @Component
 public class InventoryDataMapper {
-    public InventoryAllocation inventoryAllocationEntityToInventoryAllocation(InventoryAllocationEntity entity) {
-        return InventoryAllocation.rehydrate(
+    public Allocation inventoryAllocationEntityToInventoryAllocation(InventoryAllocationEntity entity) {
+        return Allocation.rehydrate(
             entity.getAllocationId(),
             entity.getItemId(),
             entity.getHolderMemberId(),
@@ -19,7 +19,7 @@ public class InventoryDataMapper {
         );
     }
 
-    public InventoryAllocationEntity inventoryAllocationToInventoryAllocationEntity(InventoryAllocation allocation) {
+    public InventoryAllocationEntity inventoryAllocationToInventoryAllocationEntity(Allocation allocation) {
         return InventoryAllocationEntity.builder()
             .allocationId(allocation.getId())
             .itemId(allocation.getItemId())

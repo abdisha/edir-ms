@@ -1,13 +1,17 @@
 package com.edir.app.inventory.application.in.commands;
 
-import com.edir.app.inventory.domain.entity.Item;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
 public record TransferCommand(
-    Item item,
-    UUID from ,
-    UUID to,
+    @NotNull
+    UUID itemId,
+    @NotNull  UUID from ,
+    @NotNull UUID to,
+    @NotNull
+    @Min(value = 1,message ="Quantity must be greater than 0" )
     Integer quantity
 ) {
 }

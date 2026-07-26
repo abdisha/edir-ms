@@ -3,7 +3,7 @@ package com.edir.app.inventory.domain.valueobjects;
 import org.springframework.util.StringUtils;
 
 public enum ItemStatus {
-    DAMAGED("DA"), ACTIVE("AC"), INACTIVE("INC");
+    ACTIVE("AC"), INACTIVE("INC");
     private String value;
 
     ItemStatus(String value) {
@@ -19,7 +19,6 @@ public enum ItemStatus {
 
     public static ItemStatus from(String value) {
         return switch (value.toUpperCase()) {
-            case "DAMAGED",  "DA" -> DAMAGED;
             case "ACTIVE","AC" -> ACTIVE;
             case "INACTIVE","INC" -> INACTIVE;
             default -> throw new IllegalArgumentException("Invalid item status type: "+value);

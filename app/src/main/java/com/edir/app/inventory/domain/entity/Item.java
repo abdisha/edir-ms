@@ -1,38 +1,60 @@
 package com.edir.app.inventory.domain.entity;
 
+import com.edir.app.inventory.domain.exceptions.ItemCannotBeInActiveException;
+import com.edir.app.inventory.domain.valueobjects.ItemId;
+import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
 import com.edir.app.inventory.domain.valueobjects.ItemStatus;
+import com.edir.app.shared.domain.entity.BaseEntity;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
 
+import java.util.Objects;
 import java.util.UUID;
 
-public class  Item {
-    private UUID itemId;
-    private ItemCode itemCode;
+public class  Item extends BaseEntity<ItemId> {;
+    private final ItemCode itemCode;
     private String itemName;
-    private Integer quantityAtHand;
+    private ItemQuantity quantityAtHand;
     private ItemStatus status;
 
-    public Item(UUID itemId, ItemCode itemCode, String itemName, Integer quantityAtHand, ItemStatus status) {
-        this.itemId = itemId;
+    private Item(ItemId itemId,
+                ItemCode itemCode,
+                String itemName,
+                ItemQuantity quantityAtHand,
+                ItemStatus status) {
+        super(itemId);
         this.itemCode = itemCode;
         this.itemName = itemName;
         this.quantityAtHand = quantityAtHand;
         this.status =status;
     }
 
-    public void updateQuantityAtHand(int quantity){
-        quantityAtHand = quantity;
+    public static Item registerItem(ItemCode itemCode, String itemName){
+        return new Item(ItemId.generateId(),
+            itemCode,
+            itemName,
+            ItemQuantity.of(0),
+            ItemStatus.ACTIVE);
+
     }
 
-    public void markAsActive(){
-        this.status= ItemStatus.ACTIVE;
-    }
-    public  void inActive(){
-        this.status = ItemStatus.ACTIVE;
+    public void markAsInactive(){
+        if(quantityAtHand.quantity()>0){
+            throw new ItemCannotBeInActiveException("Item can not be inactive if it has quantity");
+        }
+        this.status=ItemStatus.INACTIVE;
     }
 
-    public UUID getItemId() {
-        return itemId;
+    public void updateQuantity(ItemQuantity quantity){
+        if(quantity.quantity()<0){
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
+
+        this.quantityAtHand=Objects.requireNonNull(quantity,"Quantity cannot be null");
+
+    }
+
+    public void updateItemName(String name){
+        this.itemName= Objects.requireNonNull(name,"Item name cannot be null");
     }
 
     public ItemCode getItemCode() {
@@ -43,13 +65,12 @@ public class  Item {
         return itemName;
     }
 
-    public Integer getQuantityAtHand() {
+    public ItemQuantity getQuantityAtHand() {
         return quantityAtHand;
     }
     public ItemStatus getStatus() {
         return status;
     }
-
     public void updateName(String itemName) {
         this.itemName=itemName;
     }

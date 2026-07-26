@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "inventory_allocation", schema = "inventory")
+@NoArgsConstructor
 public class InventoryAllocationEntity {
     @Id
     private UUID allocationId;

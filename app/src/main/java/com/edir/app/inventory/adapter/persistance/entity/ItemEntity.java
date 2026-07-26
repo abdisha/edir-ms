@@ -20,7 +20,7 @@ import java.util.UUID;
 public class ItemEntity {
     @Id
     private UUID id;
-    @Column(length = 100)
+    @Column(length = 100,unique = true)
     private String itemCode;
 
     @NotNull

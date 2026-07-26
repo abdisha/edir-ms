@@ -15,7 +15,7 @@ public class ItemResponse {
 
     public static ItemResponse toResponse(Item item){
         return new ItemResponse(
-            item.getItemId(),
+            item.getId().id(),
             item.getItemCode().code(),
             item.getItemName()
         );

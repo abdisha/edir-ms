@@ -1,27 +1,55 @@
 package com.edir.app.inventory.domain.entity;
 
-import java.util.UUID;
+import com.edir.app.inventory.domain.valueobjects.ItemId;
+import com.edir.app.inventory.domain.valueobjects.ItemIssueLineId;
+import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
+import com.edir.app.shared.domain.entity.BaseEntity;
 
-public class ItemIssueLine {
-    private UUID itemIssueId;
-    private UUID itemId;
-    private int quantity;
+public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
+    private ItemId itemId;
+    private ItemQuantity issuedQuantity;
 
-    public ItemIssueLine(UUID itemIssueId, UUID itemId, int quantity) {
-        this.itemIssueId = itemIssueId;
+    // Private constructor to enforce creation through factory methods
+    private ItemIssueLine(ItemIssueLineId itemIssueLineId, ItemId itemId, ItemQuantity issuedQuantity) {
+        super(itemIssueLineId);
         this.itemId = itemId;
-        this.quantity = quantity;
+        this.issuedQuantity = issuedQuantity;
     }
 
-    public UUID getItemIssueId() {
-        return itemIssueId;
+    public static ItemIssueLine create(ItemId itemId, ItemQuantity issuedQuantity) {
+
+        if (issuedQuantity.quantity() <= 0) {
+            throw new IllegalArgumentException("Issued quantity must be positive.");
+        }
+        return new ItemIssueLine(ItemIssueLineId.generateId(), itemId, issuedQuantity);
     }
 
-    public UUID getItemId() {
+    public static ItemIssueLine rehydrate(ItemIssueLineId itemIssueLineId, ItemId itemId, ItemQuantity issuedQuantity) {
+        return new ItemIssueLine(itemIssueLineId, itemId, issuedQuantity);
+    }
+
+    public void increaseIssuedQuantity(ItemQuantity quantityToIncrease) {
+        if (quantityToIncrease.quantity() <= 0) {
+            throw new IllegalArgumentException("Quantity to increase must be positive.");
+        }
+        this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() + quantityToIncrease.quantity());
+    }
+
+    public void decreaseIssuedQuantity(ItemQuantity quantityToDecrease) {
+        if (quantityToDecrease.quantity() <= 0) {
+            throw new IllegalArgumentException("Quantity to decrease must be positive.");
+        }
+        if (this.issuedQuantity.quantity() < quantityToDecrease.quantity()) {
+            throw new IllegalArgumentException("Cannot decrease quantity below zero.");
+        }
+        this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() - quantityToDecrease.quantity());
+    }
+
+    public ItemId getItemId() {
         return itemId;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public ItemQuantity getIssuedQuantity() {
+        return issuedQuantity;
     }
 }

@@ -1,9 +1,11 @@
 package com.edir.app.inventory.application.in.commands;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.UUID;
 
 public record UpdateItemCommand(
-    UUID itemId,
-    String itemName
+    @NotNull UUID itemId,
+    @NotNull String itemName
 ) {
 }
