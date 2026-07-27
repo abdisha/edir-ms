@@ -36,6 +36,11 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     }
 
     @Override
+    public Optional<MemberSummary> findByMemberId(UUID memberId) {
+        return jpaRepository.findByMemberId(memberId);
+    }
+
+    @Override
     public PageResult<MemberDetailView> findMembers(PageQuery pageQuery) {
         Page result = jpaRepository.findMember(PageRequest.of(pageQuery.page(), pageQuery.size()));
 

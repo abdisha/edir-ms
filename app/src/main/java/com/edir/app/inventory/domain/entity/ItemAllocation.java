@@ -11,16 +11,23 @@ import java.time.ZonedDateTime;
 public class ItemAllocation extends BaseEntity<ItemAllocationId> {
     private final ItemId itemId;
     private ItemQuantity quantity;
+    private ItemQuantity issuedQuantity;
     private final ZonedDateTime receivedDate;
+    private ZonedDateTime issuedDate;
 
     protected ItemAllocation(ItemAllocationId itemAllocationId,
-                             ItemId itemId, ItemQuantity
-                                 quantity, ZonedDateTime
-                                 receivedDate) {
+                             ItemId itemId,
+                             ItemQuantity quantity,
+                             ItemQuantity issuedQuantity,
+                             ZonedDateTime receivedDate,
+                             ZonedDateTime issuedDate) {
         super(itemAllocationId);
         this.itemId = itemId;
         this.quantity = quantity;
         this.receivedDate = receivedDate;
+        this.issuedQuantity = issuedQuantity;
+        this.issuedDate = issuedDate;
+
     }
 
     public static ItemAllocation create(ItemId itemId,
@@ -28,33 +35,53 @@ public class ItemAllocation extends BaseEntity<ItemAllocationId> {
         return new ItemAllocation(ItemAllocationId.generateId(),
             itemId,
             quantity,
-            ZonedDateTime.now());
+            ItemQuantity.of(0),
+            ZonedDateTime.now(),
+            ZonedDateTime.now()
+        );
 
     }
 
     public static ItemAllocation rehydrate(ItemAllocationId id,
                                            ItemId itemId,
                                            ItemQuantity quantity,
-                                           ZonedDateTime receivedDate) {
-        return new ItemAllocation(id, itemId, quantity, receivedDate);
+                                           ItemQuantity issuedQuantity,
+                                           ZonedDateTime receivedDate,
+                                           ZonedDateTime issuedDate) {
+        return new ItemAllocation(id, itemId, quantity,issuedQuantity, receivedDate,issuedDate);
     }
 
     public void allocateItems(ItemQuantity quantity) {
-        if (quantity.quantity() < 0) {
-            throw new IllegalArgumentException("Quantity cannot be negative");
-        }
+        validateItemQuantity(quantity);
         this.quantity = this.quantity.addQuantity(quantity.quantity());
     }
 
     public void returnItems(ItemQuantity quantity) {
-        if (quantity.quantity() < 0
-            || quantity.quantity() > this.quantity.quantity()) {
-            throw new InsufficientQuantityException(this.itemId, this.quantity, quantity);
-        }
-
+        validateItemQuantity(quantity);
         this.quantity = this.quantity.subtractQuantity(quantity.quantity());
     }
 
+    public  void issueItem(ItemQuantity quantity){
+        validateItemQuantity(quantity);
+
+        this.issuedQuantity=this.issuedQuantity.addQuantity(quantity.quantity());
+        this.quantity=this.quantity.subtractQuantity(quantity.quantity());
+        this.issuedDate=ZonedDateTime.now();
+    }
+
+    public ItemQuantity getIssuedQuantity() {
+        return issuedQuantity;
+    }
+
+    private  void validateItemQuantity(ItemQuantity quantity) {
+        if (quantity.quantity() < 0) {
+            throw new InsufficientQuantityException(this.itemId, this.quantity, quantity);
+        }
+    }
+
+    public ZonedDateTime getIssuedDate() {
+        return issuedDate;
+    }
 
     public ItemId getItemId() {
         return itemId;

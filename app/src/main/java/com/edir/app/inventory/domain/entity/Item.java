@@ -8,7 +8,6 @@ import com.edir.app.shared.domain.entity.BaseEntity;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class  Item extends BaseEntity<ItemId> {;
     private final ItemCode itemCode;
@@ -35,6 +34,20 @@ public class  Item extends BaseEntity<ItemId> {;
             ItemQuantity.of(0),
             ItemStatus.ACTIVE);
 
+    }
+
+    public static Item rehydrate(ItemId itemId,
+                                 ItemCode itemCode,
+                                 String itemName,
+                                 ItemQuantity quantityAtHand,
+                                 ItemStatus status){
+        return new Item(
+            itemId,
+            itemCode,
+            itemName,
+            quantityAtHand,
+            status
+        );
     }
 
     public void markAsInactive(){

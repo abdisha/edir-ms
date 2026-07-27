@@ -84,6 +84,20 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
 
     @Query(
         value = """
+                   SELECT new com.edir.app.edir.application.api.MemberSummary(
+                    m.id,
+                   concat(  m.firstName , " ",m.middleName ," ",m.lastName) as fullName
+
+                   ) FROM EdirEntity  as e
+                    join e.members m
+                    where m.id= :memberId
+
+            """
+    )
+    Optional<MemberSummary> findByMemberId(UUID memberId);
+
+    @Query(
+        value = """
                     SELECT new com.edir.app.edir.application.ports.out.query.MemberDetailView(
                             m.id,
                             m.firstName,

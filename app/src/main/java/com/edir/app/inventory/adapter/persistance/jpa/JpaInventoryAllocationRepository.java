@@ -1,7 +1,10 @@
 package com.edir.app.inventory.adapter.persistance.jpa;
 
-import com.edir.app.inventory.adapter.persistance.entity.InventoryAllocationEntity;
+import com.edir.app.inventory.adapter.persistance.entity.AllocationEntity;
+import com.edir.app.inventory.application.out.query.AllocationItemView;
+import com.edir.app.inventory.application.out.query.AllocationView;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,10 +12,39 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface JpaInventoryAllocationRepository extends JpaRepository<InventoryAllocationEntity, UUID> {
-    Optional<InventoryAllocationEntity> findInventoryAllocationEntitiesByItemIdAndHolderMemberId(UUID itemId, UUID holderMemberId);
+public interface JpaInventoryAllocationRepository extends JpaRepository<AllocationEntity, UUID> {
+    Optional<AllocationEntity> findInventoryAllocationEntitiesByItemIdAndHolderMemberId(UUID itemId, UUID holderMemberId);
 
-    List<InventoryAllocationEntity> findInventoryAllocationEntitiesByHolderMemberId(UUID holderMemberId);
+    List<AllocationEntity> findInventoryAllocationEntitiesByHolderMemberId(UUID holderMemberId);
 
-    List<InventoryAllocationEntity> findInventoryAllocationEntitiesByItemId(UUID itemId);
+    List<AllocationEntity> findInventoryAllocationEntitiesByItemId(UUID itemId);
+
+    @Query(
+        value = """
+                select new com.edir.app.inventory.application.out.query.AllocationView(
+                    a.allocationId,
+                    a.holderMemberId
+                        )
+                        from AllocationEntity  a where a.holderMemberId=:memberId
+            """
+    )
+    Optional<AllocationView> findAllocationViewByMemberId(UUID memberId);
+
+    @Query(
+        value = """
+    select  new com.edir.app.inventory.application.out.query.AllocationItemView(
+    ai.itemId,
+    it.name,
+    ai.quantityOnHand,
+    ai.issuedOutQuantity,
+    ai.receivedDate
+
+    )
+    from AllocationEntity  as a join a.itemAllocations ai
+    left  join ItemEntity  it on it.id = ai.itemId where a.holderMemberId=:memberId
+"""
+    )
+    List<AllocationItemView> findAllocationItemViewByItemId(UUID memberId);
+
+
 }

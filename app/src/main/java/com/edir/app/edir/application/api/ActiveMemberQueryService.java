@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -15,5 +16,10 @@ public class ActiveMemberQueryService implements ActiveMemberQuery {
     @Override
     public Optional<List<MemberSummary>> findActiveMembers() {
         return memberQueryRepository.findActiveMembers();
+    }
+
+    @Override
+    public Optional<MemberSummary> findMember(UUID memberId) {
+        return memberQueryRepository.findByMemberId(memberId);
     }
 }

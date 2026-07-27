@@ -1,9 +1,11 @@
 package com.edir.app.inventory.adapter.rest;
 
 import com.edir.app.inventory.adapter.rest.response.AllocationResponse;
+import com.edir.app.inventory.adapter.rest.response.ItemAllocationResponse;
 import com.edir.app.inventory.application.in.commands.AllocateItemCommand;
 import com.edir.app.inventory.application.in.commands.TransferCommand;
 import com.edir.app.inventory.application.in.usecases.InventoryAllocationUseCase;
+import com.edir.app.inventory.application.out.query.AllocationQueryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 @RequestMapping(REST_VERSION + "/inventory/allocation")
 public class InventoryAllocationController {
     private final InventoryAllocationUseCase inventoryAllocationUseCase;
+    private final AllocationQueryService allocationQueryService;
 
     @PostMapping("allocate")
     public ResponseEntity<Void> allocate(@RequestBody AllocateItemCommand command) {
@@ -45,30 +48,17 @@ public class InventoryAllocationController {
 
 
     @GetMapping("/{memberId}/member")
-    public ResponseEntity<List<AllocationResponse>> getByMemberId(@PathVariable String memberId) {
-        var result = inventoryAllocationUseCase
-            .getMemberAllocations(UUID.fromString(memberId))
-            .stream().map(r -> new AllocationResponse(
-                r.getHolderMemberId(),
-                r.getItemId(),
-                r.getQuantityOnHand()
-            )).toList();
-
-        return ResponseEntity
+    public ResponseEntity<AllocationResponse> getByMemberId(@PathVariable String memberId) {
+        var result = allocationQueryService.findByMemberId(UUID.fromString(memberId));
+        return result.map(allocationResponse -> ResponseEntity
             .ok()
-            .body(result);
+            .body(allocationResponse)).orElseGet(() -> ResponseEntity.notFound().build());
 
     }
 
-    @GetMapping("/{itemId}/item")
-    public ResponseEntity<List<AllocationResponse>> getByItemId(@PathVariable String itemId) {
-        var result = inventoryAllocationUseCase
-            .getItemAllocations(UUID.fromString(itemId))
-            .stream().map(r -> new AllocationResponse(
-                r.getHolderMemberId(),
-                r.getItemId(),
-                r.getQuantityOnHand()
-            )).toList();
+    @GetMapping("/{memberId}/allocated-item")
+    public ResponseEntity<List<ItemAllocationResponse>> getAllocatedItem(@PathVariable UUID memberId) {
+        var result = allocationQueryService.findAllocatedItem(memberId);
 
         return ResponseEntity
             .ok()
