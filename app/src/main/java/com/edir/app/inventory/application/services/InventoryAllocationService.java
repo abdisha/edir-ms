@@ -16,9 +16,7 @@ import com.edir.app.shared.domain.valueobjects.MemberId;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @AllArgsConstructor
 @UseCase
@@ -30,8 +28,9 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
     @Override
     public void allocateItemToMember(AllocateItemCommand command) {
         Optional<Allocation> result = allocationRepository
-            .findByMemberIdAndItemId(new MemberId(command.memberId()), new ItemId(command.item()));
+            .findByMemberId(new MemberId(command.memberId()));
         Optional<Item> itemResult = itemRepository.findById(new ItemId(command.item()));
+
         if (itemResult.isEmpty()) {
             throw new ItemNotFoundException("No item found with this item id: " + command.item());
         }
@@ -59,8 +58,7 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
     @Override
     public void increaseAllocationQuantity(AllocateItemCommand command) {
         Optional<Allocation> result = allocationRepository
-            .findByMemberIdAndItemId(new MemberId(command.memberId()),
-                new ItemId(command.item()));
+            .findByMemberId(new MemberId(command.memberId()));
 
         if (result.isEmpty()) {
             allocateItemToMember(command);
@@ -75,7 +73,7 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
     @Override
     public void reduceAllocationQuantity(AllocateItemCommand command) {
         Optional<Allocation> result = allocationRepository
-            .findByMemberIdAndItemId(new MemberId(command.memberId()), new ItemId(command.item()));
+            .findByMemberId(new MemberId(command.memberId()));
 
         if (result.isEmpty()) {
             return;
@@ -90,30 +88,18 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
     @Override
     public void transferAllocation(TransferCommand command) {
         Allocation source = allocationRepository
-            .findByMemberIdAndItemId(new MemberId(command.from()),
-                new ItemId(command.itemId()))
+            .findByMemberId(new MemberId(command.from()))
             .orElseThrow(() -> new ItemNotFoundException("Item not found"));
 
         source.returnItems(new ItemId(command.itemId()), ItemQuantity.of(command.quantity()));
 
         Allocation target = allocationRepository
-            .findByMemberIdAndItemId(new MemberId(command.to()),
-                new ItemId(command.itemId()))
+            .findByMemberId(new MemberId(command.to()))
             .orElseGet(() -> Allocation.create(new MemberId(command.to())));
 
         target.allocate(new ItemId(command.itemId()), ItemQuantity.of(command.quantity()));
 
         allocationRepository.save(source);
         allocationRepository.save(target);
-    }
-
-    @Override
-    public List<Allocation> getMemberAllocations(UUID memberId) {
-        return allocationRepository.findByMemberId(new MemberId(memberId));
-    }
-
-    @Override
-    public List<Allocation> getItemAllocations(UUID item) {
-        return allocationRepository.findByItemId(new ItemId(item));
     }
 }

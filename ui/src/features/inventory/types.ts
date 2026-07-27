@@ -1,9 +1,12 @@
 export interface InventoryItem {
     id: string;
-    name: string;
-    description?: string;
-    category: "funeral" | "general";
+    itemCode:string;
+    itemName: string;
+    itemStatus:"Active"|"InActive"
     quantity: number;
-    allocated?: number;
-    dateAdded: string;
+}
+export interface CreateItemRequest{
+    itemCode:string;
+    itemName:string;
+    initialQuantity:number;
 }

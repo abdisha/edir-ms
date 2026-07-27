@@ -65,7 +65,7 @@ const ReceivePaymentContent = ({ memberId, onCancelHandle }:
             remark:value.remark
         })
         console.log(value)
-        if(context.is){
+        if(context.isSuccess){
             onCancelHandle();
         }
 

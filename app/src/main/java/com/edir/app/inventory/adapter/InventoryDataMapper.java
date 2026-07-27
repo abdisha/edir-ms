@@ -1,17 +1,10 @@
 package com.edir.app.inventory.adapter;
 
-import com.edir.app.inventory.adapter.persistance.entity.AllocationEntity;
-import com.edir.app.inventory.adapter.persistance.entity.ItemAllocationEntity;
-import com.edir.app.inventory.adapter.persistance.entity.ItemEntity;
+import com.edir.app.inventory.adapter.persistance.entity.*;
 import com.edir.app.inventory.adapter.rest.response.ItemAllocationResponse;
 import com.edir.app.inventory.application.out.query.AllocationItemView;
-import com.edir.app.inventory.domain.entity.Allocation;
-import com.edir.app.inventory.domain.entity.Item;
-import com.edir.app.inventory.domain.entity.ItemAllocation;
-import com.edir.app.inventory.domain.valueobjects.AllocationId;
-import com.edir.app.inventory.domain.valueobjects.ItemAllocationId;
-import com.edir.app.inventory.domain.valueobjects.ItemId;
-import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
+import com.edir.app.inventory.domain.entity.*;
+import com.edir.app.inventory.domain.valueobjects.*;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import org.springframework.stereotype.Component;
@@ -89,5 +82,40 @@ public class InventoryDataMapper {
             allocationItemView.issuedQuantity(),
             allocationItemView.receivedDate()
         );
+    }
+
+    public ItemIssue itemIssueEntityToItemIssue(ItemIssueEntity itemIssue){
+        return ItemIssue.rehydrate(
+            new ItemIssueId(itemIssue.getId()),
+            itemIssue.getFuneralId(),
+            itemIssue.getIssuedDate(),
+            new MemberId(itemIssue.getIssuerId()),
+            itemIssue.getIssuedLineEntities().stream().map(
+                i->ItemIssueLine.rehydrate(
+                    new ItemIssueLineId(i.getId()),
+                    new MemberId(i.getFromId()),
+                    new ItemId(i.getItemId()),
+                    new ItemQuantity(i.getIssuedQuantity())
+                )
+            ).toList()
+
+        );
+    }
+
+    public ItemIssueEntity itemIssueToItemIssueEntity(ItemIssue itemIssue){
+        return ItemIssueEntity.builder()
+            .id(itemIssue.getId().id())
+            .funeralId(itemIssue.getFuneralId())
+            .issuedDate(itemIssue.getIssuedDate())
+            .issuedLineEntities(itemIssue.getItemIssueLines().stream().map(
+                i-> ItemIssuedLineEntity.builder()
+                    .id(i.getId().id())
+                    .fromId(i.getFromId().value())
+                    .issuedQuantity(i.getIssuedQuantity().quantity())
+                    .itemId(i.getItemId().id()).build()
+            ).toList())
+            .issuerId(itemIssue.getIssuerId().value())
+            .build();
+
     }
 }

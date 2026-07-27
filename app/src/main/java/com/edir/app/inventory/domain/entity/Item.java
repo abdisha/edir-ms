@@ -27,11 +27,13 @@ public class  Item extends BaseEntity<ItemId> {;
         this.status =status;
     }
 
-    public static Item registerItem(ItemCode itemCode, String itemName){
+    public static Item registerItem(ItemCode itemCode,
+                                    String itemName,
+                                    ItemQuantity quantityAtHand){
         return new Item(ItemId.generateId(),
             itemCode,
             itemName,
-            ItemQuantity.of(0),
+            quantityAtHand,
             ItemStatus.ACTIVE);
 
     }

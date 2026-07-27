@@ -8,7 +8,6 @@ import com.edir.app.inventory.adapter.rest.response.ItemAllocationResponse;
 import com.edir.app.inventory.application.out.AllocationRepository;
 import com.edir.app.inventory.domain.entity.Allocation;
 import com.edir.app.inventory.domain.valueobjects.AllocationId;
-import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.shared.adapter.PersistenceAdapter;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 
@@ -28,31 +27,17 @@ record AllocationRepositoryImpl(JpaInventoryAllocationRepository allocationRepos
     }
 
     @Override
-    public Optional<Allocation> findByMemberIdAndItemId(MemberId memberId, ItemId itemId) {
-        return allocationRepository.findInventoryAllocationEntitiesByItemIdAndHolderMemberId(itemId.id(), memberId.value())
-            .map(mapper::inventoryAllocationEntityToInventoryAllocation);
-    }
-
-    @Override
     public Allocation save(Allocation allocation) {
         return mapper.inventoryAllocationEntityToInventoryAllocation(allocationRepository
             .save(mapper.inventoryAllocationToInventoryAllocationEntity(allocation)));
     }
 
     @Override
-    public List<Allocation> findByMemberId(MemberId memberId) {
-        return allocationRepository.findInventoryAllocationEntitiesByHolderMemberId(memberId.value())
-            .stream()
-            .map(mapper::inventoryAllocationEntityToInventoryAllocation)
-            .toList();
+    public Optional<Allocation> findByMemberId(MemberId memberId) {
+        return allocationRepository.findAllocationEntitiesByHolderMemberId(memberId.value())
+            .map(mapper::inventoryAllocationEntityToInventoryAllocation);
     }
 
-    @Override
-    public List<Allocation> findByItemId(ItemId itemId) {
-        return allocationRepository.findInventoryAllocationEntitiesByItemId(itemId.id())
-            .stream().map(mapper::inventoryAllocationEntityToInventoryAllocation)
-            .toList();
-    }
 
     @Override
     public Optional<AllocationResponse> findAllocationViewByMemberId(MemberId memberId) {

@@ -13,12 +13,8 @@ import java.util.UUID;
 
 @Repository
 public interface JpaInventoryAllocationRepository extends JpaRepository<AllocationEntity, UUID> {
-    Optional<AllocationEntity> findInventoryAllocationEntitiesByItemIdAndHolderMemberId(UUID itemId, UUID holderMemberId);
 
-    List<AllocationEntity> findInventoryAllocationEntitiesByHolderMemberId(UUID holderMemberId);
-
-    List<AllocationEntity> findInventoryAllocationEntitiesByItemId(UUID itemId);
-
+    Optional<AllocationEntity> findAllocationEntitiesByHolderMemberId(UUID holderMemberId);
     @Query(
         value = """
                 select new com.edir.app.inventory.application.out.query.AllocationView(

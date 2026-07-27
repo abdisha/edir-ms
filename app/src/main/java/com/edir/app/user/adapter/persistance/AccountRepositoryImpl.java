@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class AccountRepositoryImpl implements AccountRepository {
         entity.setEmail(user.getEmail());
         entity.setPassword(user.getPassword());
         entity.setRoles(user.getRoles().stream()
-            .map(r -> new RoleEntity(r.name()))
+            .map(r -> new RoleEntity(r.id(),r.name()))
             .collect(Collectors.toSet()));
 
         userRepository.save(entity);
@@ -42,13 +43,19 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
+    public Optional<Role> findRoleById(UUID uuid) {
+        return roleRepository.findById(uuid)
+            .map(entity -> new Role(entity.getId(), entity.getName()));
+    }
+
+    @Override
     public Optional<Role> findRoleByName(String name) {
-        return roleRepository.findById(name).map(entity -> new Role(entity.getName()));
+        return roleRepository.findRoleEntitiesByName(name);
     }
 
     @Override
     public Role saveRole(Role role) {
-        RoleEntity entity = new RoleEntity(role.name());
+        RoleEntity entity = new RoleEntity(role.id(),role.name());
         roleRepository.save(entity);
         return role;
     }
@@ -60,7 +67,7 @@ public class AccountRepositoryImpl implements AccountRepository {
             entity.getFirstName(),
             entity.getLastName(),
             entity.getPassword(),
-            entity.getRoles().stream().map(r -> new Role(r.getName())).collect(Collectors.toSet())
+            entity.getRoles().stream().map(r -> new Role(r.getId(),r.getName())).collect(Collectors.toSet())
         );
     }
 }

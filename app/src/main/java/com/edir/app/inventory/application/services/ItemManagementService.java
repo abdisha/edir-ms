@@ -7,6 +7,7 @@ import com.edir.app.inventory.application.in.usecases.ItemManagementUseCase;
 import com.edir.app.inventory.application.out.ItemRepository;
 import com.edir.app.inventory.domain.entity.Item;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
+import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
 import com.edir.app.shared.application.usecase.UseCase;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
 import jakarta.transaction.Transactional;
@@ -25,7 +26,8 @@ class ItemManagementService implements ItemManagementUseCase {
     public Item register(RegisterItemCommand command) {
          Item item = Item.registerItem(
              new ItemCode(command.itemCode()),
-             command.itemName()
+             command.itemName(),
+             new ItemQuantity(command.initialQuantity())
          );
         return repository.save(item) ;
     }

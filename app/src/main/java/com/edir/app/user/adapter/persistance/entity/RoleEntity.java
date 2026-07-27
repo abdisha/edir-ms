@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "roles", schema = "user_management")
 public class RoleEntity {
     @Id
-    private int id;
+    private UUID id;
     private String name;
 
 }

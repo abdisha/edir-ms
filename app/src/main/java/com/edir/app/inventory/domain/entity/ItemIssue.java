@@ -17,7 +17,7 @@ public class ItemIssue extends AggregateRoot<ItemIssueId> {
 
     private final UUID funeralId;
     private final MemberId issuerId;
-    private final ZonedDateTime zonedDateTime;
+    private final ZonedDateTime issuedDate;
     private final List<ItemIssueLine> itemIssueLines = new ArrayList<>();
 
     protected ItemIssue(ItemIssueId itemIssueId,
@@ -26,7 +26,7 @@ public class ItemIssue extends AggregateRoot<ItemIssueId> {
                         List<ItemIssueLine> itemIssueLines, MemberId issuerId) {
         super(itemIssueId);
         this.funeralId = funeralId;
-        this.zonedDateTime = zonedDateTime;
+        this.issuedDate = zonedDateTime;
         this.issuerId = issuerId;
         this.itemIssueLines.addAll(itemIssueLines);
     }
@@ -36,7 +36,7 @@ public class ItemIssue extends AggregateRoot<ItemIssueId> {
         super(itemIssueId);
         this.funeralId = funeralId;
         this.issuerId = issuerId;
-        this.zonedDateTime = now;
+        this.issuedDate = now;
 
     }
 
@@ -79,8 +79,8 @@ public class ItemIssue extends AggregateRoot<ItemIssueId> {
         return funeralId;
     }
 
-    public ZonedDateTime getZonedDateTime() {
-        return zonedDateTime;
+    public ZonedDateTime getIssuedDate() {
+        return issuedDate;
     }
 
     public List<ItemIssueLine> getItemIssueLines() {

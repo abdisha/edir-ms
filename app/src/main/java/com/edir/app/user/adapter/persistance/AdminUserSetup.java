@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -30,7 +31,7 @@ public class AdminUserSetup implements ApplicationRunner {
                "admin",
                "admin",
                passwordEncoder.encode("Admin123"),
-               null
+               Set.of()
            );
 
            accountRepository.saveUser(user);

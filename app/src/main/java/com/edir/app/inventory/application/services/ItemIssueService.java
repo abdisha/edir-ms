@@ -3,6 +3,7 @@ package com.edir.app.inventory.application.services;
 import com.edir.app.inventory.application.in.commands.IssueItemCommand;
 import com.edir.app.inventory.application.in.usecases.ItemIssueUseCase;
 import com.edir.app.inventory.application.out.AllocationRepository;
+import com.edir.app.inventory.application.out.ItemIssueRepository;
 import com.edir.app.inventory.domain.entity.Allocation;
 import com.edir.app.inventory.domain.entity.ItemIssue;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @Transactional
 class ItemIssueService implements ItemIssueUseCase {
     private final AllocationRepository allocationRepository;
+    private final ItemIssueRepository repository;
 
     @Override
     public void issueItem(IssueItemCommand command) {
@@ -28,7 +30,7 @@ class ItemIssueService implements ItemIssueUseCase {
          command.issueItems().forEach(
              i->{
                  Optional<Allocation> allocationOptional =
-                     allocationRepository.findByMemberIdAndItemId(new MemberId(i.from()),new ItemId(i.item()));
+                     allocationRepository.findByMemberId(new MemberId(i.from()));
                  if(allocationOptional.isEmpty()){
                      return;
                  }
@@ -39,7 +41,6 @@ class ItemIssueService implements ItemIssueUseCase {
              }
          );
 
-
-
+        repository.save(itemIssue);
     }
 }
