@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
 import {useAuth} from "@/features/auths/useAuth";
+import {ModeToggle} from "@/layouts/ModeToggle.tsx";
 
 const navigation = [
   {
@@ -133,6 +134,7 @@ export default function MainLayout() {
 
             {/* Right Side */}
             <div className="flex items-center gap-4">
+              <ModeToggle/>
               {isAuthenticated && user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger>
