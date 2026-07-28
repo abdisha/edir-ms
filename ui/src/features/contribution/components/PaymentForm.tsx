@@ -6,15 +6,15 @@ import {Input} from "@/shared/components/ui/input";
 import {Textarea} from "@/shared/components/ui/textarea";
 import {
     Field,
+    FieldContent,
     FieldDescription,
     FieldError,
     FieldGroup,
     FieldLabel,
-    FieldLegend,
     FieldSeparator,
     FieldSet,
 } from "@/shared/components/ui/field";
-import {CalendarIcon, DollarSignIcon, HashIcon, UserIcon, FileTextIcon} from "lucide-react";
+import {CalendarIcon, DollarSignIcon, FileTextIcon, HashIcon, UserIcon} from "lucide-react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/shared/components/ui/popover.tsx";
 import {format} from "date-fns";
 import {Calendar} from "@/shared/components/ui/calendar.tsx";
@@ -22,13 +22,24 @@ import {Calendar} from "@/shared/components/ui/calendar.tsx";
 interface Props {
     memberId: string;
     loading: boolean;
+    receiptId?: string;
+    memberName?: string;
+    receiptName?: string;
     onCancel(): void;
     onSubmit(
         values: PaymentFormValues
     ): void;
 }
 
-export function PaymentForm({ memberId, loading, onCancel, onSubmit }: Props){
+export function PaymentForm({
+                                receiptId,
+                                memberName,
+                                receiptName,
+                                memberId,
+                                loading,
+                                onCancel,
+                                onSubmit
+                            }: Props) {
     const form =
         useForm<PaymentFormValues>({
             resolver:
@@ -39,7 +50,7 @@ export function PaymentForm({ memberId, loading, onCancel, onSubmit }: Props){
                 receiptNumber:"",
                 remark:"",
                 paymentDate:new Date(),
-                receipterId:"",
+                receipterId: receiptId,
             }
         });
 
@@ -47,10 +58,28 @@ export function PaymentForm({ memberId, loading, onCancel, onSubmit }: Props){
     return(
         <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 p-6"
+            className="space-y-5"
         >
             <FieldSet>
-                    <FieldSeparator >Payment Details</FieldSeparator>
+
+                <FieldContent className="bg-muted/30 p-4 rounded-xl border border-border/50 flex gap-4 mb-6 shadow-sm">
+                    <div className="flex items-center gap-4 w-full">
+                        <div className="bg-primary/10 p-3 rounded-full ring-4 ring-primary/5">
+                            <UserIcon className="h-6 w-6 text-primary"/>
+                        </div>
+                        <div className='grid grid-cols-2 gap-x-8 gap-y-1 flex-1'>
+                            <div className='flex flex-col'>
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Receiver</span>
+                                <span className="text-sm font-bold text-foreground/90">{receiptName}</span>
+                            </div>
+                            <div className='flex flex-col'>
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Paid By</span>
+                                <span className="text-sm font-bold text-foreground/90">{memberName}</span>
+                            </div>
+                        </div>
+                    </div>
+                </FieldContent>
+                <FieldSeparator>Payment Details</FieldSeparator>
                 <FieldGroup className="grid gap-6 md:grid-cols-2">
                     <Field>
                         <FieldLabel>
@@ -154,43 +183,21 @@ export function PaymentForm({ memberId, loading, onCancel, onSubmit }: Props){
                     </Field>
                 </FieldGroup>
             </FieldSet>
-            <FieldSet>
-                <FieldLegend>
-                    Received By
-                </FieldLegend>
-                <Field>
-                    <FieldLabel>
-                        Receiver
-                    </FieldLabel>
-                    <div className="relative">
-                        <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input
-                            placeholder="Receiver UUID"
-                            className="pl-10"
-                            {...form.register("receipterId")}
-                        />
-                    </div>
-                    <FieldDescription>
-                        The ID of the person who received the payment.
-                    </FieldDescription>
-                    <FieldError
-                        errors={[form.formState.errors.receipterId]}
-                    />
-                </Field>
-            </FieldSet>
-            <div className="flex justify-start gap-3">
-                <Button
-                    type="submit"
-                >
-                    {loading ? "Saving..." : "Save Payment"}
-                </Button>
 
+            <div className="flex justify-end gap-3 pt-4 border-t">
                 <Button
                     onClick={onCancel}
                     type="button"
-                    variant="outline"
+                    variant="ghost"
                 >
                     Cancel
+                </Button>
+                <Button
+                    type="submit"
+                    className="min-w-[120px]"
+                    disabled={loading}
+                >
+                    {loading ? "Saving..." : "Save Payment"}
                 </Button>
             </div>
         </form>

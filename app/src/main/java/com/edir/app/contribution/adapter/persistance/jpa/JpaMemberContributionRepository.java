@@ -68,21 +68,27 @@ public interface JpaMemberContributionRepository extends JpaRepository<MemberCon
     Optional<MemberContributionView> findAllMemberContributionByd(UUID id);
 
 
+
     @Query(
         value = """
             select new com.edir.app.contribution.application.ports.out.query.PaymentView(
                                     p.id,
                                     p.amount    ,
+                                    c.startDate,
+                                    c.endDate,
+                                    c.contributionAmount,
+                                    c.penaltyAmount,
+                                    c.name,
                                     p.paidAt,
                                     p.receipterId,
                                     p.note
                               )
                               from MemberContributionEntity  as m
                                           join m.paymentEntities as p
+                                                      left join ContributionEntity  as c on c.id = m.contributionId
                                           where m.id =:id
             """
     )
     List<PaymentView> findAllPaymentsByMemberContributionId(UUID id);
-
 
 }

@@ -59,3 +59,25 @@ export interface MemberContribution {
         | "PARTIALLY_PAID"
         | "PAID";
 }
+export interface PaymentHistory{
+    id: string
+    amount: number
+    startDate: string
+    endDate: string
+    contributionAmount: number
+    penaltyAmount: number
+    contributionName: string
+    paidAt: string
+    receiptId: string
+    receiptNumber:string
+    receiptName:string
+    note: string
+}
+export interface ReceivePayment{
+    amount: number
+    receipterId: string
+    memberId: string
+    paymentDate: string
+    receiptNumber: string
+    remark: string
+}

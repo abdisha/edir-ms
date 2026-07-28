@@ -1,9 +1,14 @@
 package com.edir.app.user.adapter.persistance.jpa;
 
 import com.edir.app.user.adapter.persistance.entity.RoleEntity;
+import com.edir.app.user.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Repository
-public interface JpaRoleRepository extends JpaRepository<RoleEntity,String> {
+public interface JpaRoleRepository extends JpaRepository<RoleEntity, UUID> {
+    Optional<Role> findRoleEntitiesByName(String name);
 }

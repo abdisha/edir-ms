@@ -1,0 +1,78 @@
+package com.edir.app.inventory.adapter.rest;
+
+import com.edir.app.inventory.adapter.rest.response.AllocationResponse;
+import com.edir.app.inventory.adapter.rest.response.ItemAllocationResponse;
+import com.edir.app.inventory.application.in.commands.AllocateItemCommand;
+import com.edir.app.inventory.application.in.commands.TransferCommand;
+import com.edir.app.inventory.application.in.usecases.InventoryAllocationUseCase;
+import com.edir.app.inventory.application.out.query.AllocationQueryService;
+import com.edir.app.inventory.application.out.query.ItemQueryService;
+import com.edir.app.inventory.application.out.query.ItemView;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+import static com.edir.app.shared.EdirConstant.REST_VERSION;
+
+@AllArgsConstructor
+@RestController
+@RequestMapping(REST_VERSION + "inventory-allocation")
+public class InventoryAllocationController {
+    private final InventoryAllocationUseCase inventoryAllocationUseCase;
+    private final AllocationQueryService allocationQueryService;
+    private final ItemQueryService itemQueryService;
+
+    @PostMapping()
+    public ResponseEntity<Void> allocate(@RequestBody AllocateItemCommand command) {
+        inventoryAllocationUseCase.allocateItemToMember(command);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/increase")
+    public ResponseEntity<Void> increase(@RequestBody AllocateItemCommand command) {
+        inventoryAllocationUseCase.increaseAllocationQuantity(command);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reduce")
+    public ResponseEntity<Void> reduce(@RequestBody AllocateItemCommand command) {
+        inventoryAllocationUseCase.reduceAllocationQuantity(command);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<Void> transfer(@RequestBody TransferCommand command) {
+        inventoryAllocationUseCase.transferAllocation(command);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/unallocated")
+    public ResponseEntity<List<ItemView>> getUnAllocatedItems() {
+        var result = itemQueryService.findAllUnAllocatedItems();
+        return ResponseEntity
+            .ok()
+            .body(result);
+    }
+
+    @GetMapping("/{memberId}/member")
+    public ResponseEntity<AllocationResponse> getByMemberId(@PathVariable String memberId) {
+        var result = allocationQueryService.findByMemberId(UUID.fromString(memberId));
+        return result.map(allocationResponse -> ResponseEntity
+            .ok()
+            .body(allocationResponse)).orElseGet(() -> ResponseEntity.notFound().build());
+
+    }
+
+    @GetMapping("/{memberId}/allocated-item")
+    public ResponseEntity<List<ItemAllocationResponse>> getAllocatedItem(@PathVariable UUID memberId) {
+        var result = allocationQueryService.findAllocatedItem(memberId);
+
+        return ResponseEntity
+            .ok()
+            .body(result);
+
+    }
+}

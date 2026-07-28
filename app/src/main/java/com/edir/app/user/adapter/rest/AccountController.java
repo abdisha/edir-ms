@@ -39,7 +39,7 @@ public class AccountController {
     @PostMapping("/assign-role")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> assignRole(@RequestBody RoleAssignmentRequestDto dto) {
-        User user = accountUseCase.assignRoleToUser(dto.getEmail(), dto.getRoleName());
+        User user = accountUseCase.assignRoleToUser(dto.getEmail(), dto.getRoleId());
         return ResponseEntity.ok(UserResponseDto.fromDomain(user));
     }
 }

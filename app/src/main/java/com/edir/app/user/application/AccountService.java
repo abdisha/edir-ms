@@ -1,10 +1,10 @@
 package com.edir.app.user.application;
 
+import com.edir.app.shared.application.usecase.UseCase;
 import com.edir.app.user.application.usecase.AccountUseCase;
 import com.edir.app.user.domain.Role;
 import com.edir.app.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
-@Component
+@UseCase
 public class AccountService implements AccountUseCase {
     private final AccountRepository accountRepository;
     private final PasswordEncoder encoder;
@@ -49,7 +49,7 @@ public class AccountService implements AccountUseCase {
 
     @Override
     public Role createRole(String roleName) {
-        Role role = new Role(roleName);
+        Role role = new Role(UUID.randomUUID() ,roleName);
         if (accountRepository.findRoleByName(role.name()).isPresent()) {
             throw new IllegalArgumentException("Role already exists");
         }
@@ -57,12 +57,11 @@ public class AccountService implements AccountUseCase {
     }
 
     @Override
-    public User assignRoleToUser(String email, String roleName) {
+    public User assignRoleToUser(String email, UUID roleId) {
         User user = accountRepository.findByEmail(email)
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        Role normalizedRole = new Role(roleName);
-        Role role = accountRepository.findRoleByName(normalizedRole.name())
+        Role role = accountRepository.findRoleById(roleId)
             .orElseThrow(() -> new IllegalArgumentException("Role does not exist"));
 
         user.assignRole(role);

@@ -1,10 +1,9 @@
 import {api} from "@/shared/api/client.ts";
-import type {Page} from "@/features/contribution/types/contribution.ts";
+import type {MemberContribution, Page, ReceivePayment} from "@/features/contribution/types/contribution.ts";
 
 const endpoint:string  ="/member-contributions"
 
 export async function getMemberContributions(uuid: string): Promise<Page> {
-    // Return an empty page when uuid is not provided to avoid undefined returns
     if (!uuid) {
         return {
             content: [],
@@ -17,4 +16,14 @@ export async function getMemberContributions(uuid: string): Promise<Page> {
 
     const response = await api.get(endpoint + "/contribution/" + uuid);
     return response.data;
+}
+
+export async  function getMemberContribution(uuid: string): Promise<MemberContribution>{
+    const response = await api.get(endpoint + "/" + uuid);
+    return response.data;
+}
+
+export async function  payContribution(payment:ReceivePayment){
+    const  response = await  api.post(endpoint,payment);
+    return response.data
 }

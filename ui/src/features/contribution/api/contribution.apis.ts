@@ -6,6 +6,7 @@ import type {
 } from "@/features/contribution/types/contribution.ts";
 
 const endpoint:string  ="/contributions"
+
 export async function createContribution(request: AddContributionRequest) {
     const response = await api.post(endpoint, request);
     return response.data;
