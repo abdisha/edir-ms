@@ -6,7 +6,6 @@ export const inventoryAllocationSchema = z.object({
         .uuid("Invalid inventory item."),
 
     quantity: z
-        .coerce
         .number()
         .int("Quantity must be a whole number.")
         .min(1, "Quantity must be greater than zero."),

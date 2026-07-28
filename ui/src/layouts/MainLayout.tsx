@@ -63,7 +63,7 @@ const navigation = [
   },
   {
     title: "Settings",
-    href: "/setting",
+    href: "/settings",
     icon: SettingsIcon,
   },
 ];
