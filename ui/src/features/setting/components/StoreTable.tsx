@@ -1,20 +1,23 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/shared/components/ui/table";
 import {Button} from "@/shared/components/ui/button";
 import {Edit, MapPin, Store as StoreIcon} from "lucide-react";
+import type {Member} from "@/features/setting/types.ts";
 
 interface Store {
   id: string;
   name: string;
   location: string;
   ownerId: string;
+  ownerName?: string;
 }
 
 interface StoreTableProps {
   data: Store[];
+  members: Member[];
   onEdit: (store: Store) => void;
 }
 
-const StoreTable = ({ data, onEdit }: StoreTableProps) => {
+const StoreTable = ({ members, data, onEdit }: StoreTableProps) => {
     return (
     <div className="rounded-md border">
       <Table>
@@ -22,7 +25,7 @@ const StoreTable = ({ data, onEdit }: StoreTableProps) => {
           <TableRow>
             <TableHead className="w-[250px]">Store Name</TableHead>
             <TableHead>Location</TableHead>
-            <TableHead>Owner ID</TableHead>
+            <TableHead>Owner</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -41,8 +44,11 @@ const StoreTable = ({ data, onEdit }: StoreTableProps) => {
                   {store.location}
                 </div>
               </TableCell>
-              <TableCell className="font-mono text-xs text-muted-foreground">
-                {store.ownerId.substring(0, 8)}...
+              <TableCell>
+                {members.find((member) => member.memberId === store.ownerId)?.fullName}
+                <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+                {  store.ownerId.substring(0, 8)}...
+                </div>
               </TableCell>
               <TableCell className="text-right">
                 <Button

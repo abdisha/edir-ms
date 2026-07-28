@@ -1,6 +1,8 @@
 package com.edir.app.edir.adapter.rest;
 
 import com.edir.app.edir.adapter.rest.request.AppointmentRequest;
+import com.edir.app.edir.application.api.ActiveMemberQuery;
+import com.edir.app.edir.application.api.MemberSummary;
 import com.edir.app.edir.application.ports.in.commands.RegisterMemberCommand;
 import com.edir.app.edir.application.ports.in.usecases.AppointMemberUseCase;
 import com.edir.app.edir.application.ports.in.usecases.MemberDeceasedUseCase;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.edir.app.shared.EdirConstant.REST_VERSION;
@@ -30,19 +33,27 @@ public class MemberController {
     private final AppointMemberUseCase appointMemberUseCase;
     private final MemberDeceasedUseCase memberDeceasedUseCase;
     private final RevokeAppointmentUseCase revokeAppointmentUseCase;
+    private final ActiveMemberQuery activeMemberQuery;
 
     @PostMapping
     public ResponseEntity<UUID> registerMember(@Valid @RequestBody RegisterMemberCommand registerMemberCommand) {
         UUID memberId = registerMemberUseCase.execute(registerMemberCommand);
         return ResponseEntity
-                .status(HttpStatus.CREATED).body(memberId);
+            .status(HttpStatus.CREATED).body(memberId);
     }
 
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberDetailView> getMember(@PathVariable UUID memberId) {
         var result = memberQueryService.getMember(memberId);
         return result.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/member-summary")
+    public ResponseEntity<List<MemberSummary>> getMemberSummary() {
+        var result = activeMemberQuery.findActiveMembers();
+        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+
     }
 
     @GetMapping()
@@ -50,11 +61,11 @@ public class MemberController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size) {
 
-       return ResponseEntity.ok( memberQueryService.getMembers(new PageQuery(page,size)));
+        return ResponseEntity.ok(memberQueryService.getMembers(new PageQuery(page, size)));
     }
 
     @PutMapping("/{memberId}/revoke")
-    public ResponseEntity<Void> revoke(@PathVariable UUID memberId){
+    public ResponseEntity<Void> revoke(@PathVariable UUID memberId) {
         revokeAppointmentUseCase.execute(new MemberId(memberId));
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -62,13 +73,13 @@ public class MemberController {
 
     @PutMapping("/{memberId}/appointment")
     public ResponseEntity<Void> appoint(@PathVariable UUID memberId,
-                                       @Valid @RequestBody AppointmentRequest appointmentRequest){
-                appointMemberUseCase.execute(new MemberId(memberId),appointmentRequest.role());
+                                        @Valid @RequestBody AppointmentRequest appointmentRequest) {
+        appointMemberUseCase.execute(new MemberId(memberId), appointmentRequest.role());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{memberId}/deceased")
-    public ResponseEntity<Void> deceased(@PathVariable UUID memberId){
+    public ResponseEntity<Void> deceased(@PathVariable UUID memberId) {
         memberDeceasedUseCase.execute(new MemberId(memberId));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

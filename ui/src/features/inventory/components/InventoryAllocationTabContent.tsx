@@ -2,14 +2,19 @@ import {Badge} from "@/shared/components/ui/badge";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shared/components/ui/tabs";
 import InventoryAllocationTable from "@/features/inventory/components/tables/InventoryAllocationTable.tsx";
 import InventoryUnAllocatedItemTable from "@/features/inventory/components/tables/InventoryUnAllocatedItemTable.tsx";
-import {useGetUnAllocatedItems} from "@/features/inventory/hooks/useGetUnAllocatedItems.ts";
+import {useGetStores, useGetUnAllocatedItems} from "@/features/inventory/hooks/useGetUnAllocatedItems.ts";
 import {FormDrawer} from "@/shared/components/FromDrawer.tsx";
 import {useFormDrawer} from "@/shared/components/useFormDrawer.ts";
 import InventoryAllocationForm from "@/features/inventory/components/forms/InventoryAllocationForm.tsx";
+import {useState} from "react";
+import type {InventoryItem} from "@/features/inventory/types.ts";
 
-const InventoryAllocationTabContent = ()=>{
+const InventoryAllocationTabContent = () => {
     const {data: unAllocatedItems, isLoading: isAllocationLoading} = useGetUnAllocatedItems();
+    const {data: stores} = useGetStores();
+    const [item, setItem] = useState<InventoryItem>();
     const {open, setOpen} = useFormDrawer();
+
     return (
         <TabsContent value="item-allocation" className="mt-6">
             <h2 className="text-lg font-boldmb-2">Member Item Allocations</h2>
@@ -41,15 +46,22 @@ const InventoryAllocationTabContent = ()=>{
                 <TabsContent value="unallocated" className="border-none p-0">
                     <FormDrawer open={open} onOpenChange={setOpen} title={"Allocate Item"}>
 
-                        <InventoryAllocationForm itemId={'dfadlkfadf'}
-                                                 itemName={'adfkadlfakdf'}
-                                                 members={[]}
-                                                 onSubmit={()=>{}}/>
+                        {item && <InventoryAllocationForm itemId={item.itemCode}
+                                                          itemName={item.itemName}
+                                                          stores={stores}
+                                                          defaultValues={{
+                                                              quantity: item.quantity
+                                                          }}
+                                                            onCancel={()=>setOpen(false)}
+                                                          onSubmit={() => {
+
+                                                          }}/>}
                     </FormDrawer>
 
                     <InventoryUnAllocatedItemTable data={unAllocatedItems}
-                                                   onAllocate={() => {
+                                                   onAllocate={item => {
                                                        setOpen(true)
+                                                       setItem(item)
                                                    }}
                                                    isLoading={isAllocationLoading}/>
 

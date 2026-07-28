@@ -12,19 +12,17 @@ import {
     type InventoryAllocationFormValues,
     inventoryAllocationSchema
 } from "@/features/inventory/schemas/inventory-allocation.schema.ts";
+import type {Store} from "@/features/inventory/types.ts";
 
-interface MemberOption {
-    id: string;
-    fullName: string;
-}
 
 interface InventoryAllocationFormProps {
     defaultValues?: Partial<InventoryAllocationFormValues>;
     itemId: string;
     itemName: string;
-    members: MemberOption[];
+    stores: Store[];
     loading?: boolean;
     submitText?: string;
+    onCancel?: () => void;
     onSubmit: (
         values: InventoryAllocationFormValues
     ) => Promise<void> | void;
@@ -34,10 +32,11 @@ export default function InventoryAllocationForm({
     defaultValues,
     itemId,
     itemName,
-    members,
+    stores,
     loading = false,
     submitText = "Allocate Item",
     onSubmit,
+    onCancel
 }: InventoryAllocationFormProps) {
 
     const {
@@ -50,7 +49,7 @@ export default function InventoryAllocationForm({
         defaultValues: {
             item: itemId,
             quantity: 1,
-            memberId: "",
+            storeId: "",
             ...defaultValues,
         },
     });
@@ -106,21 +105,23 @@ export default function InventoryAllocationForm({
 
                 <Field>
                     <FieldLabel>Allocate To Member</FieldLabel>
-                    <FieldContent>
+
                         <Controller
-                            name="memberId"
+                            name="storeId"
                             control={control}
                             render={({ field }) => (
-                                <Select value={field.value} onValueChange={field.onChange}>
+                                <Select  value={field.value} onValueChange={field.onChange}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select member" />
+                                        <SelectValue placeholder="Select Store">
+                                            {stores.find((store) => store.id === field.value)?.name}
+                                        </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {members.map((member) => (
-                                            <SelectItem key={member.id} value={member.id}>
+                                        {stores.map((store) => (
+                                            <SelectItem key={store.id} value={store.id}>
                                                 <div className="flex items-center gap-2">
                                                     <User className="h-4 w-4" />
-                                                    {member.fullName}
+                                                    {store.name}
                                                 </div>
                                             </SelectItem>
                                         ))}
@@ -128,15 +129,18 @@ export default function InventoryAllocationForm({
                                 </Select>
                             )}
                         />
-                    </FieldContent>
+
                     <FieldDescription>Select the member who will receive this item.</FieldDescription>
-                    {errors.memberId && (
-                        <p className="text-sm text-destructive">{errors.memberId.message}</p>
+                    {errors.storeId && (
+                        <p className="text-sm text-destructive">{errors.storeId.message}</p>
                     )}
                 </Field>
             </FieldGroup>
 
             <div className="flex justify-end gap-3 border-t pt-6">
+                <Button variant={'outline'} onClick={onCancel} disabled={loading}>
+                    Cancel
+                </Button>
                 <Button type="submit" disabled={loading}>
                     {submitText}
                 </Button>

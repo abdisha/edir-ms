@@ -28,3 +28,10 @@ export interface ReturnedItem{
     condition:"GOOD"|"DAMAGED"|"MISSING_PARTS";
 
 }
+
+export interface Store{
+    id?:string;
+    name:string;
+    location:string;
+    ownerId:string;
+}

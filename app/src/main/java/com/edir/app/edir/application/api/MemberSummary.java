@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public record MemberSummary(
     UUID memberId,
-    String FullName
+    String fullName
 ) {
 }

@@ -28,7 +28,7 @@ public class ContributionCreatedListener {
         }
 
         for (MemberSummary member : result.get()) {
-            String [] names = member.FullName().split(" ");
+            String [] names = member.fullName().split(" ");
             helper.initializeMemberContribution(new MemberId(member.memberId()),
                 new FullName(names[0],names[1],names[2] ),
                 event.contributionId(),

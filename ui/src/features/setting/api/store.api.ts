@@ -2,6 +2,7 @@ import {api} from "@/shared/api/client.ts";
 import type {Store} from "@/features/setting/types.ts";
 
 const endpoint = "store";
+const memberEndpoint="members";
 
 export async function getStores() {
     const result = await api.get(endpoint);
@@ -25,5 +26,10 @@ export async function changeOwner(id: string, ownerId: string){
 
 export async function changeName(id: string, name: string){
     const result = await api.put(endpoint + "/" + id, {name})
+    return result.data;
+}
+
+export async function getMembers(){
+    const result = await api.get(memberEndpoint+"/member-summary");
     return result.data;
 }

@@ -16,8 +16,16 @@ import {
 import {Input} from "@/shared/components/ui/input";
 import {Button} from "@/shared/components/ui/button";
 
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/shared/components/ui/select";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/shared/components/ui/select";
 import {MapPin, Store} from "lucide-react";
+import type {Member} from "@/features/setting/types.ts";
 
 const schema = z.object({
     name: z.string().min(2),
@@ -27,19 +35,17 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-interface Member {
-    id: string;
-    fullName: string;
-}
 
 interface Props {
     onCancel: () => void;
     members: Member[];
     onSubmit: (data: FormValues) => void;
+    initialValues?: FormValues;
 }
 
 export default function InventoryStoreForm({
                                                onCancel,
+                                               initialValues,
                                                members,
                                                onSubmit,
                                            }: Props) {
@@ -54,6 +60,7 @@ export default function InventoryStoreForm({
             name: "",
             location: "",
             ownerId: "",
+            ...initialValues,
         },
     });
 
@@ -66,6 +73,7 @@ export default function InventoryStoreForm({
                     <Controller
                         control={control}
                         name="ownerId"
+                        rules={{ required: true }}
                         render={({ field }) => (
                             <Field data-invalid={!!errors.ownerId}>
                                 <FieldLabel>Store Owner</FieldLabel>
@@ -76,18 +84,22 @@ export default function InventoryStoreForm({
                                         onValueChange={field.onChange}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Select store owner" />
+                                            <SelectValue placeholder="Select store owner">
+                                                {members.find((member) => member.memberId === field.value)?.fullName}
+                                            </SelectValue>
                                         </SelectTrigger>
 
                                         <SelectContent>
+                                            <SelectGroup>
                                             {members.map((member) => (
                                                 <SelectItem
-                                                    key={member.id}
-                                                    value={member.id}
+                                                    key={member.memberId}
+                                                    value={member.memberId}
                                                 >
                                                     {member.fullName}
                                                 </SelectItem>
                                             ))}
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                 </FieldContent>

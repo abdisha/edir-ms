@@ -4,3 +4,8 @@ export interface Store{
     location:string;
     ownerId:string;
 }
+
+export interface Member {
+    memberId: string;
+    fullName: string;
+}

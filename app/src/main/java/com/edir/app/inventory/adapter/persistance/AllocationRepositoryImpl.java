@@ -48,7 +48,7 @@ record AllocationRepositoryImpl(JpaInventoryAllocationRepository allocationRepos
             if (member.isPresent()) {
                 return Optional.of(new AllocationResponse(
                     allocationView.get().memberId(),
-                    member.get().FullName(),
+                    member.get().fullName(),
                     allocationView.get().allocationId()
                 ));
             }
