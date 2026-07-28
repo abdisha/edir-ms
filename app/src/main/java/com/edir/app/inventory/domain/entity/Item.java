@@ -13,17 +13,20 @@ public class  Item extends BaseEntity<ItemId> {;
     private final ItemCode itemCode;
     private String itemName;
     private ItemQuantity quantityAtHand;
+    private ItemQuantity allocatedQuantity;
     private ItemStatus status;
 
     private Item(ItemId itemId,
                 ItemCode itemCode,
                 String itemName,
                 ItemQuantity quantityAtHand,
+                ItemQuantity allocatedQuantity,
                 ItemStatus status) {
         super(itemId);
         this.itemCode = itemCode;
         this.itemName = itemName;
         this.quantityAtHand = quantityAtHand;
+        this.allocatedQuantity = allocatedQuantity;
         this.status =status;
     }
 
@@ -34,6 +37,7 @@ public class  Item extends BaseEntity<ItemId> {;
             itemCode,
             itemName,
             quantityAtHand,
+            ItemQuantity.of(0),
             ItemStatus.ACTIVE);
 
     }
@@ -42,12 +46,14 @@ public class  Item extends BaseEntity<ItemId> {;
                                  ItemCode itemCode,
                                  String itemName,
                                  ItemQuantity quantityAtHand,
+                                 ItemQuantity allocatedQuantity,
                                  ItemStatus status){
         return new Item(
             itemId,
             itemCode,
             itemName,
             quantityAtHand,
+            allocatedQuantity,
             status
         );
     }
@@ -65,7 +71,20 @@ public class  Item extends BaseEntity<ItemId> {;
         }
 
         this.quantityAtHand=Objects.requireNonNull(quantity,"Quantity cannot be null");
+    }
 
+    public void itemAllocated(ItemQuantity allocatedQuantity){
+        if(allocatedQuantity.quantity()<0){
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
+        this.allocatedQuantity=this.allocatedQuantity.addQuantity(allocatedQuantity.quantity());
+    }
+
+    public void itemReturned(ItemQuantity quantity){
+        if(quantity.quantity()<0){
+            throw new IllegalArgumentException("Quantity cannot be negative");
+        }
+       this.allocatedQuantity =this.allocatedQuantity.subtractQuantity(quantity.quantity());
     }
 
     public void updateItemName(String name){
@@ -88,5 +107,9 @@ public class  Item extends BaseEntity<ItemId> {;
     }
     public void updateName(String itemName) {
         this.itemName=itemName;
+    }
+
+    public ItemQuantity getAllocatedQuantity() {
+        return allocatedQuantity;
     }
 }

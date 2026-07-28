@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Transactional
@@ -34,13 +35,14 @@ class ItemManagementService implements ItemManagementUseCase {
 
     @Override
     public void updateItem(UpdateItemCommand command) {
-        Optional<Item> result = repository.findById(new ItemId(command.itemId()));
+        Optional<Item> result = repository.findById(new ItemId(UUID.fromString(command.itemId())));
         if (result.isEmpty()) {
             throw new ItemNotFoundException("Item not found");
         }
 
         Item item = result.get();
         item.updateName(command.itemName());
+        item.updateQuantity(new ItemQuantity(command.quantityAtHand()));
         repository.save(item);
     }
 

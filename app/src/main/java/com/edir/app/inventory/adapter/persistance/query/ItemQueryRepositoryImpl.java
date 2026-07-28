@@ -21,6 +21,11 @@ class ItemQueryRepositoryImpl implements ItemQueryRepository {
     }
 
     @Override
+    public List<ItemView> findAllUnAllocatedItems() {
+        return jpaItemRepository.findAllUnAllocatedItems();
+    }
+
+    @Override
     public Optional<ItemView> findItemById(UUID id) {
         return jpaItemRepository.findItemViewById(id);
     }

@@ -8,6 +8,7 @@ import com.edir.app.inventory.application.out.AllocationRepository;
 import com.edir.app.inventory.application.out.ItemRepository;
 import com.edir.app.inventory.domain.entity.Allocation;
 import com.edir.app.inventory.domain.entity.Item;
+import com.edir.app.inventory.domain.exceptions.InsufficientQuantityException;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
 import com.edir.app.inventory.domain.valueobjects.ItemStatus;
@@ -37,7 +38,12 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
 
         Item item = itemResult.get();
         if (item.getStatus().equals(ItemStatus.INACTIVE)) {
-            throw new IllegalArgumentException("Item is inactive");
+            throw new ItemNotFoundException("Item is inactive");
+        }
+        if(item.getQuantityAtHand().quantity()<command.quantity()){
+            throw new InsufficientQuantityException(item.getId(),
+                new ItemQuantity(command.quantity()),
+                item.getQuantityAtHand());
         }
 
         if (result.isEmpty()) {
@@ -52,6 +58,10 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
 
         Allocation allocation = result.get();
         allocation.allocate(item.getId(), ItemQuantity.of(command.quantity()));
+
+        item.itemAllocated(new ItemQuantity(command.quantity()));
+
+        itemRepository.save(item);
         allocationRepository.save(allocation);
     }
 
@@ -74,14 +84,21 @@ class InventoryAllocationService implements InventoryAllocationUseCase {
     public void reduceAllocationQuantity(AllocateItemCommand command) {
         Optional<Allocation> result = allocationRepository
             .findByMemberId(new MemberId(command.memberId()));
+        Optional<Item> itemResult = itemRepository.findById(new ItemId(command.item()));
 
+        if (itemResult.isEmpty()) {
+            throw new ItemNotFoundException("No item found with this item id: " + command.item());
+        }
+        Item item = itemResult.get();
         if (result.isEmpty()) {
             return;
         }
 
         Allocation allocation = result.get();
         allocation.returnItems(new ItemId(command.item()), ItemQuantity.of(command.quantity()));
+        item.itemReturned(new ItemQuantity(command.quantity()));
 
+        itemRepository.save(item);
         allocationRepository.save(allocation);
     }
 

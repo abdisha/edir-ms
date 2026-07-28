@@ -6,5 +6,6 @@ import java.util.UUID;
 
 public interface ItemQueryRepository {
     List<ItemView> findAllItems();
+    List<ItemView> findAllUnAllocatedItems();
     Optional<ItemView> findItemById(UUID id);
 }

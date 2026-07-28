@@ -33,4 +33,5 @@ public class ItemEntity {
     private ItemStatus status;
 
     private Integer quantityAtHand;
+    private Integer allocatedQuantity;
 }

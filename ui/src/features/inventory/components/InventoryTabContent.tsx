@@ -4,21 +4,49 @@ import {PlusCircle} from "lucide-react";
 import {FormDrawer} from "@/shared/components/FromDrawer.tsx";
 import {useCreateInventory} from "@/features/inventory/hooks/useCreateInventory.ts";
 import {useFormDrawer} from "@/shared/components/useFormDrawer.ts";
-import InventoryItemTable from "@/features/inventory/components/InventoryItemTable.tsx";
-import {InventoryItemForm} from "@/features/inventory/components/InventoryItemFrom.tsx";
+import InventoryItemTable from "@/features/inventory/components/tables/InventoryItemTable.tsx";
+import {InventoryItemForm} from "@/features/inventory/components/forms/InventoryItemFrom.tsx";
 import {useGetInventory} from "@/features/inventory/hooks/useGetInventory.ts";
+import {useGetItemById} from "@/features/inventory/hooks/useGetItemById.tsx";
+import {useState} from "react";
+import {useUpdateItem} from "@/features/inventory/hooks/useUpdateItem.ts";
+import {SpinnerCard} from "@/shared/components/SpinnerCard.tsx";
 
 const InventoryTabContent = () => {
 
-    const {data, isLoading} = useGetInventory();
+    const {data: inventoryData, isLoading: isInventoryLoading} = useGetInventory();
+    const [id, setId] = useState<string>();
+    const {data: itemData, isLoading: isItemLoading} = useGetItemById(id);
+    const {open, setOpen} = useFormDrawer();
+
+    const updateMutation = useUpdateItem({
+        onSuccess: () => {
+            setOpen(false);
+        }
+    })
 
     const createMutation = useCreateInventory({
         onSuccess: () => {
             setOpen(false);
         }
     });
-    const {open, setOpen} = useFormDrawer();
-    const selectedInventoryIds: string[] = [];
+
+    const handleSubmit = (values: { itemName: any; initialQuantity: any; itemCode: any; }) => {
+        if (id !== undefined) {
+            updateMutation.mutate({itemId: id, itemName: values.itemName, quantityAtHand: values.initialQuantity})
+        } else {
+            createMutation.mutate({
+                itemCode: values.itemCode,
+                itemName: values.itemName,
+                initialQuantity: values.initialQuantity
+            })
+        }
+    }
+
+    const onEdit = (id: string) => {
+        setId(id);
+        setOpen(true);
+    }
 
 
     return (
@@ -29,13 +57,30 @@ const InventoryTabContent = () => {
                 size={"xl"}
                 title="Inventory Item"
                 description="Register a new inventory item."
-                loading={createMutation.isPending}
+                loading={createMutation.isPending || isItemLoading}
             >
+                {
+                    isItemLoading &&
+                    <SpinnerCard/>
+
+                }
+                {(itemData || !isItemLoading) &&
                 <InventoryItemForm
-                    onSubmit={createMutation.mutate}
-                    loading={createMutation.isPending}
-                    onCancel={() => setOpen(false)}
+                    onSubmit={handleSubmit}
+                    loading={createMutation.isPending || isItemLoading}
+                    defaultValues={
+                        {
+                            itemName: itemData?.itemName,
+                            initialQuantity: itemData?.quantity,
+                            itemCode: itemData?.itemCode
+                        }
+                    }
+                    onCancel={() => {
+                        setOpen(false)
+                        setId(undefined)
+                    }}
                 />
+                }
             </FormDrawer>
 
             <h2 className="text-lg font-bold  mb-2">Inventory Overview</h2>
@@ -60,24 +105,11 @@ const InventoryTabContent = () => {
                     {/*    className="pl-9 bg-card"*/}
                     {/*/>*/}
                 </div>
-                <div className="flex items-center gap-3">
-
-                    {selectedInventoryIds.length > 0 && (
-                        <div
-                            className="flex items-center gap-2 w-full sm:w-auto justify-end bg-muted/50 p-1.5 rounded-lg border">
-                  <span className="text-xs font-medium px-2 text-muted-foreground">
-                    {selectedInventoryIds.length} selected
-                  </span>
-                            <Button size="sm" variant="destructive" className="h-7 text-xs">
-                                Bulk Delete
-                            </Button>
-                        </div>
-                    )}
-                </div>
             </div>
             <InventoryItemTable
-                loading={isLoading}
-                filteredInventoryData={data}
+                onEdit={onEdit}
+                loading={isInventoryLoading}
+                inventoryData={inventoryData}
             />
 
         </TabsContent>

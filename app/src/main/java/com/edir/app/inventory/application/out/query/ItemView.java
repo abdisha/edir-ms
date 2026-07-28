@@ -9,5 +9,6 @@ public record ItemView(
     String itemName,
     ItemStatus itemStatus,
     Integer quantity,
+    Integer allocated,
     String itemCode) {
 }

@@ -60,6 +60,7 @@ public class InventoryDataMapper {
             .itemCode(item.getItemCode().code())
             .name(item.getItemName())
             .status(item.getStatus())
+            .allocatedQuantity(item.getAllocatedQuantity().quantity())
             .quantityAtHand(item.getQuantityAtHand().quantity())
             .build();
     }
@@ -70,6 +71,7 @@ public class InventoryDataMapper {
             new ItemCode(entity.getItemCode()),
             entity.getName(),
             new ItemQuantity(entity.getQuantityAtHand()),
+            new ItemQuantity(entity.getAllocatedQuantity()),
             entity.getStatus()
         );
     }
@@ -118,4 +120,22 @@ public class InventoryDataMapper {
             .build();
 
     }
+
+   public StoreEntity storeToStoreEntity(Store store){
+        return StoreEntity.builder()
+            .id(store.getId().id())
+            .name(store.getName())
+            .storeOwner(store.getStoreOwner().value())
+            .location(store.getLocation())
+            .build();
+   }
+
+   public Store storeEntityToStore(StoreEntity entity){
+        return Store.rehydrate(
+            new StoreId(entity.getId()),
+            entity.getName(),
+            entity.getLocation(),
+            new MemberId(entity.getStoreOwner())
+        );
+   }
 }

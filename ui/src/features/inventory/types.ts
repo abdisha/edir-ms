@@ -4,6 +4,7 @@ export interface InventoryItem {
     itemName: string;
     itemStatus:"ACTIVE"|"INACTIVE"
     quantity: number;
+    allocated: number;
 }
 export interface CreateItemRequest{
     itemCode:string;

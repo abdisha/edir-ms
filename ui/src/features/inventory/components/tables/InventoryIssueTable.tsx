@@ -1,7 +1,9 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/shared/components/ui/table.tsx";
 import {
     DropdownMenu,
-    DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/shared/components/ui/dropdown-menu.tsx";
 import {Button} from "@/shared/components/ui/button.tsx";

@@ -1,10 +1,10 @@
 import {Barcode, Boxes, Package} from "lucide-react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Controller, useForm} from "react-hook-form";
-import {type InventoryItemFormValues, inventoryItemSchema,} from "../schemas/inventory-item.schema";
-import {Button} from "@/shared/components/ui/button";
-import {Input} from "@/shared/components/ui/input";
-import {Field, FieldContent, FieldDescription, FieldLabel,} from "@/shared/components/ui/field";
+import {type InventoryItemFormValues, inventoryItemSchema,} from "../../schemas/inventory-item.schema.ts";
+import {Button} from "@/shared/components/ui/button.tsx";
+import {Input} from "@/shared/components/ui/input.tsx";
+import {Field, FieldContent, FieldDescription, FieldLabel,} from "@/shared/components/ui/field.tsx";
 
 interface InventoryItemFormProps {
   defaultValues?: Partial<InventoryItemFormValues>;
@@ -19,7 +19,7 @@ export function InventoryItemForm({
   loading = false,
   submitText = "Save Item",
   onSubmit,
-  onCancel,
+  onCancel
 }: InventoryItemFormProps) {
   const {
     control,
@@ -123,7 +123,10 @@ export function InventoryItemForm({
 
       <div className="flex justify-end gap-3 border-t pt-6">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={()=> {
+            onCancel()
+            control._reset();
+          }}>
             Cancel
           </Button>
         )}

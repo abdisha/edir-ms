@@ -13,7 +13,7 @@ export function useCreateInventory(option?:Options) {
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: inventoryKeys.allInventory})
                 .then(() => toast.success("Item created successfully"))
-            option.onSuccess?.()
+            option?.onSuccess?.()
         },
 
         onError: (error : AxiosError<{ message: string }>) => {

@@ -18,6 +18,7 @@ public interface JpaItemRepository extends JpaRepository<ItemEntity, UUID> {
     i.name,
     i.status,
     i.quantityAtHand,
+    i.allocatedQuantity,
     i.itemCode
 
     ) from ItemEntity i
@@ -30,6 +31,20 @@ public interface JpaItemRepository extends JpaRepository<ItemEntity, UUID> {
     i.name,
     i.status,
     i.quantityAtHand,
+    i.allocatedQuantity,
+    i.itemCode
+
+    ) from ItemEntity i where i.quantityAtHand-i.allocatedQuantity>0
+""")
+    List<ItemView> findAllUnAllocatedItems();
+
+    @Query(value = """
+    select new com.edir.app.inventory.application.out.query.ItemView(
+    i.id,
+    i.name,
+    i.status,
+    i.quantityAtHand,
+    i.allocatedQuantity,
     i.itemCode
     ) from ItemEntity i where i.id =:id
 """)

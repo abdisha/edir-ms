@@ -1,7 +1,7 @@
 import {Button} from "@/shared/components/ui/button.tsx";
 import {PlusCircle} from "lucide-react";
 import {TabsContent} from "@/shared/components/ui/tabs.tsx";
-import InventoryIssueTable from "@/features/inventory/components/InventoryIssueTable.tsx";
+import InventoryIssueTable from "@/features/inventory/components/tables/InventoryIssueTable.tsx";
 
 const InventoryIssueTabContent =()=>{
     return (

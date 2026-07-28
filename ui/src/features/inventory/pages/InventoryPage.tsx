@@ -4,6 +4,7 @@ import InventoryStatBanner from "@/features/inventory/components/InventoryStatBa
 import InventoryTabContent from "@/features/inventory/components/InventoryTabContent.tsx";
 import InventoryIssueTabContent from "@/features/inventory/components/InventoryIssueTabContent.tsx";
 import InventoryReturnTabContent from "@/features/inventory/components/InventoryReturnTabContent.tsx";
+import InventoryAllocationTabContent from "@/features/inventory/components/InventoryAllocationTabContent.tsx";
 
 
 export function InventoryPage() {
@@ -19,6 +20,10 @@ export function InventoryPage() {
                         <Package className="h-4 w-4"/>
                         Inventory
                     </TabsTrigger>
+                    <TabsTrigger value="item-allocation" className="flex items-center gap-2">
+                        <User className="h-4 w-4"/>
+                        Item Allocation
+                    </TabsTrigger>
                     <TabsTrigger value="item-issue" className="flex items-center gap-2">
                         <Flag className="h-4 w-4"/>
                         Item Issues
@@ -27,14 +32,13 @@ export function InventoryPage() {
                         <ArrowDownLeft className="h-4 w-4"/>
                         Returned Items
                     </TabsTrigger>
-                    <TabsTrigger value="item-allocation" className="flex items-center gap-2">
-                        <User className="h-4 w-4"/>
-                        Item Allocation
-                    </TabsTrigger>
+
                 </TabsList>
 
                 {/* Inventory Tab Content */}
                 <InventoryTabContent/>
+                {/* Allocation Tab Content */}
+                <InventoryAllocationTabContent/>
                 {/* Issue Tab Content */}
                 <InventoryIssueTabContent/>
                 {/* Returned Item Tab Content */}

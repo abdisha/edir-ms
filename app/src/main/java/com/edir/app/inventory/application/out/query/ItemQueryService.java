@@ -15,8 +15,13 @@ public class ItemQueryService {
     public List<ItemView> findAll() {
         return queryRepository.findAllItems();
     }
+    public List<ItemView> findAllUnAllocatedItems() {
+        return queryRepository.findAllUnAllocatedItems();
+    }
 
     public Optional<ItemView> findById(UUID id) {
         return queryRepository.findItemById(id);
     }
+
+
 }

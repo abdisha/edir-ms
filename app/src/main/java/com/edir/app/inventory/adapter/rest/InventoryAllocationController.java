@@ -6,6 +6,8 @@ import com.edir.app.inventory.application.in.commands.AllocateItemCommand;
 import com.edir.app.inventory.application.in.commands.TransferCommand;
 import com.edir.app.inventory.application.in.usecases.InventoryAllocationUseCase;
 import com.edir.app.inventory.application.out.query.AllocationQueryService;
+import com.edir.app.inventory.application.out.query.ItemQueryService;
+import com.edir.app.inventory.application.out.query.ItemView;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +19,13 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(REST_VERSION + "/inventory/allocation")
+@RequestMapping(REST_VERSION + "inventory-allocation")
 public class InventoryAllocationController {
     private final InventoryAllocationUseCase inventoryAllocationUseCase;
     private final AllocationQueryService allocationQueryService;
+    private final ItemQueryService itemQueryService;
 
-    @PostMapping("allocate")
+    @PostMapping()
     public ResponseEntity<Void> allocate(@RequestBody AllocateItemCommand command) {
         inventoryAllocationUseCase.allocateItemToMember(command);
         return ResponseEntity.ok().build();
@@ -46,6 +49,13 @@ public class InventoryAllocationController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/unallocated")
+    public ResponseEntity<List<ItemView>> getUnAllocatedItems() {
+        var result = itemQueryService.findAllUnAllocatedItems();
+        return ResponseEntity
+            .ok()
+            .body(result);
+    }
 
     @GetMapping("/{memberId}/member")
     public ResponseEntity<AllocationResponse> getByMemberId(@PathVariable String memberId) {

@@ -10,4 +10,5 @@ public interface InventoryAllocationUseCase {
     void reduceAllocationQuantity(AllocateItemCommand allocateItemCommand);
     void transferAllocation(TransferCommand transferCommand);
 
+
 }

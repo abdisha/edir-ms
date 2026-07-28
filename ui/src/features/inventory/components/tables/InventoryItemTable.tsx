@@ -1,4 +1,4 @@
-import {AlertTriangle, CheckCircle2, Edit, Eye, Inbox, MoreHorizontal, Trash2} from "lucide-react";
+import {AlertTriangle, CheckCircle2, Edit, Eye, Inbox, MoreHorizontal, Package, Trash2} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/shared/components/ui/table.tsx";
 import {
     DropdownMenu,
@@ -14,16 +14,17 @@ import {SpinnerCard} from "@/shared/components/SpinnerCard.tsx";
 
 interface InventoryItemTableProp{
     loading:boolean
-    filteredInventoryData:InventoryItem[],
+    inventoryData:InventoryItem[],
+    onEdit:(id:string)=>void
 }
 
 
-const  InventoryItemTable=({filteredInventoryData,loading=false}:InventoryItemTableProp)=>{
+const  InventoryItemTable=({inventoryData,onEdit,loading=false}:InventoryItemTableProp)=>{
 
     if(loading){
         return <SpinnerCard/>
     }
-    console.log(filteredInventoryData)
+    console.log(inventoryData)
 
     return( <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
         <Table>
@@ -31,12 +32,13 @@ const  InventoryItemTable=({filteredInventoryData,loading=false}:InventoryItemTa
                 <TableRow>
                     <TableHead className="font-semibold">Item Name & SKU</TableHead>
                     <TableHead className="font-semibold">Quantity</TableHead>
+                    <TableHead className="font-semibold">Allocated</TableHead>
                     <TableHead className="font-semibold">Status</TableHead>
                     <TableHead className="text-right font-semibold">Actions</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {filteredInventoryData?.length===0 ? (
+                {inventoryData?.length===0 ? (
                     <TableRow>
                         <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
                             <div className={'flex flex-col items-center justify-center'}>
@@ -46,7 +48,7 @@ const  InventoryItemTable=({filteredInventoryData,loading=false}:InventoryItemTa
                         </TableCell>
                     </TableRow>
                 ) : (
-                    filteredInventoryData.map((item) => {
+                    inventoryData.map((item) => {
                         return (
                             <TableRow
                                 key={item.itemId}
@@ -54,13 +56,21 @@ const  InventoryItemTable=({filteredInventoryData,loading=false}:InventoryItemTa
                             >
 
                                 <TableCell>
-                                    <div className="flex flex-col">
-                                        <span className="font-medium text-foreground">{item.itemName}</span>
-                                        <span className="text-xs text-muted-foreground">SKU: {item.itemCode}</span>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted">
+                                            <Package className="h-5 w-5 text-muted-foreground" />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="font-medium text-foreground">{item.itemName}</span>
+                                            <span className="text-xs text-muted-foreground font-mono uppercase tracking-tighter">#{item.itemCode}</span>
+                                        </div>
                                     </div>
                                 </TableCell>
                                 <TableCell>
                                     <span className="font-semibold text-foreground">{item.quantity}</span>
+                                </TableCell>
+                                <TableCell>
+                                    <span className="font-semibold text-foreground">{item.allocated}</span>
                                 </TableCell>
                                 <TableCell>
                                     <InventoryStatusBadge status={item.itemStatus} />
@@ -79,7 +89,7 @@ const  InventoryItemTable=({filteredInventoryData,loading=false}:InventoryItemTa
                                                 <Eye className="mr-2 h-4 w-4 text-muted-foreground" />
                                                 View
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem className="cursor-pointer">
+                                            <DropdownMenuItem className="cursor-pointer" onClick={()=>onEdit(item.itemId)}>
                                                 <Edit className="mr-2 h-4 w-4 text-muted-foreground" />
                                                 Edit
                                             </DropdownMenuItem>
