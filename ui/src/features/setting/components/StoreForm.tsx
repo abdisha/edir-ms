@@ -33,11 +33,13 @@ interface Member {
 }
 
 interface Props {
+    onCancel: () => void;
     members: Member[];
     onSubmit: (data: FormValues) => void;
 }
 
 export default function InventoryStoreForm({
+                                               onCancel,
                                                members,
                                                onSubmit,
                                            }: Props) {
@@ -65,7 +67,7 @@ export default function InventoryStoreForm({
                         control={control}
                         name="ownerId"
                         render={({ field }) => (
-                            <Field invalid={!!errors.ownerId}>
+                            <Field data-invalid={!!errors.ownerId}>
                                 <FieldLabel>Store Owner</FieldLabel>
 
                                 <FieldContent>
@@ -94,7 +96,7 @@ export default function InventoryStoreForm({
                             </Field>
                         )}
                     />
-                    <Field invalid={!!errors.name}>
+                    <Field data-invalid={!!errors.name}>
                         <FieldLabel className="flex items-center gap-2">
                             <Store className="h-4 w-4 text-muted-foreground" />
                             Store Name
@@ -107,6 +109,7 @@ export default function InventoryStoreForm({
 
                         <FieldContent>
                             <Input
+                                aria-label={'Store Name'}
                                 placeholder="e.g. Main Warehouse"
                                 {...register("name")}
                             />
@@ -115,7 +118,7 @@ export default function InventoryStoreForm({
                         <FieldError>{errors.name?.message}</FieldError>
                     </Field>
 
-                    <Field invalid={!!errors.location}>
+                    <Field data-invalid={!!errors.location}>
                         <FieldLabel className="flex items-center gap-2">
                             <MapPin className="h-4 w-4 text-muted-foreground" />
                             Location
@@ -128,6 +131,7 @@ export default function InventoryStoreForm({
 
                         <FieldContent>
                             <Input
+                                aria-label={'Store Location'}
                                 placeholder="e.g. Addis Ababa, Bole"
                                 {...register("location")}
                             />
@@ -141,12 +145,12 @@ export default function InventoryStoreForm({
             </FieldSet>
 
             <div className="flex justify-end gap-2">
-                <Button variant="outline" type="button">
-                    Cancel
-                </Button>
 
                 <Button type="submit">
                     Save Store
+                </Button>
+                <Button variant="outline" type="button" onClick={onCancel}>
+                    Cancel
                 </Button>
             </div>
         </form>

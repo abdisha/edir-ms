@@ -1,19 +1,24 @@
 import {useNavigate} from "react-router";
-import {ArrowLeft, Plus, Warehouse} from "lucide-react";
+import {ArrowLeft, Loader2, Plus, Warehouse} from "lucide-react";
 
 import {Button} from "@/shared/components/ui/button";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/shared/components/ui/card";
 
 import StoreTable from "../components/StoreTable";
-import type {Store} from "@/features/setting/types.ts";
 import {useFormDrawer} from "@/shared/components/useFormDrawer.ts";
 import {FormDrawer} from "@/shared/components/FromDrawer.tsx";
 import StoreForm from "../components/StoreForm";
+import {useGetStores} from "@/features/setting/hooks/useGetStores.ts";
+import {useCreateStore} from "@/features/setting/hooks/useCreateStore.ts";
 
 const InventoryStorePages = () => {
     const navigate = useNavigate();
+    const {data:stores,isLoading,isError}=useGetStores();
+    const storeMutation = useCreateStore({
+        onSuccess:()=>setOpen(false)
+    });
     const {open,setOpen} = useFormDrawer()
-    const stores:Store[] = [];
+
 
     const handleEditStore = (store: any) => {
         console.log("Edit store:", store);
@@ -64,7 +69,18 @@ const InventoryStorePages = () => {
                 </CardHeader>
 
                 <CardContent>
-                    {stores.length > 0 ? (
+                    {isLoading ? (
+                        <div className="flex h-64 items-center justify-center">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        </div>
+                    ) : isError ? (
+                        <div className="flex h-64 flex-col items-center justify-center gap-2 text-destructive">
+                            <p className="font-semibold">Error loading stores</p>
+                            <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+                                Try Again
+                            </Button>
+                        </div>
+                    ) : stores && stores.length > 0 ? (
                         <StoreTable data={stores} onEdit={handleEditStore} />
                     ) : (
                         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16">
@@ -88,7 +104,8 @@ const InventoryStorePages = () => {
             <FormDrawer open={open} onOpenChange={setOpen} title={'Add Store or edit store'}>
                 <StoreForm
                 members={[]}
-                onSubmit={()=>{}}
+                onCancel={() => setOpen(false)}
+                onSubmit={data=>storeMutation.mutate(data)}
                 />
 
             </FormDrawer>

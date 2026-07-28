@@ -1,5 +1,5 @@
 export interface Store{
-    id:string;
+    id?:string;
     name:string;
     location:string;
     ownerId:string;
