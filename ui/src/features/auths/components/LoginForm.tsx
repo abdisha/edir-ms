@@ -45,7 +45,7 @@ export function LoginForm({ submit, loading }: LoginFormProp) {
       </div>
 
       {/* Login Card */}
-      <Card className="p-6 md:p-8 shadow-lg border">
+      <Card className="p-6 md:p-8 shadow-lg border rounded-lg">
         <form onSubmit={form.handleSubmit(submit)} className="space-y-6">
           {/* Header */}
           <div className="space-y-2">
@@ -151,7 +151,7 @@ export function LoginForm({ submit, loading }: LoginFormProp) {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-3 text-muted-foreground font-medium">
+              <span className="text-muted-foreground font-medium">
                 New to Edir MS?
               </span>
             </div>

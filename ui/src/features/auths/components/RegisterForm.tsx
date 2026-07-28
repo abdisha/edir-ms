@@ -48,7 +48,7 @@ export function RegisterForm({ submit, loading = false }: RegisterFormProp) {
             </div>
 
             {/* Register Card */}
-            <Card className="p-6 md:p-8 shadow-lg border bg-white">
+            <Card className="p-6 md:p-8 shadow-lg border ">
                 <form onSubmit={form.handleSubmit(submit)} className="space-y-5">
                     {/* Header */}
                     <div className="space-y-2">
@@ -174,7 +174,7 @@ export function RegisterForm({ submit, loading = false }: RegisterFormProp) {
                             <span className="w-full border-t" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-white px-3 text-muted-foreground font-medium">
+                            <span className="px-3 text-muted-foreground font-medium">
                                 Already have an account?
                             </span>
                         </div>
