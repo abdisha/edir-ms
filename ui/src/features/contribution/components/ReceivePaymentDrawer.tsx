@@ -1,4 +1,3 @@
-import {Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle,} from "@/shared/components/ui/drawer";
 import {PaymentForm} from "./PaymentForm";
 import {useAuth} from "@/features/auths/useAuth.tsx";
 import {useGetMember} from "@/features/edir/hooks/useGetMembers.ts";
@@ -6,45 +5,32 @@ import {SpinnerCard} from "@/shared/components/SpinnerCard.tsx";
 import {AlertCircle} from "lucide-react";
 import {Alert, AlertDescription, AlertTitle} from "@/shared/components/ui/alert";
 import {useReceivePayment} from "@/features/contribution/hooks/useReceivePayment.ts";
+import {FormDrawer} from "@/shared/components/FromDrawer.tsx";
 
 interface Props {
     open: boolean;
+    loading:boolean;
     onOpenChange(
         open: boolean
     ): void;
     memberId: string;
 }
-export function ReceivePaymentDrawer({ open, onOpenChange, memberId }: Props) {
+export function ReceivePaymentDrawer({ open, onOpenChange,loading, memberId }: Props) {
     const onCancelHandle=()=>{
         onOpenChange(false);
     }
     return(
-        <Drawer
-            open={open}
-            onOpenChange={onOpenChange}
-            showSwipeHandle={true}
-            swipeDirection={"right"}
-        >
-            <DrawerContent className="mx-auto max-w-full h-full max-h-[96vh] flex flex-col">
-
-
-                <div className="overflow-y-auto px-4 pb-8">
-                    <DrawerHeader className="px-0">
-                        <DrawerTitle className="text-2xl font-bold">
-                            Receive Payment
-                        </DrawerTitle>
-                        <DrawerDescription className="text-base">
-                            Record a contribution payment
-                        </DrawerDescription>
-                    </DrawerHeader>
-                        <ReceivePaymentContent
-                            memberId={memberId}
-                            onCancelHandle={onCancelHandle}
-                        />
-
-                </div>
-            </DrawerContent>
-        </Drawer>
+            <FormDrawer
+                loading={loading}
+                open={open}
+                onOpenChange={onOpenChange}
+                        title={"Receive Payment"}
+                description={"Record a contribution payment"}>
+                <ReceivePaymentContent
+                    memberId={memberId}
+                    onCancelHandle={onCancelHandle}
+                />
+            </FormDrawer>
     )
 }
 
@@ -53,34 +39,30 @@ const ReceivePaymentContent = ({ memberId, onCancelHandle }:
 
     const { data, isPending, isError } = useGetMember(memberId);
     const { user } = useAuth();
-    const context= useReceivePayment();
+    const context = useReceivePayment({
+        onSuccess: onCancelHandle,
+
+    },memberId);
 
     const handleSubmit=(value:{amount:number,receiptNumber:string,remark:string})=>{
-        context.mutation({
+        context.mutate({
             amount:value.amount,
-            receipterId:user?.id,
+            receipterId:user?.id || "",
             memberId:memberId,
             paymentDate:new Date().toISOString(),
             receiptNumber:value.receiptNumber,
             remark:value.remark
-        })
-        console.log(value)
-        if(context.isSuccess){
-            onCancelHandle();
-        }
-
+        });
     }
 
     if(isPending){
-        return <div className='flex items-center justify-center min-h-[300px]'>
-            <SpinnerCard size={40} color={'green'} text={'loading member information'}/>
-
+        return <div className='flex flex-col items-center justify-center w-full py-12'>
+            <SpinnerCard size={20} color={'green'} text={'Loading member information...'}/>
         </div>
-
     }
 
     if(isError ||!data){
-        return( <div className="p-4">
+        return( <div className="w-full">
             <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
@@ -98,9 +80,11 @@ const ReceivePaymentContent = ({ memberId, onCancelHandle }:
         loading={false}
         memberName={data.firstName +" "+data.lastName}
         onCancel={onCancelHandle}
-        onSubmit={handleSubmit}
+        onSubmit={(value)=>handleSubmit({
+            amount:value.amount,
+            receiptNumber:value.receiptNumber,
+            remark:value.remark || ""
+        })}
         memberId={data.id}
     />
-
-
 }

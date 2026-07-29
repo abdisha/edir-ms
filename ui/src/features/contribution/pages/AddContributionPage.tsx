@@ -10,7 +10,6 @@ const AddContributionPage =()=>{
     const navigate = useNavigate();
     useEffect(()=>{
         if(context.isSuccess){
-
             navigate("/contributions")
         }
     },[context.isSuccess])

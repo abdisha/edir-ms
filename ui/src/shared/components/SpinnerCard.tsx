@@ -8,7 +8,7 @@ interface SpinnerProps {
 
 export function SpinnerCard({ size = 24,text,color="white" }: SpinnerProps) {
     return (
-        <div>
+        <div className="flex flex-col items-center justify-center gap-2 p-4">
             <Loader2
                 className="animate-spin text-primary"
                 color={color}
@@ -16,13 +16,10 @@ export function SpinnerCard({ size = 24,text,color="white" }: SpinnerProps) {
                     width: size,
                     height: size,
                 }}
-                string={text}
             />
-            {
-                text?
-                    <p>{text} </p>:null
-            }
+            {text && (
+                <p className="text-sm font-medium text-muted-foreground">{text}</p>
+            )}
         </div>
-
     );
 }

@@ -29,45 +29,29 @@ public class MemberContributionController {
 
     @PostMapping("/receive-payment")
     @ApiResponse(responseCode = "204", description = "Payment received successfully")
-    public ResponseEntity<Void> receivePayment(@Valid @RequestBody
-                                               ReceivePaymentCommand command) {
-        receivePaymentUseCase.execute(command);
+    public ResponseEntity<Void> receivePayment(@Valid @RequestBody ReceivePaymentCommand command) {
+        receivePaymentUseCase.receivePayment(command);
+
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build();
     }
 
     @GetMapping("/contribution/{contributionId}")
-    public ResponseEntity<PageResult<MemberContributionView>> getMemberContributionViews(
-        @PathVariable UUID contributionId,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
-        var result = queryService.findMemberContribution(
-            contributionId,
-            new PageQuery(
-                page,
-                size
-            )
-        );
+    public ResponseEntity<PageResult<MemberContributionView>> getMemberContributionViews(@PathVariable UUID contributionId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        var result = queryService.findMemberContribution(contributionId, new PageQuery(page, size));
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{memberContributionId}")
-    public ResponseEntity<MemberContributionView> getMemberContributionView(
-        @PathVariable UUID memberContributionId) {
-        return queryService.findMemberContributionById(
-                memberContributionId
-            ).map(ResponseEntity::ok)
-            .orElseGet(
-                () -> ResponseEntity.notFound().build()
-            );
+    public ResponseEntity<MemberContributionView> getMemberContributionView(@PathVariable UUID memberContributionId) {
+        return queryService.findMemberContributionById(memberContributionId)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{memberContributionId}/payments")
     public ResponseEntity<List<PaymentView>> getPayments(@PathVariable UUID memberContributionId) {
-        return
-            ResponseEntity.ok(
-                queryService
-                    .findPayments(memberContributionId));
+        return ResponseEntity.ok(queryService.findPayments(memberContributionId));
     }
 }

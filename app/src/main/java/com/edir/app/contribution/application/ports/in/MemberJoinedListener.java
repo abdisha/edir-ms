@@ -33,7 +33,6 @@ public class MemberJoinedListener {
                 log.warn("There is no open contribution to create contribution for this member id: {}",
                     event.id().value());
             }
-
         );
 
     }

@@ -14,7 +14,6 @@ export async function getStores(){
 }
 
 export async function getAllocationByStoreId(storeId:string){
-    console.log("storeId: "+storeId)
     const result = await api.get(`${endpoint}/${storeId}/store`);
     return result.data;
 }

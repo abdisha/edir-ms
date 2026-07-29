@@ -18,7 +18,6 @@ public class ContributionDomainServiceImpl implements ContributionDomainService 
                 memberContribution,
                 closingDate
             );
-
             memberContribution.applyPenalty(penalty);
         }
         memberContribution.close();
@@ -26,12 +25,13 @@ public class ContributionDomainServiceImpl implements ContributionDomainService 
     }
 
     public Money calculate( Contribution contribution,
-        MemberContribution memberContribution,
-        ZonedDateTime closingDate) {
+                            MemberContribution memberContribution,
+                            ZonedDateTime closingDate) {
 
         if (!closingDate.isAfter(contribution.getDueDate())) {
             return Money.zero();
         }
+
         return contribution.getPenaltyPolicy().calculate(memberContribution
                 .getOutstandingContribution());
     }

@@ -57,7 +57,7 @@ export interface MemberContribution {
     status:
         | "PENDING"
         | "PARTIALLY_PAID"
-        | "PAID";
+        | "FULLY_PAID";
 }
 export interface PaymentHistory{
     id: string
@@ -80,4 +80,17 @@ export interface ReceivePayment{
     paymentDate: string
     receiptNumber: string
     remark: string
+}
+
+export interface Payment {
+    id: string
+    amount: number
+    startDate: string
+    endDate: string
+    contributionAmount: number
+    penaltyAmount: number
+    contributionName: string
+    paidAt: string
+    receiptId: string
+    Note: string
 }

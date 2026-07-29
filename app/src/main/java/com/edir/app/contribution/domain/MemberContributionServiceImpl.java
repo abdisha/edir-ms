@@ -13,21 +13,17 @@ import java.util.Optional;
 
 public class MemberContributionServiceImpl implements MemberContributionService {
 
-    public MemberContribution initialize(
-        ContributionId contributionId,
-        Money amount,
-        MemberId memberId,
-        FullName fullName,
-        @NonNull Optional<MemberContribution> previousContribution
+    public MemberContribution initialize(ContributionId contributionId,
+                                         Money amount,
+                                         MemberId memberId,
+                                         FullName fullName,
+                                         @NonNull Optional<MemberContribution> previousContribution
     ) {
-
         Money rolledContribution = Money.zero();
         Money rolledPenalty = Money.zero();
 
         if (previousContribution.isPresent()) {
-
             MemberContribution previous = previousContribution.get();
-
             rolledContribution = previous.getOutstandingContribution();
             rolledPenalty = previous.getOutstandingPenalty();
         }
@@ -61,8 +57,7 @@ public class MemberContributionServiceImpl implements MemberContributionService 
         }
 
         if (remaining.isPositive()) {
-            Money pay = ledger
-                .getRolledOverContribution().min(remaining);
+            Money pay = ledger.getRolledOverContribution().min(remaining);
             rolloverPaid = pay;
             remaining = remaining.subtract(pay);
         }
@@ -74,13 +69,10 @@ public class MemberContributionServiceImpl implements MemberContributionService 
             remaining = remaining.subtract(pay);
         }
 
-        return new Settlement(
-            contributionPaid,
+        return new Settlement(contributionPaid,
             penaltyPaid,
             rolloverPaid,
-            remaining
-
-        );
+            remaining);
 
     }
 }

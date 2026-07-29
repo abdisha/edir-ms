@@ -26,9 +26,7 @@ interface Props {
     memberName?: string;
     receiptName?: string;
     onCancel(): void;
-    onSubmit(
-        values: PaymentFormValues
-    ): void;
+    onSubmit(values: PaymentFormValues): void;
 }
 
 export function PaymentForm({

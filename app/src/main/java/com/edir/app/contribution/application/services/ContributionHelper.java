@@ -22,18 +22,10 @@ public class ContributionHelper {
     public void initializeMemberContribution(MemberId memberId,
                                              FullName fullName,
                                              ContributionId id, Money amount){
-        Optional<MemberContribution> previous =
-            memberContributionRepository.findLatestByMember(new MemberContributionId(memberId.value()));
+        Optional<MemberContribution> previous = memberContributionRepository
+            .findLatestByMember(new MemberContributionId(memberId.value()));
 
-        MemberContribution ledger =
-            initialize.initialize(
-                id,
-               amount,
-               memberId,
-                fullName,
-                previous
-            );
-
+        MemberContribution ledger = initialize.initialize(id, amount, memberId, fullName, previous);
         memberContributionRepository.save(ledger);
     }
 

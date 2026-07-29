@@ -147,7 +147,7 @@ export function MemberContributionTable({
                                                 variant="outline"
                                                 className="hidden md:flex h-8 gap-1.5 border-primary/20 hover:border-primary hover:bg-primary/5 text-primary shadow-xs"
                                                 onClick={() => onReceivePayment(item)}
-                                                disabled={item.status === "PAID"}
+                                                disabled={item.status === "FULLY_PAID"}
                                             >
                                                 <CreditCard className="h-3.5 w-3.5" />
                                                 Receive Pay
@@ -169,7 +169,7 @@ export function MemberContributionTable({
                                                     <DropdownMenuItem
                                                         className="md:hidden cursor-pointer"
                                                         onClick={() => onReceivePayment(item)}
-                                                        disabled={item.status === "PAID"}
+                                                        disabled={item.status === "FULLY_PAID"}
                                                     >
                                                         <CreditCard className="mr-2 h-4 w-4 text-muted-foreground" />
                                                         Receive Payment
@@ -235,7 +235,7 @@ export function MemberContributionTable({
 
 function StatusBadge({ status }: { status: MemberContribution["status"] }) {
     switch (status) {
-        case "PAID":
+        case "FULLY_PAID":
             return (
                 <Badge variant="default" className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-emerald-500/20 gap-1 font-medium shadow-none">
                     <CheckCircle2 className="h-3 w-3" />

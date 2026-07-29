@@ -11,12 +11,11 @@ import org.jspecify.annotations.NonNull;
 import java.util.Optional;
 
 public interface MemberContributionService {
-     MemberContribution initialize(
-        ContributionId contributionId,
-        Money amount,
-        MemberId memberId,
-        FullName fullName,
-        @NonNull Optional<MemberContribution> previousContribution
+     MemberContribution initialize(ContributionId contributionId,
+                                   Money amount,
+                                   MemberId memberId,
+                                   FullName fullName,
+                                   @NonNull Optional<MemberContribution> previousContribution
     );
 
     void receivePayment(MemberContribution ledger, Payment payment);

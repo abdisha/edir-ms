@@ -112,14 +112,22 @@ public class MemberContribution extends AggregateRoot<MemberContributionId> {
     public void receivePayment(Payment payment, Settlement settlement) {
         payments.add(payment);
 
-        outstandingPenalty = outstandingPenalty
-            .subtract(settlement.penaltyPaid());
-
+        outstandingPenalty = outstandingPenalty.subtract(settlement.penaltyPaid());
         outstandingContribution = outstandingContribution
             .subtract(settlement.rolledContributionPaid());
 
         outstandingContribution = outstandingContribution
             .subtract(settlement.currentContributionPaid());
+
+        if (outstandingContribution.isZero() && outstandingPenalty.isZero()) {
+            this.status = MemberContributionStatus.FULLY_PAID;
+        }
+
+        if (outstandingContribution.isPositive() || outstandingPenalty.isPositive()) {
+            this.status = MemberContributionStatus.PARTIALLY_PAID;
+        }
+
+
     }
 
     public void applyPenalty(Money penalty) {
@@ -127,8 +135,7 @@ public class MemberContribution extends AggregateRoot<MemberContributionId> {
             return;
         }
 
-        this.outstandingPenalty =
-            this.outstandingPenalty.add(penalty);
+        this.outstandingPenalty = this.outstandingPenalty.add(penalty);
     }
 
     public void close() {

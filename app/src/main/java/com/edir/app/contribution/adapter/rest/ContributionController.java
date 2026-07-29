@@ -1,7 +1,7 @@
 package com.edir.app.contribution.adapter.rest;
 
 import com.edir.app.contribution.application.ports.in.commands.CreateContributionCommand;
-import com.edir.app.contribution.application.ports.in.usecases.CreateContributionUseCase;
+import com.edir.app.contribution.application.ports.in.usecases.ContributionUseCase;
 import com.edir.app.contribution.application.ports.out.query.ContributionQueryService;
 import com.edir.app.contribution.application.ports.out.query.ContributionView;
 import com.edir.app.shared.domain.entity.PageQuery;
@@ -20,17 +20,14 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 @RestController
 @RequestMapping(REST_VERSION+"contributions")
 public class ContributionController {
-    private final CreateContributionUseCase createContributionUseCase;
+    private final ContributionUseCase contributionUseCase;
     private final ContributionQueryService contributionQueryService;
 
     @PostMapping
-    public ResponseEntity<UUID> createContribution(@Valid
-                                                       @RequestBody CreateContributionCommand
-                                                           contributionCommand){
-        var id = createContributionUseCase.execute(contributionCommand);
-
+    public ResponseEntity<UUID> createContribution(@Valid @RequestBody CreateContributionCommand contributionCommand){
+        var id = contributionUseCase.createContribution(contributionCommand);
         return ResponseEntity
-            .status(HttpStatus.CREATED).body(id);
+            .status(HttpStatus.CREATED).body(id.value());
     }
 
     @GetMapping("/active")
@@ -44,12 +41,9 @@ public class ContributionController {
     public ResponseEntity<PageResult<ContributionView>> getContributionViews(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size) {
-        var result = contributionQueryService.findAllContribution(
-            new PageQuery(
-                page,
-                size
-            )
-        );
+        var result = contributionQueryService
+            .findAllContribution(new PageQuery(page,size));
+
         return ResponseEntity.ok(result);
     }
 
