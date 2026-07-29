@@ -10,24 +10,22 @@ import {useGetMemberContributions} from "@/features/contribution/hooks/useGetMem
 import {ReceivePaymentDrawer} from "@/features/contribution/components/ReceivePaymentDrawer.tsx";
 import type {MemberContribution} from "@/features/contribution/types/contribution.ts";
 import {useState} from "react";
+import {useFormDrawer} from "@/shared/components/useFormDrawer.ts";
 
 const ContributionPage =()=>{
     const navigation = useNavigate()
     const {data,isError,isLoading} = useGetContribution()
     const contributionId = data?.id ?? '';
     const memberContribution= useGetMemberContributions(contributionId)
-
+    const {open, setOpen} = useFormDrawer();
     const [selectedMember, setSelectedMember] =
         useState<MemberContribution | null>(null);
-
-    const [drawerOpen, setDrawerOpen] =
-        useState(false);
 
     const handleReceivePayment = (
         contribution: MemberContribution
     ) => {
         setSelectedMember(contribution);
-        setDrawerOpen(true);
+        setOpen(true);
     };
 
     if(isLoading){
@@ -66,8 +64,9 @@ const ContributionPage =()=>{
             data={memberContribution.data.content}/>}
 
         <ReceivePaymentDrawer
-            open={drawerOpen}
-            onOpenChange={setDrawerOpen}
+            loading={memberContribution.isLoading}
+            open={open}
+            onOpenChange={setOpen}
             memberId={selectedMember?.memberId ?? ""}
         />
 

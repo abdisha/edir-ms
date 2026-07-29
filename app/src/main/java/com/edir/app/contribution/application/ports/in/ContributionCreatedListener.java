@@ -7,21 +7,24 @@ import com.edir.app.edir.application.api.MemberSummary;
 import com.edir.app.shared.domain.valueobjects.FullName;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 @Component
 public class ContributionCreatedListener {
     private final ActiveMemberQuery activeMemberQuery;
     private final ContributionHelper helper;
 
-
     @ApplicationModuleListener
     public void on(ContributionCreatedEvent event) {
         List<MemberSummary> result = activeMemberQuery.findActiveMembers();
+        log.info("Received contribution event :{}", event.contributionId());
+        log.info("Processing member contribution count: {}", result.size());
 
         for (MemberSummary member : result) {
             String [] names = member.fullName().split(" ");

@@ -41,8 +41,7 @@ public class Contribution extends AggregateRoot<ContributionId> {
         this.penaltyPolicy = Objects.requireNonNull(penaltyPolicy, "Penalty policy cannot be null");
     }
 
-    private Contribution(
-                         String name,
+    private Contribution(String name,
                          String description,
                          DateRange period,
                          Money amount,
@@ -57,11 +56,8 @@ public class Contribution extends AggregateRoot<ContributionId> {
         this.dueDate = dueDate;
         this.status = status;
         this.penaltyPolicy = Objects.requireNonNull(penaltyPolicy, "Penalty policy cannot be null");
-        registerEvent(new ContributionCreatedEvent(
-            getId(),
-            getContributionAmount(),
-            name
-        ));
+
+        registerEvent(new ContributionCreatedEvent(getId(), getContributionAmount(), name));
     }
 
     public static Contribution createContributionWithPenaltyPolicy(

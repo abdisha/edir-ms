@@ -52,20 +52,20 @@ public class ContributionDataMapper {
     }
 
     public MemberContributionEntity memberContributionToMemberContributionEntity(MemberContribution memberContribution) {
-        return MemberContributionEntity.builder()
+        MemberContributionEntity entity = MemberContributionEntity.builder()
             .id(memberContribution.getId().value())
             .fullName(memberContribution.getFullName().toString())
             .memberId(memberContribution.getMemberId().value())
             .contributionId(memberContribution.getContributionId().value())
             .rolledOverContribution(memberContribution.getOutstandingContribution().amount())
             .rolledOverPenalty(memberContribution.getOutstandingPenalty().amount())
-            .paymentEntities(
-                toPaymentEntity(memberContribution)
-            ).contributionAmount(memberContribution
+            .contributionAmount(memberContribution
                 .getContribution().amount())
             .status(memberContribution.getStatus())
             .penaltyAmount(memberContribution.getPenalty().amount())
             .build();
+        entity.setPaymentEntities(toPaymentEntity(memberContribution,entity));
+        return entity;
     }
 
     public MemberContribution memberContributionToMemberContributionEntity(MemberContributionEntity memberContributionEntity) {
@@ -82,7 +82,6 @@ public class ContributionDataMapper {
             memberContributionEntity.getStatus(),
             new Money(memberContributionEntity.getRolledOverPenalty()),
             toPayment(memberContributionEntity.getPaymentEntities())
-
         );
     }
 
@@ -99,13 +98,14 @@ public class ContributionDataMapper {
                 )).collect(Collectors.toSet());
     }
 
-    private static @NonNull List<PaymentEntity> toPaymentEntity(MemberContribution memberContribution) {
+    private static @NonNull List<PaymentEntity> toPaymentEntity(MemberContribution memberContribution, MemberContributionEntity entity) {
         return memberContribution.getPayments()
             .stream().map(
                 payment -> PaymentEntity.builder()
                     .id(payment.getId().value())
                     .amount(payment.amount().amount())
                     .paidAt(payment.paidAt())
+                    .memberContribution(entity)
                     .receipterId(payment.getReceipterId().value())
                     .receiptNumber(payment.getReceiptNumber())
                     .note(payment.getNote())

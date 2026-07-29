@@ -24,6 +24,11 @@ export async  function getMemberContribution(uuid: string): Promise<MemberContri
 }
 
 export async function  payContribution(payment:ReceivePayment){
-    const  response = await  api.post(endpoint,payment);
+    const  response = await  api.post(endpoint+"/receive-payment",payment);
+    return response.data
+}
+
+export  async function fetchPayment(uuid:string){
+    const response = await api.get(endpoint+"/"+uuid+"/payments");
     return response.data
 }

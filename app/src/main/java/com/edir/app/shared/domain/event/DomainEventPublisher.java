@@ -12,10 +12,8 @@ public class DomainEventPublisher {
     private final ApplicationEventPublisher publisher;
 
     public void publishEvent(AggregateRoot<?> aggregate) {
-
         aggregate.domainEvents()
             .forEach(publisher::publishEvent);
-
         aggregate.clearEvents();
     }
 }

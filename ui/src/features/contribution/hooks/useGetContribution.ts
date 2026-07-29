@@ -5,6 +5,7 @@ import {getContribution} from "@/features/contribution/api/contribution.apis.ts"
 export function useGetContribution(){
     return useQuery({
         queryKey:queryKeys.contribution,
-        queryFn:getContribution
+        queryFn:getContribution,
+        enabled:true
     })
 }

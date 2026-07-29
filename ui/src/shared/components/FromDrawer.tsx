@@ -51,7 +51,7 @@ export function FormDrawer({
             {loading && <Loader2 className="h-5 w-5 animate-spin text-primary" />}
           </div>
         </DrawerHeader>
-        <div className="relative p-6">
+        <div className="relative p-6 overflow-y-auto max-h-[85vh] scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/40 transition-colors">
           {loading && (
             <div className="absolute inset-0 z-50 flex items-center justify-center rounded-lg bg-background/70 backdrop-blur-sm">
               <div className="flex flex-col items-center gap-3">
