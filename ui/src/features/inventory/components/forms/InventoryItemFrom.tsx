@@ -77,7 +77,7 @@ export function InventoryItemForm({
               control={control}
               name="itemName"
               render={({ field }) => (
-                <Input {...field} placeholder="Plastic Chair" />
+                <Input {...field}  aria-label={'Item Name'} placeholder="Plastic Chair" />
               )}
             />
           </FieldContent>
@@ -100,6 +100,8 @@ export function InventoryItemForm({
                 <div className="relative">
                   <Boxes className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
+                      placeholder="Quantity"
+                    aria-label={'Quantity'}
                     type="number"
                     min={0}
                     className="pl-9"

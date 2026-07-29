@@ -28,3 +28,32 @@ export interface ReturnedItem{
     condition:"GOOD"|"DAMAGED"|"MISSING_PARTS";
 
 }
+
+export interface Store{
+    id?:string;
+    name:string;
+    location:string;
+    ownerId:string;
+}
+
+export interface Allocation {
+    storeId: string
+    storeName: string
+    ownerId: string
+    ownerName: string
+    allocationId: string
+    itemId: string
+    itemName: string
+    itemCode: string
+    quantityAtHand: number
+    issuedQuantity: number
+    receivedDate: string
+}
+
+export interface StoreAllocationSummary {
+    storeId: string
+    storeName: string
+    location: string
+    totalItem: number
+}
+

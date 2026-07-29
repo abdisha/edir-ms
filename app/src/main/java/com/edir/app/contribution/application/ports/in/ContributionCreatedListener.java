@@ -11,7 +11,6 @@ import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Component
@@ -22,13 +21,10 @@ public class ContributionCreatedListener {
 
     @ApplicationModuleListener
     public void on(ContributionCreatedEvent event) {
-        Optional<List<MemberSummary>> result = activeMemberQuery.findActiveMembers();
-        if (result.isEmpty()) {
-            return;
-        }
+        List<MemberSummary> result = activeMemberQuery.findActiveMembers();
 
-        for (MemberSummary member : result.get()) {
-            String [] names = member.FullName().split(" ");
+        for (MemberSummary member : result) {
+            String [] names = member.fullName().split(" ");
             helper.initializeMemberContribution(new MemberId(member.memberId()),
                 new FullName(names[0],names[1],names[2] ),
                 event.contributionId(),

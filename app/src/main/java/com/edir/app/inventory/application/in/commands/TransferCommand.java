@@ -8,8 +8,8 @@ import java.util.UUID;
 public record TransferCommand(
     @NotNull
     UUID itemId,
-    @NotNull  UUID from ,
-    @NotNull UUID to,
+    @NotNull  UUID fromStore ,
+    @NotNull UUID toStore,
     @NotNull
     @Min(value = 1,message ="Quantity must be greater than 0" )
     Integer quantity

@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {getUnAllocatedItems} from "@/features/inventory/api/inventory.allocation.api.ts";
+import {getStores, getUnAllocatedItems} from "@/features/inventory/api/inventory.allocation.api.ts";
 import {inventoryKeys} from "@/features/inventory/api/inventory.querykeys.ts";
 
 export function useGetUnAllocatedItems(){
@@ -7,4 +7,12 @@ export function useGetUnAllocatedItems(){
         queryFn:getUnAllocatedItems,
         queryKey:inventoryKeys.allUnAllocatedItem
     })
+}
+
+export function useGetStores(){
+    return useQuery({
+        queryFn:getStores,
+        queryKey:inventoryKeys.stores
+    })
+
 }

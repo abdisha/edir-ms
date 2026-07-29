@@ -12,19 +12,17 @@ import {
     type InventoryAllocationFormValues,
     inventoryAllocationSchema
 } from "@/features/inventory/schemas/inventory-allocation.schema.ts";
+import type {StoreAllocationSummary} from "@/features/inventory/types.ts";
 
-interface MemberOption {
-    id: string;
-    fullName: string;
-}
 
 interface InventoryAllocationFormProps {
     defaultValues?: Partial<InventoryAllocationFormValues>;
     itemId: string;
     itemName: string;
-    members: MemberOption[];
+    stores: StoreAllocationSummary[];
     loading?: boolean;
     submitText?: string;
+    onCancel?: () => void;
     onSubmit: (
         values: InventoryAllocationFormValues
     ) => Promise<void> | void;
@@ -34,32 +32,33 @@ export default function InventoryAllocationForm({
     defaultValues,
     itemId,
     itemName,
-    members,
+    stores,
     loading = false,
     submitText = "Allocate Item",
     onSubmit,
+    onCancel
 }: InventoryAllocationFormProps) {
 
     const {
         control,
         handleSubmit,
-        formState: { errors },
+        formState: { errors,isValid},
     } = useForm<InventoryAllocationFormValues>({
         resolver: zodResolver(inventoryAllocationSchema),
 
         defaultValues: {
-            item: itemId,
             quantity: 1,
-            memberId: "",
+            storeId: "",
             ...defaultValues,
         },
     });
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={handleSubmit(onSubmit,(errors) => console.log(errors))} className="space-y-8">
             <FieldGroup>
                 <Field>
                     <FieldLabel>Selected Inventory Item</FieldLabel>
+                    isValid: {isValid}
                     <FieldContent>
                         <div className="rounded-lg border bg-muted/40 p-4">
                             <div className="flex items-start gap-3">
@@ -88,6 +87,8 @@ export default function InventoryAllocationForm({
                                 <div className="relative">
                                     <Hash className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                                     <Input
+                                        placeholder="Quantity"
+                                        aria-label={'Quantity'}
                                         type="number"
                                         min={1}
                                         className="pl-9"
@@ -105,22 +106,24 @@ export default function InventoryAllocationForm({
                 </Field>
 
                 <Field>
-                    <FieldLabel>Allocate To Member</FieldLabel>
-                    <FieldContent>
+                    <FieldLabel>Allocate To Store</FieldLabel>
+
                         <Controller
-                            name="memberId"
+                            name="storeId"
                             control={control}
                             render={({ field }) => (
-                                <Select value={field.value} onValueChange={field.onChange}>
+                                <Select  value={field.value} onValueChange={field.onChange}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select member" />
+                                        <SelectValue placeholder="Select Store">
+                                            {stores.find((store) => store.storeId === field.value)?.storeName}
+                                        </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {members.map((member) => (
-                                            <SelectItem key={member.id} value={member.id}>
+                                        {stores.map((store) => (
+                                            <SelectItem key={store.storeId} value={store.storeId}>
                                                 <div className="flex items-center gap-2">
                                                     <User className="h-4 w-4" />
-                                                    {member.fullName}
+                                                    {store.storeName}
                                                 </div>
                                             </SelectItem>
                                         ))}
@@ -128,17 +131,23 @@ export default function InventoryAllocationForm({
                                 </Select>
                             )}
                         />
-                    </FieldContent>
-                    <FieldDescription>Select the member who will receive this item.</FieldDescription>
-                    {errors.memberId && (
-                        <p className="text-sm text-destructive">{errors.memberId.message}</p>
+
+                    <FieldDescription>Select the Store who will receive this item.</FieldDescription>
+                    {errors.storeId && (
+                        <p className="text-sm text-destructive">{errors.storeId.message}</p>
                     )}
                 </Field>
             </FieldGroup>
 
             <div className="flex justify-end gap-3 border-t pt-6">
-                <Button type="submit" disabled={loading}>
-                    {submitText}
+                <Button type="button" variant={'outline'} onClick={onCancel} disabled={loading}>
+                    Cancel
+                </Button>
+                <Button type="submit"  disabled={loading}>
+                    {
+                        loading? <p className="text-sm">Allocating..</p>:submitText
+                    }
+
                 </Button>
             </div>
         </form>

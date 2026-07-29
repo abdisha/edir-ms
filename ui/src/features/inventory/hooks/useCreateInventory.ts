@@ -11,7 +11,10 @@ export function useCreateInventory(option?:Options) {
     return useMutation({
         mutationFn: createItem,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: inventoryKeys.allInventory})
+            Promise.all([
+                queryClient.invalidateQueries({ queryKey: inventoryKeys.allInventory }),
+                queryClient.invalidateQueries({ queryKey: inventoryKeys.allUnAllocatedItem })
+            ])
                 .then(() => toast.success("Item created successfully"))
             option?.onSuccess?.()
         },

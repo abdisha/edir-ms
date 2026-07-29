@@ -20,7 +20,7 @@ public class AllocationEntity {
     @Id
     private UUID allocationId;
     @NotNull
-    private UUID holderMemberId;
+    private UUID storeId;
     @OneToMany(mappedBy = "allocation", fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<ItemAllocationEntity> itemAllocations;
 

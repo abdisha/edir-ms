@@ -14,7 +14,7 @@ import java.util.UUID;
 public class ActiveMemberQueryService implements ActiveMemberQuery {
     private  final MemberQueryRepository memberQueryRepository;
     @Override
-    public Optional<List<MemberSummary>> findActiveMembers() {
+    public List<MemberSummary> findActiveMembers() {
         return memberQueryRepository.findActiveMembers();
     }
 
