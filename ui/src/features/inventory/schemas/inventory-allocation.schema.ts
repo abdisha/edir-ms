@@ -1,10 +1,6 @@
 import {z} from "zod";
 
 export const inventoryAllocationSchema = z.object({
-    item: z
-        .string()
-        .uuid("Invalid inventory item."),
-
     quantity: z
         .number()
         .int("Quantity must be a whole number.")

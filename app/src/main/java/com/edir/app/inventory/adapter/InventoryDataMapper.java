@@ -16,7 +16,7 @@ public class InventoryDataMapper {
     public Allocation inventoryAllocationEntityToInventoryAllocation(AllocationEntity entity) {
         return Allocation.rehydrate(
             new AllocationId(entity.getAllocationId()),
-            new MemberId(entity.getHolderMemberId()),
+            new StoreId(entity.getStoreId()),
             toItemAllocation(entity.getItemAllocations())
         );
     }
@@ -35,14 +35,18 @@ public class InventoryDataMapper {
     }
 
     public AllocationEntity inventoryAllocationToInventoryAllocationEntity(Allocation allocation) {
-        return AllocationEntity.builder()
+        AllocationEntity  allocationEntity =  AllocationEntity.builder()
             .allocationId(allocation.getId().id())
-            .holderMemberId(allocation.getHolderMemberId().value())
-            .itemAllocations(toItemAllocationEntity(allocation.getItemAllocations()))
+            .storeId(allocation.getStoreId().id())
             .build();
+
+        allocationEntity.setItemAllocations(toItemAllocationEntity(allocation.getItemAllocations(), allocationEntity));
+
+        return allocationEntity;
     }
 
-    private List<ItemAllocationEntity> toItemAllocationEntity(List<ItemAllocation> itemAllocations) {
+    private List<ItemAllocationEntity> toItemAllocationEntity(List<ItemAllocation> itemAllocations,
+                                                              AllocationEntity allocationEntity) {
         return itemAllocations.stream().map(
             i->ItemAllocationEntity.builder()
                 .id(i.getId().id())
@@ -50,7 +54,9 @@ public class InventoryDataMapper {
                 .quantityOnHand(i.getQuantity().quantity())
                 .issuedOutQuantity(i.getIssuedQuantity().quantity())
                 .receivedDate(i.getReceivedDate())
-                .issuedDate(i.getIssuedDate()).build()
+                .allocation(allocationEntity)
+                .issuedDate(i.getIssuedDate())
+                .build()
         ).toList();
     }
 

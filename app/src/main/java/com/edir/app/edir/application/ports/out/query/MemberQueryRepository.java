@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface MemberQueryRepository {
     Optional<MemberDetailView> findMember(UUID memberId);
-    Optional<List<MemberSummary>> findActiveMembers();
+    List<MemberSummary> findActiveMembers();
     Optional<MemberSummary> findByMemberId(UUID memberId);
     PageResult<MemberDetailView> findMembers(PageQuery pageQuery);
 }

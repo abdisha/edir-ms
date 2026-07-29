@@ -5,43 +5,43 @@ import com.edir.app.inventory.domain.exceptions.NoItemToReturnException;
 import com.edir.app.inventory.domain.valueobjects.AllocationId;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
+import com.edir.app.inventory.domain.valueobjects.StoreId;
 import com.edir.app.shared.domain.entity.AggregateRoot;
-import com.edir.app.shared.domain.valueobjects.MemberId;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class Allocation extends AggregateRoot<AllocationId> {
-    private MemberId holderMemberId;
+    private StoreId storeId;
     private final List<ItemAllocation> itemAllocations = new ArrayList<>();
 
     protected Allocation(AllocationId allocationId,
-                         MemberId holderMemberId,
+                         StoreId storeId,
                          List<ItemAllocation> itemAllocations) {
         super(allocationId);
-        this.holderMemberId = holderMemberId;
+        this.storeId = storeId;
         this.itemAllocations.addAll(itemAllocations);
     }
 
     protected Allocation(AllocationId allocationId,
-                         MemberId holderMemberId) {
+                         StoreId storeId) {
         super(allocationId);
-        this.holderMemberId = holderMemberId;
+        this.storeId = storeId;
     }
 
-    public static Allocation create(MemberId memberId) {
+    public static Allocation create(StoreId storeId) {
         return new Allocation(
             AllocationId.generateId(),
-            memberId);
+            storeId);
     }
 
     public static Allocation rehydrate(AllocationId allocationId,
-                                                 MemberId holderMemberId,
+                                                 StoreId storeId,
                                                  List<ItemAllocation> itemAllocations) {
         return new Allocation(
             allocationId,
-            holderMemberId,
+            storeId,
             itemAllocations
         );
     }
@@ -97,8 +97,8 @@ public class Allocation extends AggregateRoot<AllocationId> {
     }
 
 
-    public MemberId getHolderMemberId() {
-        return holderMemberId;
+    public StoreId getStoreId() {
+        return storeId;
     }
 
     public List<ItemAllocation> getItemAllocations() {

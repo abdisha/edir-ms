@@ -80,7 +80,7 @@ public interface EdirJpaRepository extends JpaRepository<EdirEntity, UUID> {
 
             """
     )
-    Optional<List<MemberSummary>> findActiveMember();
+    List<MemberSummary> findActiveMember();
 
     @Query(
         value = """

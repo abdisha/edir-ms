@@ -31,7 +31,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     }
 
     @Override
-    public Optional<List<MemberSummary>> findActiveMembers() {
+    public List<MemberSummary> findActiveMembers() {
         return jpaRepository.findActiveMember();
     }
 

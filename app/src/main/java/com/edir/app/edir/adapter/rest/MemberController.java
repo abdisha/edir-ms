@@ -52,7 +52,7 @@ public class MemberController {
     @GetMapping("/member-summary")
     public ResponseEntity<List<MemberSummary>> getMemberSummary() {
         var result = activeMemberQuery.findActiveMembers();
-        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return ResponseEntity.ok(result);
 
     }
 

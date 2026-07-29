@@ -7,53 +7,81 @@ import {
     DropdownMenuTrigger
 } from "@/shared/components/ui/dropdown-menu.tsx";
 import {Button} from "@/shared/components/ui/button.tsx";
-import {ChevronDown, ChevronUp, Eye, MoreHorizontal, Shuffle, Trash2} from "lucide-react";
+import {
+    Calendar,
+    ChevronDown,
+    ChevronUp,
+    Eye,
+    Loader2,
+    MoreHorizontal,
+    Package,
+    Shuffle,
+    Trash2,
+    User
+} from "lucide-react";
+import type {Allocation, StoreAllocationSummary} from "@/features/inventory/types.ts";
 
 interface InventoryAllocationTableProp{
-   allocations:any[];
-   openAllocations:any[];
+   stores:StoreAllocationSummary[];
+   allocations:Allocation[];
    toggleAllocationGroup:(value:string)=>void;
+   loading:boolean;
 }
 
-const InventoryAllocationTable =({allocations,openAllocations,toggleAllocationGroup}:InventoryAllocationTableProp)=>{
+
+const InventoryAllocationTable = ({ loading, stores, allocations, toggleAllocationGroup }: InventoryAllocationTableProp) => {
 
     return (
         <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="font-semibold w-1/4">Member Name</TableHead>
-                        <TableHead className="font-semibold w-1/4">Department</TableHead>
-                        <TableHead className="font-semibold w-1/2">Allocated Items Summary</TableHead>
+                        <TableHead className="font-semibold w-1/4">Store / Member</TableHead>
+                        <TableHead className="font-semibold w-1/4">Location</TableHead>
+                        <TableHead className="font-semibold w-1/2 text-center">Allocated Items Summary</TableHead>
                         <TableHead className="text-right font-semibold">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {allocations.length === 0 ? (
+                    {loading ? (
+                        <TableRow>
+                            <TableCell colSpan={4} className="h-32 text-center">
+                                <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                    <span>Loading allocations...</span>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    ) :  stores.length === 0 ? (
                         <TableRow>
                             <TableCell colSpan={4} className="h-32 text-center text-muted-foreground">
                                 No item allocations found.
                             </TableCell>
                         </TableRow>
                     ) : (
-                        allocations.map((allocation) => (
+                        stores.map((store) => (
                             <>
                                 <TableRow
-                                    key={allocation.memberId}
+                                    key={store.storeId}
                                     className="cursor-pointer hover:bg-muted/50 transition-colors"
-                                    onClick={() => toggleAllocationGroup(allocation.memberId)}
+                                    onClick={() => toggleAllocationGroup(store.storeId||"")}
                                 >
-                                    <TableCell className="font-medium flex items-center gap-2">
-                                        {openAllocations.includes(allocation.memberId) ? (
-                                            <ChevronUp className="h-4 w-4 text-muted-foreground" />
-                                        ) : (
-                                            <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                                        )}
-                                        {allocation.memberName}
+                                    <TableCell className="font-medium">
+                                        <div className="flex items-center gap-2">
+                                            { allocations && allocations.some(a => a.storeId == store.storeId) ? (
+                                                <ChevronUp className="h-4 w-4 text-primary" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                                            )}
+                                            <User className="h-4 w-4 text-muted-foreground" />
+                                            {store.storeName}
+                                        </div>
                                     </TableCell>
-                                    <TableCell>{allocation.department}</TableCell>
-                                    <TableCell className="text-muted-foreground text-sm">
-                                        {allocation.items.length} items allocated
+                                    <TableCell>{store.location}</TableCell>
+                                    <TableCell className="text-center">
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                                            { store.totalItem} items
+                                        </span>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
@@ -81,19 +109,28 @@ const InventoryAllocationTable =({allocations,openAllocations,toggleAllocationGr
                                         </DropdownMenu>
                                     </TableCell>
                                 </TableRow>
-                                {openAllocations.includes(allocation.memberId) && allocation.items.length > 0 && (
+                                {allocations && allocations.some(a=>a.storeId==store.storeId) && allocations.length > 0 && (
                                     <TableRow className="bg-muted/20">
                                         <TableCell colSpan={4} className="p-0">
                                             <div className="overflow-hidden">
                                                 <Table className="w-full">
                                                     <TableBody>
-                                                        {allocation.items.map((item) => (
-                                                            <TableRow key={item.id} className="hover:bg-muted/40">
-                                                                <TableCell className="pl-12 py-2 text-muted-foreground w-1/4"></TableCell> {/* Empty cell for alignment */}
-                                                                <TableCell className="py-2 font-medium w-1/4">{item.itemName}</TableCell>
+                                                        {allocations && allocations.filter(a=>a.storeId==store.storeId).map((item) => (
+                                                            <TableRow key={item.allocationId} className="hover:bg-muted/40 border-none">
+                                                                <TableCell className="pl-12 py-2 w-1/4">
+                                                                    <div className="flex items-center gap-2 text-sm">
+                                                                        <Package className="h-3.5 w-3.5 text-muted-foreground" />
+                                                                        <span className="font-medium">{item.itemName}</span>
+                                                                    </div>
+                                                                </TableCell>
+                                                                <TableCell className="py-2 text-xs text-muted-foreground w-1/4">
+                                                                    Code: {item.itemCode}
+                                                                </TableCell>
                                                                 <TableCell className="py-2 text-sm text-muted-foreground w-1/2">
-                                                                    SKU: {item.sku} | Allocated: {item.allocatedDate}
-                                                                    {item.returnDueDate && ` | Due: ${item.returnDueDate}`}
+                                                                    <div className="flex items-center justify-center gap-4">
+                                                                        <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {item.receivedDate}</span>
+                                                                        <span className="font-semibold text-foreground">Qty: {item.issuedQuantity}</span>
+                                                                    </div>
                                                                 </TableCell>
                                                                 <TableCell className="text-right py-2">
                                                                     <DropdownMenu>

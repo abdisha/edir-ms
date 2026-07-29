@@ -8,6 +8,6 @@ import java.util.UUID;
 
 @NamedInterface
 public interface ActiveMemberQuery {
-   Optional<List<MemberSummary>> findActiveMembers();
+   List<MemberSummary> findActiveMembers();
    Optional<MemberSummary> findMember(UUID memberId);
 }
