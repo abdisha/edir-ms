@@ -13,9 +13,10 @@ interface Props {
     onOpenChange(
         open: boolean
     ): void;
-    memberId: string;
+    memberId:string;
+    contributionId: string;
 }
-export function ReceivePaymentDrawer({ open, onOpenChange,loading, memberId }: Props) {
+export function ReceivePaymentDrawer({ open, onOpenChange, memberId,loading, contributionId }: Props) {
     const onCancelHandle=()=>{
         onOpenChange(false);
     }
@@ -27,6 +28,7 @@ export function ReceivePaymentDrawer({ open, onOpenChange,loading, memberId }: P
                         title={"Receive Payment"}
                 description={"Record a contribution payment"}>
                 <ReceivePaymentContent
+                    contributionId={contributionId}
                     memberId={memberId}
                     onCancelHandle={onCancelHandle}
                 />
@@ -34,15 +36,15 @@ export function ReceivePaymentDrawer({ open, onOpenChange,loading, memberId }: P
     )
 }
 
-const ReceivePaymentContent = ({ memberId, onCancelHandle }:
-                               { memberId: string, onCancelHandle: () => void}) => {
+const ReceivePaymentContent = ({contributionId, memberId, onCancelHandle }:
+                               { memberId: string, onCancelHandle: () => void,contributionId:string}) => {
 
     const { data, isPending, isError } = useGetMember(memberId);
     const { user } = useAuth();
     const context = useReceivePayment({
         onSuccess: onCancelHandle,
 
-    },memberId);
+    },contributionId);
 
     const handleSubmit=(value:{amount:number,receiptNumber:string,remark:string})=>{
         context.mutate({

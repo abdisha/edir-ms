@@ -35,6 +35,6 @@ public class MemberContributionEntity {
     private BigDecimal rolledOverPenalty;
     @Enumerated(EnumType.STRING)
     private MemberContributionStatus status;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "memberContribution", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PaymentEntity> paymentEntities = new ArrayList<>();
 }

@@ -18,6 +18,7 @@ import com.edir.app.shared.domain.event.DomainEventPublisher;
 import com.edir.app.shared.domain.valueobjects.Money;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Optional;
 @Slf4j
 @AllArgsConstructor
 @UseCase
+@Transactional
 class ContributionService implements ContributionUseCase {
     private final ContributionRepository contributionRepository;
     private final MemberContributionRepository memberContributionRepository;

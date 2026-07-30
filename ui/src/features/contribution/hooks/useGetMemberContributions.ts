@@ -6,7 +6,7 @@ export function useGetMemberContributions(uuid:string){
     return useQuery({
         queryKey:queryKeys.memberContribution(uuid),
         queryFn:()=>getMemberContributions(uuid),
-        enabled:Boolean(true),
+        enabled:!!uuid,
     })
 }
 
@@ -14,6 +14,6 @@ export function useGetMemberContribution(uuid:string){
     return useQuery({
         queryKey:queryKeys.memberContribution(uuid),
         queryFn:()=>getMemberContribution(uuid),
-        enabled:Boolean(true)
+        enabled:!!uuid
     })
 }

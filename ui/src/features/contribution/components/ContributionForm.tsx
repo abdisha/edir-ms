@@ -92,6 +92,7 @@ export function ContributionForm({
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel>Name</FieldLabel>
                                     <Input
+                                        aria-label={'Name'}
                                         placeholder="Monthly Contribution"
                                         {...field}
                                     />

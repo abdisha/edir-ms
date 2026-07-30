@@ -10,28 +10,35 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
+@Transactional
 @Component
-public class ContributionCreatedListener {
+class ContributionCreatedListener {
     private final ActiveMemberQuery activeMemberQuery;
     private final ContributionHelper helper;
 
     @ApplicationModuleListener
     public void on(ContributionCreatedEvent event) {
-        List<MemberSummary> result = activeMemberQuery.findActiveMembers();
-        log.info("Received contribution event :{}", event.contributionId());
-        log.info("Processing member contribution count: {}", result.size());
+        log.info("Executing contribution created event listener");
+        try {
+            List<MemberSummary> result = activeMemberQuery.findActiveMembers();
+            log.info("Received contribution event :{}", event.contributionId());
+            log.info("Processing member contribution count: {}", result.size());
 
-        for (MemberSummary member : result) {
-            String [] names = member.fullName().split(" ");
-            helper.initializeMemberContribution(new MemberId(member.memberId()),
-                new FullName(names[0],names[1],names[2] ),
-                event.contributionId(),
-                event.amount());
+            for (MemberSummary member : result) {
+                String [] names = member.fullName().split(" ");
+                helper.initializeMemberContribution(new MemberId(member.memberId()),
+                    new FullName(names[0],names[1],names[2] ),
+                    event.contributionId(),
+                    event.amount());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
