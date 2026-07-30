@@ -1,8 +1,8 @@
-import {queryKeys} from "@/shared/api/queryKeys";
 import {useMutation, useQueryClient,} from "@tanstack/react-query";
 
 import {addMember} from "../api/member-apis";
 import {toast} from "sonner";
+import {memberQueryKey} from "@/features/edir/api/member-query.key.ts";
 
 const useCreateMember = () => {
   const queryClient = useQueryClient();
@@ -12,7 +12,7 @@ const useCreateMember = () => {
     onSuccess: () => {
       queryClient
         .invalidateQueries({
-          queryKey: queryKeys.createMember,
+          queryKey: memberQueryKey.members(0, 10),
         })
         .then(() => {
           toast.success("Member created successfully");

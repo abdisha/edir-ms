@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @AllArgsConstructor
 @Component
-public class MemberJoinedListener {
+class MemberJoinedListener {
     private final ContributionHelper helper;
     private final ContributionQueryService queryService;
 

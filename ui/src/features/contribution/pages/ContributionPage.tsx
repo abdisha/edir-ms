@@ -21,9 +21,7 @@ const ContributionPage =()=>{
     const [selectedMember, setSelectedMember] =
         useState<MemberContribution | null>(null);
 
-    const handleReceivePayment = (
-        contribution: MemberContribution
-    ) => {
+    const handleReceivePayment = (contribution: MemberContribution) => {
         setSelectedMember(contribution);
         setOpen(true);
     };
@@ -31,13 +29,13 @@ const ContributionPage =()=>{
     if(isLoading){
         return <SpinnerPage/>
     }
+
     if(isError && memberContribution.isError){
         return <PageError/>
     }
+
     if (data==null){
-        return  <EmptyContribution
-            onCreate={()=>navigation('/add-contribution')}
-        />
+        return  <EmptyContribution onCreate={()=>navigation('/add-contribution')}/>
     }
 
     return <div className="space-y-5">
@@ -68,6 +66,7 @@ const ContributionPage =()=>{
             open={open}
             onOpenChange={setOpen}
             memberId={selectedMember?.memberId ?? ""}
+            contributionId={contributionId ?? ""}
         />
 
     </div>

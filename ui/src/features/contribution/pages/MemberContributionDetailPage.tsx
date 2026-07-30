@@ -216,10 +216,11 @@ const MemberContributionDetailPage = () => {
                 </TabsContent>
             </Tabs>
             <ReceivePaymentDrawer
+                memberId={data.memberId}
                 loading={isLoading}
                 open={open}
                 onOpenChange={setOpen}
-                memberId={data.memberId ?? ""}
+                contributionId={data.contributionId ?? ""}
             />
         </div>
     );
