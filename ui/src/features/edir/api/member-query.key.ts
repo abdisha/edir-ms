@@ -1,4 +1,4 @@
-export const memberQueryKey={
+export const MemberQueryKey={
     edir: ["edir"] as const,
     member:(uuid:string)=> ["member",uuid] as const,
     createMember:["createMember"] as const,
