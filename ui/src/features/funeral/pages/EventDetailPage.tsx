@@ -1,18 +1,18 @@
 import {
-  AlertCircle,
-  ArrowLeft,
-  Calendar,
-  CheckCircle2,
-  Clock,
-  Download,
-  Edit,
-  Mail,
-  MapPin,
-  MoreVertical,
-  Package,
-  Phone,
-  Share2,
-  Users,
+    AlertCircle,
+    ArrowLeft,
+    Calendar,
+    CheckCircle2,
+    Clock,
+    Download,
+    Edit,
+    Mail,
+    MapPin,
+    MoreVertical,
+    Package,
+    Phone,
+    Share2,
+    Users,
 } from "lucide-react";
 import {useState} from "react";
 import {Button} from "@/shared/components/ui/button";
@@ -21,11 +21,11 @@ import {Badge} from "@/shared/components/ui/badge";
 import {Separator} from "@/shared/components/ui/separator";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/shared/components/ui/table";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
 
 interface IssuedItem {
@@ -132,7 +132,7 @@ const mockEventDetail: FuneralEventDetail = {
   ],
 };
 
-export default function FuneralEventDetailPage() {
+export default function EventDetailPage() {
   const [event] = useState<FuneralEventDetail>(mockEventDetail);
 
   const pendingItems = event.issuedItems.filter((item) => item.status === "pending").length;
