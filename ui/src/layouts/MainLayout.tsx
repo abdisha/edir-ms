@@ -1,31 +1,31 @@
 import {Link, NavLink, Outlet, useNavigate} from "react-router";
 import {
-  BarChart3,
-  CalendarsIcon,
-  Handshake,
-  Home,
-  LogIn,
-  LogOut,
-  SettingsIcon,
-  ShelvingUnit,
-  User,
-  Users2Icon
+    BarChart3,
+    CalendarsIcon,
+    Handshake,
+    Home,
+    LogIn,
+    LogOut,
+    SettingsIcon,
+    ShelvingUnit,
+    User,
+    Users2Icon
 } from "lucide-react";
 
 import {cn} from "@/lib/utils";
 import {Button} from "@/shared/components/ui/button";
 import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
+    NavigationMenu,
+    NavigationMenuItem,
+    NavigationMenuList,
+    navigationMenuTriggerStyle,
 } from "@/shared/components/ui/navigation-menu";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
 import {useAuth} from "@/features/auths/useAuth";
 import {ModeToggle} from "@/layouts/ModeToggle.tsx";
@@ -48,7 +48,7 @@ const navigation = [
   },
   {
     title: "Funeral Event",
-    href: "/funeral-event",
+    href: "/event-event",
     icon: CalendarsIcon,
   },
   {

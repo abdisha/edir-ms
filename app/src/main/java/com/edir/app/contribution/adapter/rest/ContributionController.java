@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.edir.app.shared.EdirConstant.REST_VERSION;
@@ -31,10 +32,8 @@ public class ContributionController {
     }
 
     @GetMapping("/active")
-    public ResponseEntity<ContributionView> getContributionView() {
-        return contributionQueryService.findOpenContribution()
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Optional<ContributionView>> getContributionView() {
+        return ResponseEntity.ok(contributionQueryService.findOpenContribution());
     }
 
     @GetMapping()

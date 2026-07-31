@@ -3,11 +3,11 @@ import FuneralEventDetailPage from "@/features/funeral/pages/FuneralEventDetailP
 
 const FuneralEventRoutes=[
     {
-        path:'/funeral-event',
+        path:'/event-event',
         element:<FuneralEventPage/>
     },
     {
-        path:'/funeral-event-detail',
+        path:'/event-event-detail',
         element:<FuneralEventDetailPage/>
     }
 ]

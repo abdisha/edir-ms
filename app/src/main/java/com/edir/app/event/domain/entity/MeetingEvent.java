@@ -1,0 +1,85 @@
+package com.edir.app.event.domain.entity;
+
+import com.edir.app.event.domain.valueobjects.MeetingEventId;
+import com.edir.app.shared.domain.entity.AggregateRoot;
+import com.edir.app.shared.domain.exceptions.DomainValidationException;
+
+import java.time.ZonedDateTime;
+import java.util.Objects;
+
+public class MeetingEvent extends AggregateRoot<MeetingEventId> {
+    private String meetingName;
+    private ZonedDateTime eventDate;
+    private String agenda;
+    private String location;
+
+    private MeetingEvent(MeetingEventId meetingEventId,
+                        String meetingName,
+                        ZonedDateTime eventDate,
+                        String agenda,
+                         String location) {
+        super(meetingEventId);
+        validate(meetingName, eventDate);
+        this.meetingName = meetingName;
+        this.eventDate = eventDate;
+        this.agenda = agenda;
+        this.location = location;
+    }
+
+    public static MeetingEvent meetingEvent(
+        String meetingName,
+        ZonedDateTime eventDate,
+        String agenda,
+        String location
+    ){
+        return new MeetingEvent(
+            MeetingEventId.generate(),
+            meetingName,
+            eventDate,
+            agenda,
+            location
+        );
+    }
+
+
+    public static MeetingEvent rehydrate(
+        MeetingEventId meetingEventId,
+        String meetingName,
+        ZonedDateTime eventDate,
+        String agenda,
+        String location
+    ){
+        return new MeetingEvent(
+            meetingEventId,
+            meetingName,
+            eventDate,
+            agenda,
+            location
+        );
+    }
+
+    private void validate(String meetingName, ZonedDateTime eventDate) {
+        Objects.requireNonNull(meetingName, "Meeting name cannot be null");
+        Objects.requireNonNull(eventDate, "Event date cannot be null");
+        if (meetingName.isBlank()) {
+            throw new DomainValidationException("Meeting name cannot be empty");
+        }
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getMeetingName() {
+        return meetingName;
+    }
+
+    public ZonedDateTime getEventDate() {
+        return eventDate;
+    }
+
+    public String getAgenda() {
+        return agenda;
+    }
+
+}

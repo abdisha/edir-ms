@@ -2,7 +2,7 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {updateEdir} from "@/features/edir/api/edir-apis.ts";
 
 import {toast} from "sonner";
-import {memberQueryKey} from "@/features/edir/api/member-query.key.ts";
+import {MemberQueryKey} from "@/features/edir/api/member-query.key.ts";
 
 export function useUpdateEdir() {
     const queryClient = useQueryClient();
@@ -12,7 +12,7 @@ export function useUpdateEdir() {
 
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: memberQueryKey.edir,
+                queryKey: MemberQueryKey.edir,
             }).then(() => toast.success("Edir updated successfully"));
         },
         onError:()=>{

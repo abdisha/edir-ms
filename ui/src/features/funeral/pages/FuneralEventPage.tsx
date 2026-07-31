@@ -48,7 +48,7 @@ const mockEvents: FuneralEvent[] = [
     location: "Adama, Ethiopia",
     status: "closed",
     attendees: 120,
-    description: "Completed funeral service",
+    description: "Completed event service",
     createdDate: "2024-07-10",
   },
   {
@@ -232,7 +232,7 @@ const FuneralEventPage = () => {
                             variant="ghost"
                             size="sm"
                             className="text-primary hover:text-primary hover:bg-primary/10"
-                            onClick={()=>navigate('/funeral-event-detail')}
+                            onClick={()=>navigate('/event-event-detail')}
                           >
                             View
                           </Button>
@@ -259,7 +259,7 @@ const FuneralEventPage = () => {
                         <p className="text-sm">
                           {activeTab !== "all"
                             ? `No ${activeTab} events yet`
-                            : "Create your first funeral event"}
+                            : "Create your first event event"}
                         </p>
                       </div>
                     </TableCell>
