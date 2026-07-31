@@ -4,15 +4,19 @@ import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.inventory.domain.valueobjects.ItemIssueLineId;
 import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
 import com.edir.app.shared.domain.entity.BaseEntity;
+import com.edir.app.shared.domain.exceptions.DomainValidationException;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 
 public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
-    private ItemId itemId;
-    private MemberId fromId;
+    private final ItemId itemId;
+    private final MemberId fromId;
     private ItemQuantity issuedQuantity;
 
     // Private constructor to enforce creation through factory methods
-    private ItemIssueLine(ItemIssueLineId itemIssueLineId, MemberId fromId, ItemId itemId, ItemQuantity issuedQuantity) {
+    private ItemIssueLine(ItemIssueLineId itemIssueLineId,
+                          MemberId fromId,
+                          ItemId itemId,
+                          ItemQuantity issuedQuantity) {
         super(itemIssueLineId);
         this.itemId = itemId;
         this.issuedQuantity = issuedQuantity;
@@ -22,7 +26,7 @@ public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
     public static ItemIssueLine create(ItemId itemId, MemberId fromId, ItemQuantity issuedQuantity) {
 
         if (issuedQuantity.quantity() <= 0) {
-            throw new IllegalArgumentException("Issued quantity must be positive.");
+            throw new DomainValidationException("Issued quantity must be positive.");
         }
         return new ItemIssueLine(ItemIssueLineId.generateId(), fromId, itemId, issuedQuantity);
     }
@@ -33,17 +37,17 @@ public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
 
     public void increaseIssuedQuantity(ItemQuantity quantityToIncrease) {
         if (quantityToIncrease.quantity() <= 0) {
-            throw new IllegalArgumentException("Quantity to increase must be positive.");
+            throw new DomainValidationException("Quantity to increase must be positive.");
         }
         this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() + quantityToIncrease.quantity());
     }
 
     public void decreaseIssuedQuantity(ItemQuantity quantityToDecrease) {
         if (quantityToDecrease.quantity() <= 0) {
-            throw new IllegalArgumentException("Quantity to decrease must be positive.");
+            throw new DomainValidationException("Quantity to decrease must be positive.");
         }
         if (this.issuedQuantity.quantity() < quantityToDecrease.quantity()) {
-            throw new IllegalArgumentException("Cannot decrease quantity below zero.");
+            throw new DomainValidationException("Cannot decrease quantity below zero.");
         }
         this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() - quantityToDecrease.quantity());
     }

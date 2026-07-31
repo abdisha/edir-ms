@@ -5,6 +5,7 @@ import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
 import com.edir.app.inventory.domain.valueobjects.ItemStatus;
 import com.edir.app.shared.domain.entity.BaseEntity;
+import com.edir.app.shared.domain.exceptions.DomainValidationException;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
 
 import java.util.Objects;
@@ -67,7 +68,7 @@ public class  Item extends BaseEntity<ItemId> {;
 
     public void updateQuantity(ItemQuantity quantity){
         if(quantity.quantity()<0){
-            throw new IllegalArgumentException("Quantity cannot be negative");
+            throw new DomainValidationException("Quantity cannot be negative");
         }
 
         this.quantityAtHand=Objects.requireNonNull(quantity,"Quantity cannot be null");
@@ -75,14 +76,14 @@ public class  Item extends BaseEntity<ItemId> {;
 
     public void itemAllocated(ItemQuantity allocatedQuantity){
         if(allocatedQuantity.quantity()<0){
-            throw new IllegalArgumentException("Quantity cannot be negative");
+            throw new DomainValidationException("Quantity cannot be negative");
         }
         this.allocatedQuantity=this.allocatedQuantity.addQuantity(allocatedQuantity.quantity());
     }
 
     public void itemReturned(ItemQuantity quantity){
         if(quantity.quantity()<0){
-            throw new IllegalArgumentException("Quantity cannot be negative");
+            throw new DomainValidationException("Quantity cannot be negative");
         }
        this.allocatedQuantity =this.allocatedQuantity.subtractQuantity(quantity.quantity());
     }
