@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
+import {useNavigate} from "react-router";
 
 export default function EventPage() {
   const [open, setOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function EventPage() {
   return (
     <div className="space-y-8">
       <Card className="overflow-hidden border-0 shadow-sm">
-        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-background">
+        <div className="bg-linear-to-r from-primary/10 via-primary/5 to-background">
           <CardContent className="py-10">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
               <div className="space-y-4">
@@ -106,7 +107,13 @@ interface Props {
 }
 
 function EventTypeDialog({ open, onOpenChange }: Props) {
+  const navigate =useNavigate();
   function select(type: "FUNERAL" | "MEETING") {
+    const randomFuneralId = Math.random().toString(36).substring(2, 15);
+    navigate("/funeral-event", {
+      state: { funeralId: randomFuneralId }
+    });
+
     onOpenChange(false);
     console.log(type);
     // Open Funeral Drawer
