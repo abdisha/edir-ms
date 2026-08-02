@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/shared/components/ui/button";
 import {useParams} from "react-router";
 import {useEffect, useState} from "react";
+import FuneralEventForm from "@/features/funeral/components/FuneralEventForm.tsx";
 // Define interfaces for the data
 interface FuneralDetail {
     id: string;
@@ -23,15 +24,14 @@ interface IssuedItem {
 }
 
 const FuneralEventPage = () => {
-    const { funeralId } = useParams<{ funeralId: string }>();
+    const { eventId } = useParams<{ eventId: string }>();
     const [funeralDetails, setFuneralDetails] = useState<FuneralDetail | null>(null);
     const [issuedItems, setIssuedItems] = useState<IssuedItem[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!funeralId) {
-            setError("Funeral ID is missing from the URL.");
+        if (!eventId || eventId =="new-funeral-event") {
             setLoading(false);
             return;
         }
@@ -45,8 +45,8 @@ const FuneralEventPage = () => {
 
                 // Mock data based on funeralId
                 const mockFuneralData: FuneralDetail = {
-                    id: funeralId,
-                    name: `Funeral Service for John Doe (ID: ${funeralId})`,
+                    id: eventId,
+                    name: `Funeral Service for John Doe (ID: ${eventId})`,
                     date: '2023-10-26',
                     location: 'St. Mary\'s Church Hall',
                     description: 'A memorial service to celebrate the life of John Doe.',
@@ -72,7 +72,7 @@ const FuneralEventPage = () => {
         };
 
         fetchFuneralData();
-    }, [funeralId]);
+    }, [eventId]);
 
     if (loading) {
         return <div className="p-4">Loading funeral details...</div>;
@@ -80,6 +80,10 @@ const FuneralEventPage = () => {
 
     if (error) {
         return <div className="p-4 text-red-600">Error: {error}</div>;
+    }
+
+    if(eventId =="new-funeral-event"){
+        return <FuneralEventForm members={[]} onSubmit={()=>{}}/>
     }
 
     if (!funeralDetails) {
@@ -90,7 +94,7 @@ const FuneralEventPage = () => {
         <>
             <div className="p-4">
                 <h1 className="text-2xl font-bold mb-4">Funeral Event Details</h1>
-                <div className="bg-white shadow-md rounded-lg p-6 mb-6">
+                <div className=" shadow-md rounded-lg p-6 mb-6">
                     <h2 className="text-xl font-semibold mb-2">{funeralDetails.name}</h2>
                     <p><strong>Date:</strong> {funeralDetails.date}</p>
                     <p><strong>Location:</strong> {funeralDetails.location}</p>
@@ -99,7 +103,7 @@ const FuneralEventPage = () => {
                 </div>
 
                 <h2 className="text-xl font-bold mb-4">Issued Items</h2>
-                <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+                <div className="overflow-x-auto  shadow-md rounded-lg">
                     <Table>
                         <TableHeader>
                             <TableRow>

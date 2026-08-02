@@ -4,11 +4,11 @@ import FuneralEventPage from "@/features/funeral/pages/FuneralEventPage.tsx";
 
 const FuneralEventRoutes=[
     {
-        path:'/event-event',
+        path:'/event',
         element:<EventPage/>
     },
     {
-        path:'/event-event-detail',
+        path:'/event-detail',
         element:<EventDetailPage/>
     },
     {

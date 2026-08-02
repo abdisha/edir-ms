@@ -109,10 +109,7 @@ interface Props {
 function EventTypeDialog({ open, onOpenChange }: Props) {
   const navigate =useNavigate();
   function select(type: "FUNERAL" | "MEETING") {
-    const randomFuneralId = Math.random().toString(36).substring(2, 15);
-    navigate("/funeral-event", {
-      state: { funeralId: randomFuneralId }
-    });
+    navigate("/"+"new-funeral-event"+"/funeral-event");
 
     onOpenChange(false);
     console.log(type);
