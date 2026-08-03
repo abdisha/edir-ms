@@ -17,7 +17,7 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(REST_VERSION+"/meeting-event")
+@RequestMapping(REST_VERSION+"meeting-event")
 class MeetingEventController {
     private final EventUseCase eventUseCase;
     private final MeetingEventQueryRepository meetingEventQueryRepository;

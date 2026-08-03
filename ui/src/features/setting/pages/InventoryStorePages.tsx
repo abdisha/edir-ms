@@ -10,7 +10,7 @@ import {FormDrawer} from "@/shared/components/FromDrawer.tsx";
 import StoreForm from "../components/StoreForm";
 import {useGetStores} from "@/features/setting/hooks/useGetStores.ts";
 import {useCreateStore} from "@/features/setting/hooks/useCreateStore.ts";
-import {useGetMembers} from "@/features/setting/hooks/useGetMembers.ts";
+import {useGetMembers} from "@/shared/hooks/useGetMembers.ts";
 import {useState} from "react";
 
 const InventoryStorePages = () => {

@@ -20,7 +20,7 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(REST_VERSION+"/funeral-events")
+@RequestMapping(REST_VERSION+"funeral-events")
 class FuneralEventController {
     private final FuneralEventUseCase funeralEventUseCase;
     private final FuneralEventQueryService funeralEventQueryService;

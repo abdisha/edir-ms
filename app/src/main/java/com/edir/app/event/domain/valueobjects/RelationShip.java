@@ -1,5 +1,15 @@
 package com.edir.app.event.domain.valueobjects;
 
 public enum RelationShip {
-    SPOUSE,SPILLING,PARENT,CHILD,OTHER
+    SPOUSE,
+    FATHER,
+    MOTHER,
+    SON,
+    DAUGHTER,
+    BROTHER,
+    SISTER,
+    GRANDFATHER,
+    GRANDMOTHER,
+    RELATIVE,
+    OTHER,
 }

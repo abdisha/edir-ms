@@ -1,47 +1,23 @@
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Controller, useForm} from "react-hook-form";
 
-import {
-    type FuneralEventFormValues,
-    funeralEventSchema,
-    relationshipOptions,
-} from "../schemas/funeral-event.schame";
+import {type FuneralEventFormValues, funeralEventSchema, relationshipOptions,} from "../schemas/funeral-event.schame";
 
-import {
-    Field,
-    FieldContent,
-    FieldDescription,
-    FieldGroup,
-    FieldLabel,
-} from "@/shared/components/ui/field";
+import {Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel,} from "@/shared/components/ui/field";
 import {Input} from "@/shared/components/ui/input";
 import {Button} from "@/shared/components/ui/button";
-import {Textarea} from "@/shared/components/ui/textarea";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/shared/components/ui/select";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/shared/components/ui/select";
 
 import {Calendar, HeartHandshake, Users} from "lucide-react";
 import {Calendar as CalendarPicker} from "@/shared/components/ui/calendar";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/shared/components/ui/popover";
+import {Popover, PopoverContent, PopoverTrigger,} from "@/shared/components/ui/popover";
 import {format} from "date-fns";
 import {useNavigate} from "react-router";
+import type {Member} from "@/shared/types.ts";
 
-interface MemberOption {
-    id: string;
-    fullName: string;
-}
 
 interface Props {
-    members: MemberOption[];
+    members: Member[];
     loading?: boolean;
     defaultValues?: Partial<FuneralEventFormValues>;
     submitText?: string;
@@ -55,13 +31,14 @@ export default function FuneralEventForm({
     defaultValues,
     onSubmit,
 }: Props) {
-    const {
-        control,
-        handleSubmit,
-        formState: {errors},
-    } = useForm<FuneralEventFormValues>({
+    const form = useForm<FuneralEventFormValues>({
         resolver: zodResolver(funeralEventSchema),
         defaultValues: {
+            deceasedPersonFullName: "",
+            funeralAddress: "",
+            funeralName: "",
+            memberId: "",
+            relationShip: "",
             payout: 0,
             funeralDate: new Date(),
             ...defaultValues,
@@ -71,7 +48,7 @@ export default function FuneralEventForm({
 
     return (
         <div className="mx-auto w-full max-w-4xl">
-            <form className="space-y-10" onSubmit={handleSubmit(onSubmit)}>
+            <form className="space-y-10" onSubmit={form.handleSubmit(onSubmit)}>
                 {/* Page Header */}
                 <div className="text-center space-y-2">
                     <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
@@ -95,44 +72,56 @@ export default function FuneralEventForm({
                         </p>
                     </div>
                     <FieldGroup className="grid gap-6 md:grid-cols-2">
-                        <Field>
-                            <FieldLabel>Deceased Full Name</FieldLabel>
-                            <FieldContent>
-                                <Controller
+
+                        <Controller
                                     name="deceasedPersonFullName"
-                                    control={control}
-                                    render={({field}) => (
+                                    control={form.control}
+                                    render={({field, fieldState}) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel>Deceased Full Name</FieldLabel>
+                                            <FieldContent>
                                         <Input
+                                            aria-label={'deceased-full-name'}
                                             placeholder="Abebe Kebede"
                                             {...field}
                                         />
+                                            </FieldContent>
+                                            <FieldDescription>
+                                                Enter the deceased person's full name.
+                                            </FieldDescription>
+                                            {fieldState.error && (
+                                                <FieldError errors={[fieldState.error]}/>
+                                            )}
+                                        </Field>
                                     )}
                                 />
-                            </FieldContent>
-                            <FieldDescription>
-                                Enter the deceased person's full name.
-                            </FieldDescription>
-                            {errors.deceasedPersonFullName && (
-                                <p className="text-sm text-destructive">
-                                    {errors.deceasedPersonFullName.message}
-                                </p>
-                            )}
-                        </Field>
-                        <Field>
-                            <FieldLabel>Funeral Name</FieldLabel>
-                            <FieldContent>
-                                <Controller
-                                    name="funeralName"
-                                    control={control}
-                                    render={({field}) => (
+
+
+                        <Controller
+                            name="funeralName"
+                            control={form.control}
+                            render={({field, fieldState}) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>Funeral Name</FieldLabel>
+                                    <FieldContent>
                                         <Input
+                                            aria-label={'funeral-name'}
                                             placeholder="Abebe Kebede Funeral"
                                             {...field}
                                         />
-                                    )}
+                                    </FieldContent>
+                                    <FieldDescription>
+                                        A descriptive name for the funeral event.
+                                    </FieldDescription>
+                                    {
+                                        fieldState.error && (
+                                            <FieldError errors={[fieldState.error]}/>
+                                        )
+                                    }
+                                </Field>
+                            )}
                                 />
-                            </FieldContent>
-                        </Field>
+
                     </FieldGroup>
                 </section>
                 <section className="rounded-xl border bg-card p-6 shadow-sm space-y-6">
@@ -149,39 +138,53 @@ export default function FuneralEventForm({
                         </p>
                     </div>
                     <FieldGroup className="grid gap-6 md:grid-cols-2">
-                        <Field>
-                            <FieldLabel>Member</FieldLabel>
-                            <FieldContent>
-                                <Controller
-                                    name="memberId"
-                                    control={control}
-                                    render={({field}) => (
+
+                        <Controller
+                            name="memberId"
+                            control={form.control}
+                            render={({field, fieldState}) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>Member</FieldLabel>
+                                    <FieldContent>
                                         <Select value={field.value} onValueChange={field.onChange}>
                                             <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select member"/>
+                                                <SelectValue placeholder="Select member">
+                                                    {members.filter(m=>m.memberId==field.value)
+                                                        .map(m=>m.fullName)}
+                                                </SelectValue>
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {members.map(member => (
                                                     <SelectItem
-                                                        key={member.id}
-                                                        value={member.id}
+                                                        key={member.memberId}
+                                                        value={member.memberId}
                                                     >
                                                         {member.fullName}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                    )}
-                                />
-                            </FieldContent>
-                        </Field>
-                        <Field>
-                            <FieldLabel>Relationship</FieldLabel>
-                            <FieldContent>
-                                <Controller
-                                    name="relationShip"
-                                    control={control}
-                                    render={({field}) => (
+                                    </FieldContent>
+                                    <FieldDescription>
+                                        Select the Edir member associated with the deceased.
+                                    </FieldDescription>
+                                    {
+                                        fieldState.error && (
+                                            <FieldError errors={[fieldState.error]}/>
+                                        )
+                                    }
+                                </Field>
+                            )}
+                        />
+
+
+                        <Controller
+                            name="relationShip"
+                            control={form.control}
+                            render={({field, fieldState}) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>Relationship</FieldLabel>
+                                    <FieldContent>
                                         <Select value={field.value} onValueChange={field.onChange}>
                                             <SelectTrigger className={"w-full"}>
                                                 <SelectValue placeholder={"Select relationship"}/>
@@ -197,10 +200,19 @@ export default function FuneralEventForm({
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                    )}
+                                    </FieldContent>
+                                    <FieldDescription>
+                                        Specify the relationship of the member to the deceased.
+                                    </FieldDescription>
+                                    {
+                                        fieldState.error && (
+                                            <FieldError errors={[fieldState.error]}/>
+                                        )
+                                    }
+                                </Field>
+                            )}
                                 />
-                            </FieldContent>
-                        </Field>
+
                     </FieldGroup>
                 </section>
                 <section className="rounded-xl border bg-card p-6 shadow-sm space-y-6">
@@ -209,67 +221,98 @@ export default function FuneralEventForm({
                         Funeral Details
                     </h3>
                     <FieldGroup className="grid gap-6 md:grid-cols-2">
-                        <Field>
-                            <FieldLabel>Funeral Date</FieldLabel>
-                            <FieldContent>
-                                <Controller
-                                    name="funeralDate"
-                                    control={control}
-                                    render={({field}) => (
-                                        <Popover>
-                                            <PopoverTrigger>
-                                                <Button variant="outline" className="w-full justify-start">
-                                                    <Calendar className="mr-2 h-4 w-4"/>
-                                                    {format(field.value, "PPP")}
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent>
-                                                <CalendarPicker
-                                                    mode="single"
-                                                    selected={field.value}
-                                                    onSelect={field.onChange}
-                                                />
-                                            </PopoverContent>
-                                        </Popover>
-                                    )}
+
+                        <Controller
+                            name="funeralDate"
+                            control={form.control}
+                            render={({field, fieldState}) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>Funeral Date</FieldLabel>
+                                    <FieldContent>
+                                <Popover>
+                                    <PopoverTrigger>
+                                        <Button variant="outline" className="w-full justify-start">
+                                            <Calendar className="mr-2 h-4 w-4"/>
+                                            {format(field.value, "PPP")}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <CalendarPicker
+                                            mode="single"
+                                            selected={field.value}
+                                            onSelect={field.onChange}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                                    </FieldContent>
+                                    <FieldDescription>
+                                        The date when the funeral event took place.
+                                    </FieldDescription>
+                                    {
+                                        fieldState.error && (
+                                            <FieldError errors={[fieldState.error]}/>
+                                        )
+                                    }
+                                </Field>
+                            )}
                                 />
-                            </FieldContent>
-                        </Field>
-                        <Field>
-                            <FieldLabel>Payout (ETB)</FieldLabel>
-                            <FieldContent>
-                                <Controller
+
+                        <Controller
                                     name="payout"
-                                    control={control}
-                                    render={({field}) => (
+                                    control={form.control}
+                                    render={({field, fieldState}) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                            <FieldLabel>Payout (ETB)</FieldLabel>
+                                            <FieldContent>
                                         <Input
+                                            aria-label={'payout'}
+                                            placeholder="0"
                                             type="number"
                                             {...field}
+                                            onChange={(e) => field.onChange(Number(e.target.value))}
                                         />
+                                            </FieldContent>
+                                            <FieldDescription>
+                                                The amount of financial assistance provided (in ETB).
+                                            </FieldDescription>
+                                            {
+                                                fieldState.error && (
+                                                    <FieldError errors={[fieldState.error]}/>
+                                                )
+                                            }
+                                        </Field>
                                     )}
-                                />
-                            </FieldContent>
-                        </Field>
+                        />
                     </FieldGroup>
-                    <Field>
-                        <FieldLabel>Funeral Address</FieldLabel>
-                        <FieldContent>
-                            <Controller
-                                name="funeralAddress"
-                                control={control}
-                                render={({field}) => (
-                                    <Textarea
-                                        rows={4}
-                                        placeholder="Enter funeral location..."
-                                        {...field}
-                                    />
+                    <Controller name="funeralAddress"
+                                control={form.control}
+                                render={({field, fieldState}) => (
+                                    <Field data-invalid={fieldState.invalid}>
+                                        <FieldLabel>Funeral Address</FieldLabel>
+                                        <FieldContent>
+                                            <Input
+                                                aria-label={'funeral-address'}
+                                                placeholder="Enter funeral location..."
+                                                {...field}
+                                            />
+                                        </FieldContent>
+                                        <FieldDescription>
+                                            The physical address where the funeral was held.
+                                        </FieldDescription>
+                                        {
+                                            fieldState.error && (
+                                                <FieldError errors={[fieldState.error]}/>
+                                            )
+                                        }
+                                    </Field>
                                 )}
-                            />
-                        </FieldContent>
-                    </Field>
+                    />
                 </section>
                 <div className="flex justify-end border-t pt-6 gap-2">
                     <Button type="submit" disabled={loading}>
+                        {loading && (
+                            <span className="sr-only">Saving funeral event...</span>
+                        )}
                         {submitText}
                     </Button>
                     <Button variant={"outline"} onClick={()=>navigate(-1)}>

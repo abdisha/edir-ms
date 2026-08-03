@@ -1,10 +1,12 @@
-
-
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
-import { Button } from "@/shared/components/ui/button";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/shared/components/ui/table";
+import {Button} from "@/shared/components/ui/button";
 import {useParams} from "react-router";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import FuneralEventForm from "@/features/funeral/components/FuneralEventForm.tsx";
+import {useCreateFuneralEvent} from "@/features/funeral/hooks/useCreateFuneralEvent.ts";
+import {useGetMembers} from "@/shared/hooks/useGetMembers.ts";
+import {useGetFuneralEventById} from "@/features/funeral/hooks/useGetFuneralEvent.ts";
+
 // Define interfaces for the data
 interface FuneralDetail {
     id: string;
@@ -27,10 +29,11 @@ const FuneralEventPage = () => {
     const { eventId } = useParams<{ eventId: string }>();
     const [funeralDetails, setFuneralDetails] = useState<FuneralDetail | null>(null);
     const [issuedItems, setIssuedItems] = useState<IssuedItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
+    const members = useGetMembers()
+    const funeralEventMutation = useCreateFuneralEvent();
+    const {data:event, isLoading, isError, error} = useGetFuneralEventById(eventId)
+  /*  useEffect(() => {
         if (!eventId || eventId =="new-funeral-event") {
             setLoading(false);
             return;
@@ -72,18 +75,31 @@ const FuneralEventPage = () => {
         };
 
         fetchFuneralData();
-    }, [eventId]);
+    }, [eventId]);*/
 
-    if (loading) {
+    if (members.isLoading) {
         return <div className="p-4">Loading funeral details...</div>;
     }
 
-    if (error) {
-        return <div className="p-4 text-red-600">Error: {error}</div>;
+    if (members.isError) {
+        return <div className="p-4 text-red-600">Error: {members.error.message}</div>;
     }
 
     if(eventId =="new-funeral-event"){
-        return <FuneralEventForm members={[]} onSubmit={()=>{}}/>
+        return <FuneralEventForm members={members.data}
+                                 loading={funeralEventMutation.isPending}
+                                 onSubmit={values=>{
+                                     console.log(values)
+            funeralEventMutation.mutate({
+                deceasedPersonFullName:values.deceasedPersonFullName,
+                funeralName:values.funeralName,
+                relationShip:values.relationShip,
+                payout:values.payout,
+                funeralDate:values.funeralDate,
+                funeralAddress:values.funeralAddress,
+                memberId:values.memberId
+            });
+        }}/>
     }
 
     if (!funeralDetails) {

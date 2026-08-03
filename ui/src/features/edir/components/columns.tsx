@@ -72,9 +72,9 @@ export const columns: ColumnDef<Member>[] = [
         <div className="flex items-center gap-2">
           <MapPin className="h-4 w-4 text-muted-foreground" />
           <div>
-           <p className="font-medium text-sm">{member.address?.subcity}</p>
+           <p className="font-medium text-sm">{member?.subcity}</p>
            <p className="text-xs text-muted-foreground">
-             Woreda {member.address?.woreda}
+             Woreda {member?.woreda}
            </p>
           </div>
         </div>
@@ -102,7 +102,7 @@ export const columns: ColumnDef<Member>[] = [
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger>
            <Button
              variant="ghost"
              size="icon"
@@ -113,7 +113,7 @@ export const columns: ColumnDef<Member>[] = [
            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-           <DropdownMenuItem asChild>
+           <DropdownMenuItem>
              <Link
                to={`/members/${member.id}`}
                className="flex items-center cursor-pointer"
@@ -122,7 +122,7 @@ export const columns: ColumnDef<Member>[] = [
                <span>View Details</span>
              </Link>
            </DropdownMenuItem>
-           <DropdownMenuItem asChild>
+           <DropdownMenuItem>
              <Link
                to={`/members/${member.id}/edit`}
                className="flex items-center cursor-pointer"

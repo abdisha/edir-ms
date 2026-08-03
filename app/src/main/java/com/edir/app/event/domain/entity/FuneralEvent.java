@@ -6,9 +6,11 @@ import com.edir.app.event.domain.exceptions.FuneralAlreadyClosedExceptions;
 import com.edir.app.event.domain.valueobjects.FuneralEventId;
 import com.edir.app.event.domain.valueobjects.RelationShip;
 import com.edir.app.shared.domain.entity.AggregateRoot;
+import com.edir.app.shared.domain.exceptions.DomainValidationException;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import com.edir.app.shared.domain.valueobjects.Money;
+import org.springframework.util.StringUtils;
 
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -38,8 +40,18 @@ public class FuneralEvent extends AggregateRoot<FuneralEventId> {
                         RelationShip relationShip,
                         Set<EventItem> eventItems) {
         super(funeralEventId);
+        if(funeralDate==null){
+            throw new DomainValidationException("Funeral date is required");
+        }
         this.funeralDate = funeralDate;
+
+        if(funeralName==null || StringUtils.containsWhitespace(funeralName.trim())){
+            throw new DomainValidationException("Funeral name is required");
+        }
         this.funeralName = funeralName;
+        if(deceasedPersonFullName==null || StringUtils.containsWhitespace(deceasedPersonFullName.trim())){
+            throw new DomainValidationException("Deceased person full name is required");
+        }
         this.deceasedPersonFullName = deceasedPersonFullName;
         this.mournerId = mournerId;
         this.funeralAddress = funeralAddress;

@@ -12,6 +12,7 @@ export const relationshipOptions = [
     "GRANDMOTHER",
     "RELATIVE",
     "OTHER",
+    ""
 ] as const;
 
 export const funeralEventSchema = z.object({
@@ -30,9 +31,8 @@ export const funeralEventSchema = z.object({
         message: "Please select a relationship.",
     }),
 
-    payout: z
-        .number()
-        .min(0, "Payout cannot be negative."),
+    payout: z.number()
+        .positive( "Payout cannot be negative."),
 
     funeralDate: z.date({
         message: "Please select the funeral date.",

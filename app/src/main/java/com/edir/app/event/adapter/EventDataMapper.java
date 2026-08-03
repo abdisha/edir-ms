@@ -40,6 +40,8 @@ public class EventDataMapper {
         FuneralEventEntity eventEntity = FuneralEventEntity.builder()
             .funeralEventId(edirEvent.getId().id())
             .name(edirEvent.getFuneralName())
+            .deceasedPersonAddress(edirEvent.getFuneralAddress())
+            .deceasedPersonFullName(edirEvent.getDeceasedPersonFullName())
             .funeralDate(edirEvent.getFuneralDate())
             .mournerId(edirEvent.getMournerId().value())
             .payOut(edirEvent.getPayOut().amount())

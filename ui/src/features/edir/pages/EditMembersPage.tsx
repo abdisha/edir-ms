@@ -34,7 +34,6 @@ const EditMembersPage =()=>{
                 console.log(data);
             }}
             onCancel={() => navigate(-1)}
-            onSuccess={() => navigate("/members")}
         />
     )
 }

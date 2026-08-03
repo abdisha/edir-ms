@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {getMembers} from "@/features/setting/api/store.api.ts";
+import {getMembers} from "@/shared/api/shared-api.ts";
 
 export function useGetMembers(){
     return useQuery({

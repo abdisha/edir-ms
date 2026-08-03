@@ -120,6 +120,8 @@ export function ContributionForm({
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel>Amount (ETB)</FieldLabel>
                                     <Input
+                                        aria-label={'Amount'}
+                                        placeholder="10"
                                         type="number"
                                         min={0}
                                         {...field}
