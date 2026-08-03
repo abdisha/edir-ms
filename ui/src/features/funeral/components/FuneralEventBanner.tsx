@@ -4,19 +4,10 @@ import {Badge} from "@/shared/components/ui/badge";
 import {Button} from "@/shared/components/ui/button";
 import {Card, CardContent,} from "@/shared/components/ui/card";
 import {Separator} from "@/shared/components/ui/separator";
+import type {FuneralEvent} from "@/features/funeral/types/types.ts";
 
 interface FuneralEventBannerProps {
-    funeral: {
-        funeralId: string;
-        funeralName: string;
-        deceasedPersonFullName: string;
-        relationShip: string;
-        funeralDate: string;
-        payout: number;
-        memberId: string;
-        isClose: boolean;
-    };
-
+    funeral:FuneralEvent;
     onEdit?: () => void;
 }
 
@@ -26,7 +17,7 @@ export function FuneralEventBanner({
                               }: FuneralEventBannerProps) {
     return (
         <Card className="overflow-hidden border shadow-sm">
-            <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-background">
+            <div className="bg-linear-to-r from-primary/10 via-primary/5 to-background">
                 <CardContent className="space-y-8 py-8">
                     {/* Header */}
                     <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -135,7 +126,7 @@ function InfoCard({
         </span>
             </div>
 
-            <p className="break-words text-lg font-semibold">
+            <p className="wrap-break-word text-lg font-semibold">
                 {value}
             </p>
         </div>

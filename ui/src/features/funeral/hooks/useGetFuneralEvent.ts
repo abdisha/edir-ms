@@ -1,5 +1,9 @@
 import {useQuery} from "@tanstack/react-query";
-import {getFuneralEventById, getFuneralEvents} from "@/features/funeral/apis/funeral-event.apis.ts";
+import {
+    getFuneralEventById,
+    getFuneralEventItemIssue,
+    getFuneralEvents
+} from "@/features/funeral/apis/funeral-event.apis.ts";
 import {FuneralEventQueryKey} from "@/features/funeral/apis/funeral-event-query.key.ts";
 
 export function useGetFuneralEvent(){
@@ -15,4 +19,12 @@ export function useGetFuneralEventById(id: string) {
         queryKey: FuneralEventQueryKey.funeralEvent(id),
         enabled: !!id
     });
+}
+
+export function useGetItemIssueById(funeralId:string){
+    return  useQuery({
+        queryFn:()=>getFuneralEventItemIssue(funeralId),
+        queryKey:FuneralEventQueryKey.itemIssueAll,
+        enabled: Boolean(funeralId)
+    })
 }

@@ -5,7 +5,7 @@ import com.edir.app.event.application.port.in.command.CreateFuneralEventCommand;
 import com.edir.app.event.domain.valueobjects.FuneralEventId;
 
 public interface FuneralEventUseCase {
-    void addEvent(CreateFuneralEventCommand command);
+    FuneralEventId addEvent(CreateFuneralEventCommand command);
     void addItemIssue(AddEventItemCommand command);
     void closeFuneralEvent(FuneralEventId funeralEventId);
 }

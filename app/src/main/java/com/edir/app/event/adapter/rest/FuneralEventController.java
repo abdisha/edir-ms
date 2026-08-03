@@ -9,6 +9,7 @@ import com.edir.app.event.application.port.out.query.ItemIssueView;
 import com.edir.app.event.domain.valueobjects.FuneralEventId;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +27,9 @@ class FuneralEventController {
     private final FuneralEventQueryService funeralEventQueryService;
 
     @PostMapping()
-    public ResponseEntity<Void> post(@Valid  @RequestBody CreateFuneralEventCommand command) {
-        funeralEventUseCase.addEvent(command);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UUID> post(@Valid  @RequestBody CreateFuneralEventCommand command) {
+        var result = funeralEventUseCase.addEvent(command);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result.id());
     }
 
     @PostMapping("/{funeralId}/issue-item")

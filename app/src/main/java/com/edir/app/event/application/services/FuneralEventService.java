@@ -25,7 +25,7 @@ class FuneralEventService implements FuneralEventUseCase {
     private final DomainEventPublisher publisher;
 
     @Override
-    public void addEvent(CreateFuneralEventCommand command) {
+    public FuneralEventId addEvent(CreateFuneralEventCommand command) {
         FuneralEvent funeralEvent = FuneralEvent.addEvent(
             command.funeralDate(),
             command.funeralName(),
@@ -35,7 +35,7 @@ class FuneralEventService implements FuneralEventUseCase {
             command.funeralAddress(),
             command.relationShip()
         );
-        repository.save(funeralEvent);
+        return new FuneralEventId(repository.save(funeralEvent));
     }
 
     @Override

@@ -22,7 +22,7 @@ import java.util.Set;
 public class Edir extends AggregateRoot<EdirId> {
     private EdirName edirName;
     private String about;
-    private ZonedDateTime establishedDate;
+    private final ZonedDateTime establishedDate;
     private Address address;
     private PhoneNumber phoneNumber;
     private MemberId directorId;
@@ -89,6 +89,7 @@ public class Edir extends AggregateRoot<EdirId> {
                 phoneNumber);
     }
 
+    //This for database use only to repopulate
     public static Edir rehydrate(EdirId edirId,
                                  EdirName edirName,
                                  ZonedDateTime establishedDate,
@@ -131,6 +132,7 @@ public class Edir extends AggregateRoot<EdirId> {
         if (isActiveMember(member.getId())) {
             throw new MemberAlreadyRegisteredException(member.getId());
         }
+
         registerEvent(new MemberJoinedEvent(
             member.getId(),
             member.getFullName(),
@@ -152,7 +154,6 @@ public class Edir extends AggregateRoot<EdirId> {
 
     public void revokeAppointment(MemberId memberId) {
         validateLeaderShipCandidate(memberId);
-
         revokeLeaderShipRole(memberId);
     }
 
@@ -171,7 +172,6 @@ public class Edir extends AggregateRoot<EdirId> {
     public void markMemberAsDeceased(MemberId memberId) {
         EdirMember member = findMemberById(memberId);
         member.markAsDeceased();
-
         revokeLeaderShipRole(memberId);
     }
 
