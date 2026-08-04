@@ -60,7 +60,7 @@ export function ContributionForm({
             className="mx-auto max-w-4xl space-y-4"
         >
             {/* Header */}
-            <div className="mb-4 rounded-lg border bg-gradient-to-r from-primary/5 to-primary/10 p-6">
+            <div className="mb-4 rounded-lg border bg-linear-to-r from-primary/5 to-primary/10 p-6">
                 <div className="flex items-start gap-4">
                     <div className="rounded-lg bg-primary/10 p-2">
                         <CreditCard className="h-5 w-5 text-primary" />

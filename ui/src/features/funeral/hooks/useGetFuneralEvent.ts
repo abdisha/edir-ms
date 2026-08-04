@@ -13,10 +13,10 @@ export function useGetFuneralEvent(){
     });
 }
 
-export function useGetFuneralEventById(id: string) {
+export function useGetFuneralEventById(id: undefined | string) {
     return useQuery({
-        queryFn: () => getFuneralEventById(id),
-        queryKey: FuneralEventQueryKey.funeralEvent(id),
+        queryFn: () => getFuneralEventById(id!),
+        queryKey: FuneralEventQueryKey.funeralEvent(id!),
         enabled: !!id
     });
 }

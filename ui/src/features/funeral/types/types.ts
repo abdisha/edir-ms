@@ -1,7 +1,16 @@
 export interface CreateFuneralEvent {
     deceasedPersonFullName: string
     funeralName: string
-    relationShip: string
+    relationShip: "SPOUSE"|
+    "FATHER"|
+    "MOTHER"|
+    "SON"|
+    "DAUGHTER"|
+    "BROTHER"|
+    "SISTER"|
+    "GRANDFATHER"|
+    "GRANDMOTHER"|
+    "RELATIVE" | "OTHER"
     payout: number
     funeralDate: Date
     funeralAddress: string
@@ -32,3 +41,20 @@ export interface UpInsItemIssue {
     name:string;
     quantity:number;
 }
+
+export type RelationShip= typeof relationshipOptions;
+
+
+export const relationshipOptions = [
+    "SPOUSE",
+    "FATHER",
+    "MOTHER",
+    "SON",
+    "DAUGHTER",
+    "BROTHER",
+    "SISTER",
+    "GRANDFATHER",
+    "GRANDMOTHER",
+    "RELATIVE",
+    "OTHER",
+] as const;

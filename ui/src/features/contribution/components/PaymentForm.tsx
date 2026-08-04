@@ -86,6 +86,8 @@ export function PaymentForm({
                         <div className="relative">
                             <DollarSignIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                             <Input
+                                aria-label={'Amount'}
+                                placeholder="10"
                                 type="number"
                                 className="pl-10"
                                 {...form.register("amount",{
@@ -147,6 +149,7 @@ export function PaymentForm({
                         <div className="relative">
                             <HashIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                             <Input
+                                aria-label={'Receipt Number'}
                                 placeholder="RCPT-00001"
                                 className="pl-10"
                                 {...form.register("receiptNumber")}
@@ -166,6 +169,7 @@ export function PaymentForm({
                          <div className="relative">
                             <FileTextIcon className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                             <Textarea
+                                aria-label={'Remark'}
                                 rows={4}
                                 placeholder="Optional remark..."
                                 className="pl-10"
@@ -192,7 +196,7 @@ export function PaymentForm({
                 </Button>
                 <Button
                     type="submit"
-                    className="min-w-[120px]"
+                    className="min-w-30"
                     disabled={loading}
                 >
                     {loading ? "Saving..." : "Save Payment"}

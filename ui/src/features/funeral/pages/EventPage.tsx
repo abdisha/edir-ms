@@ -8,17 +8,31 @@ import {Badge} from "@/shared/components/ui/badge";
 import {Separator} from "@/shared/components/ui/separator";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import {useNavigate} from "react-router";
+import FuneralEventTable from "@/features/funeral/components/FuneralEventTable.tsx";
+import {useGetFuneralEvent} from "@/features/funeral/hooks/useGetFuneralEvent.ts";
+import {SpinnerPage} from "@/pages/SpinnerPage.tsx";
+import {PageError} from "@/pages/PageError.tsx";
 
 export default function EventPage() {
   const [open, setOpen] = useState(false);
+  const {data,isLoading,isError,error}=useGetFuneralEvent();
+  const navigate = useNavigate();
+
+  if(isLoading){
+    return <SpinnerPage message={'Loading events...'}/>
+  }
+
+  if(isError){
+    return <PageError title={'Unable to load events'} description={error.message}/>
+  }
 
   return (
     <div className="space-y-8">
@@ -72,6 +86,9 @@ export default function EventPage() {
             </div>
           </CardContent>
         </div>
+      </Card>
+      <Card>
+      <FuneralEventTable funeralEvents={data} onSelect={funeralId => navigate(`/${funeralId}/funeral-event-detail`)} />
       </Card>
 
       <EventTypeDialog open={open} onOpenChange={setOpen} />

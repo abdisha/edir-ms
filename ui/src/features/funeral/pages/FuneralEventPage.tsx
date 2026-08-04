@@ -3,21 +3,41 @@ import {useGetFuneralEventById} from "@/features/funeral/hooks/useGetFuneralEven
 import FuneralEventForm from "@/features/funeral/components/FuneralEventForm.tsx";
 import {useCreateFuneralEvent} from "@/features/funeral/hooks/useCreateFuneralEvent.ts";
 import {useGetMembers} from "@/shared/hooks/useGetMembers.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {Alert, AlertDescription, AlertTitle} from "@/shared/components/ui/alert.tsx";
+import {AlertCircle} from "lucide-react";
 
+const NEW_FUNERAL_ID = "new-funeral-event"
 const FuneralEventPage =()=>{
     const { eventId = "" } = useParams<{ eventId: string }>();
     const members = useGetMembers();
-    const {data:funeralQuery} = useGetFuneralEventById(eventId);
+    const {data: funeralQuery} = useGetFuneralEventById(eventId == NEW_FUNERAL_ID ? undefined : eventId);
     const navigate = useNavigate()
-    const createMutation = useCreateFuneralEvent({
-        onSuccess: () => {
-            console.log("saved "+createMutation.data)
-            navigate(createMutation.data+"/funeral-events")
-        },
-    });
+    const createMutation = useCreateFuneralEvent();
     const isCreateMode = eventId;
     const [editing, setEditing] = useState(false);
+    useEffect(() => {
+        if (createMutation.isSuccess && createMutation.data) {
+            console.log("success" + createMutation.data)
+            navigate("/" + createMutation.data + "/funeral-event-detail");
+        }
+    }, [createMutation.isSuccess]);
+
+    if (members.isError) {
+        return (
+            <div className="container mx-auto max-w-5xl py-10">
+                <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4"/>
+                    <AlertTitle>
+                        Unable to load members
+                    </AlertTitle>
+                    <AlertDescription>
+                        {members.error.message}
+                    </AlertDescription>
+                </Alert>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -37,7 +57,12 @@ const FuneralEventPage =()=>{
                 onSubmit={async (values) => {
                     console.log(values);
                     if (isCreateMode) {
-                        await createMutation.mutateAsync(values);
+                        await createMutation.mutateAsync(
+                            {
+                                ...values,
+                                relationShip:values.relationShip
+                            }
+                        );
 
                     }
                     setEditing(false);

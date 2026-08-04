@@ -5,14 +5,17 @@ import {Button} from "@/shared/components/ui/button";
 import {Card, CardContent,} from "@/shared/components/ui/card";
 import {Separator} from "@/shared/components/ui/separator";
 import type {FuneralEvent} from "@/features/funeral/types/types.ts";
+import type {Member} from "@/shared/types.ts";
 
 interface FuneralEventBannerProps {
     funeral:FuneralEvent;
+    members: Member[]
     onEdit?: () => void;
 }
 
 export function FuneralEventBanner({
                                   funeral,
+                                       members,
                                   onEdit,
                               }: FuneralEventBannerProps) {
     return (
@@ -23,7 +26,7 @@ export function FuneralEventBanner({
                     <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                         <div className="space-y-3">
                             <Badge
-                                variant={funeral.isClose ? "secondary" : "default"}
+                                variant={funeral?.isClose ? "secondary" : "default"}
                                 className="w-fit"
                             >
                                 {funeral.isClose ? (
@@ -47,7 +50,7 @@ export function FuneralEventBanner({
                                 <p className="mt-2 text-muted-foreground">
                                     Funeral support for{" "}
                                     <span className="font-medium text-foreground">
-                    {funeral.deceasedPersonFullName}
+                                 {funeral.deceasedPersonFullName}
                   </span>
                                 </p>
                             </div>
@@ -85,7 +88,7 @@ export function FuneralEventBanner({
                         <InfoCard
                             icon={<Users className="h-5 w-5" />}
                             label="Member ID"
-                            value={funeral.memberId}
+                            value={members.find(m=>m.memberId=funeral.memberId)?.fullName || ""}
                         />
 
                         <InfoCard

@@ -1,19 +1,6 @@
 import {z} from "zod";
+import {relationshipOptions} from "@/features/funeral/types/types.ts";
 
-export const relationshipOptions = [
-    "SPOUSE",
-    "FATHER",
-    "MOTHER",
-    "SON",
-    "DAUGHTER",
-    "BROTHER",
-    "SISTER",
-    "GRANDFATHER",
-    "GRANDMOTHER",
-    "RELATIVE",
-    "OTHER",
-    ""
-] as const;
 
 export const funeralEventSchema = z.object({
 

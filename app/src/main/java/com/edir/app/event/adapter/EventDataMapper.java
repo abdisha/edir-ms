@@ -45,6 +45,7 @@ public class EventDataMapper {
             .funeralDate(edirEvent.getFuneralDate())
             .mournerId(edirEvent.getMournerId().value())
             .payOut(edirEvent.getPayOut().amount())
+            .relationShip(edirEvent.getRelationShip())
             .payOutDate(edirEvent.getFuneralDate())
             .isClosed(edirEvent.getIsClosed())
             .build();

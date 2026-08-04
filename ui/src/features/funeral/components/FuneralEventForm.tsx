@@ -1,7 +1,7 @@
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Controller, useForm} from "react-hook-form";
 
-import {type FuneralEventFormValues, funeralEventSchema, relationshipOptions,} from "../schemas/funeral-event.schame";
+import {type FuneralEventFormValues, funeralEventSchema,} from "../schemas/funeral-event.schame";
 
 import {Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel,} from "@/shared/components/ui/field";
 import {Input} from "@/shared/components/ui/input";
@@ -14,6 +14,7 @@ import {Popover, PopoverContent, PopoverTrigger,} from "@/shared/components/ui/p
 import {format} from "date-fns";
 import {useNavigate} from "react-router";
 import type {Member} from "@/shared/types.ts";
+import {relationshipOptions} from "@/features/funeral/types/types.ts";
 
 
 interface Props {
@@ -38,7 +39,7 @@ export default function FuneralEventForm({
             funeralAddress: "",
             funeralName: "",
             memberId: "",
-            relationShip: "",
+            relationShip: undefined,
             payout: 0,
             funeralDate: new Date(),
             ...defaultValues,
@@ -74,27 +75,27 @@ export default function FuneralEventForm({
                     <FieldGroup className="grid gap-6 md:grid-cols-2">
 
                         <Controller
-                                    name="deceasedPersonFullName"
-                                    control={form.control}
-                                    render={({field, fieldState}) => (
-                                        <Field data-invalid={fieldState.invalid}>
-                                            <FieldLabel>Deceased Full Name</FieldLabel>
-                                            <FieldContent>
-                                        <Input
-                                            aria-label={'deceased-full-name'}
-                                            placeholder="Abebe Kebede"
-                                            {...field}
-                                        />
-                                            </FieldContent>
-                                            <FieldDescription>
-                                                Enter the deceased person's full name.
-                                            </FieldDescription>
-                                            {fieldState.error && (
-                                                <FieldError errors={[fieldState.error]}/>
-                                            )}
-                                        </Field>
-                                    )}
+                            name="deceasedPersonFullName"
+                            control={form.control}
+                            render={({field, fieldState}) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel>Deceased Full Name</FieldLabel>
+                                    <FieldContent>
+                                <Input
+                                    aria-label={'deceased-full-name'}
+                                    placeholder="Abebe Kebede"
+                                    {...field}
                                 />
+                                    </FieldContent>
+                                    <FieldDescription>
+                                        Enter the deceased person's full name.
+                                    </FieldDescription>
+                                    {fieldState.error && (
+                                        <FieldError errors={[fieldState.error]}/>
+                                    )}
+                                </Field>
+                            )}
+                        />
 
 
                         <Controller
@@ -119,8 +120,7 @@ export default function FuneralEventForm({
                                         )
                                     }
                                 </Field>
-                            )}
-                                />
+                            )} />
 
                     </FieldGroup>
                 </section>
@@ -148,9 +148,9 @@ export default function FuneralEventForm({
                                     <FieldContent>
                                         <Select value={field.value} onValueChange={field.onChange}>
                                             <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Select member">
-                                                    {members.filter(m=>m.memberId==field.value)
-                                                        .map(m=>m.fullName)}
+                                                <SelectValue placeholder="Select Member">
+                                                    {members.find(m => m.memberId == field.value)
+                                                        ?.fullName}
                                                 </SelectValue>
                                             </SelectTrigger>
                                             <SelectContent>
@@ -183,9 +183,9 @@ export default function FuneralEventForm({
                             control={form.control}
                             render={({field, fieldState}) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel>Relationship</FieldLabel>
+                                    <FieldLabel>Relationship to Deceased</FieldLabel>
                                     <FieldContent>
-                                        <Select value={field.value} onValueChange={field.onChange}>
+                                        <Select value={field.value ?? ""} onValueChange={field.onChange}>
                                             <SelectTrigger className={"w-full"}>
                                                 <SelectValue placeholder={"Select relationship"}/>
                                             </SelectTrigger>
