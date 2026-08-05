@@ -42,8 +42,6 @@ export interface UpInsItemIssue {
     quantity:number;
 }
 
-export type RelationShip= typeof relationshipOptions;
-
 
 export const relationshipOptions = [
     "SPOUSE",
@@ -58,3 +56,13 @@ export const relationshipOptions = [
     "RELATIVE",
     "OTHER",
 ] as const;
+
+export interface MeetingEvent {
+    id: string;
+    meetingName: string;
+    agenda: string;
+    location: string;
+    eventDate: string;
+    isClosed: boolean;
+}
+

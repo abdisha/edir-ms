@@ -1,23 +1,29 @@
 import {api} from "@/shared/api/client.ts";
 
-const endpiont = "meeting-event";
+const endpoint = "meeting-event";
 
 export async function getMeetingEvents(){
-    const result = await api.get(endpiont);
+    const result = await api.get(endpoint);
     return result.data;
 }
 
 export async function getMeetingEventById(id:string){
-    const result = await api.get(`${endpiont}/${id}`);
+    const result = await api.get(`${endpoint}/${id}`);
     return result.data;
 }
 
 export async function createMeetingEvent(data:any){
-    const result = await api.post(endpiont,data);
+    const result = await api.post(endpoint,data);
     return result.data;
 }
 
-export async function updateMeetingEvent(id:string,data:any){
-    const result = await api.put(`${endpiont}/${id}`,data);
+export async function updateMeetingEvent(request:{id: string, data: any}){
+    const result = await api.put(`${endpoint}/${request.id}`,request.data);
     return result.data;
+}
+
+export async function deleteMeetingEvent(eventId:string){
+    const result = await api.delete(`${endpoint}/${eventId}`);
+    return result.data;
+
 }

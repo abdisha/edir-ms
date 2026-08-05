@@ -3,6 +3,7 @@ package com.edir.app.event.domain.entity;
 import com.edir.app.event.domain.valueobjects.MeetingEventId;
 import com.edir.app.shared.domain.entity.AggregateRoot;
 import com.edir.app.shared.domain.exceptions.DomainValidationException;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -66,6 +67,13 @@ public class MeetingEvent extends AggregateRoot<MeetingEventId> {
         }
     }
 
+    public void updateInformation(@NotNull String meetingName, @NotNull ZonedDateTime eventDate, @NotNull String location) {
+        validate(meetingName,eventDate);
+        this.meetingName = meetingName;
+        this.eventDate = eventDate;
+        this.location = location;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -81,5 +89,4 @@ public class MeetingEvent extends AggregateRoot<MeetingEventId> {
     public String getAgenda() {
         return agenda;
     }
-
 }

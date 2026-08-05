@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 
-public record CreateMeetingEventCommand(
+public record UpInsertMeetingEventCommand(
   @NotNull
   String meetingName,
   @NotNull

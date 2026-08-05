@@ -1,6 +1,6 @@
 package com.edir.app.event.adapter.rest;
 
-import com.edir.app.event.application.port.in.command.CreateMeetingEventCommand;
+import com.edir.app.event.application.port.in.command.UpInsertMeetingEventCommand;
 import com.edir.app.event.application.port.in.usecases.EventUseCase;
 import com.edir.app.event.application.port.out.query.MeetingEventQueryRepository;
 import com.edir.app.event.application.port.out.query.MeetingView;
@@ -23,12 +23,17 @@ class MeetingEventController {
     private final MeetingEventQueryRepository meetingEventQueryRepository;
 
     @PostMapping()
-    public ResponseEntity<Void> createEvent( @Valid  @RequestBody CreateMeetingEventCommand createMeetingEventCommand) {
-        eventUseCase.addEvent(createMeetingEventCommand);
+    public ResponseEntity<UUID> createEvent(@Valid  @RequestBody UpInsertMeetingEventCommand upInsertMeetingEventCommand) {
+      var id=   eventUseCase.addEvent(upInsertMeetingEventCommand);
+        return ResponseEntity.ok().body(id);
+    }
+    @PutMapping("/{meetingId}")
+    public ResponseEntity<Void> updateEvent(@PathVariable UUID meetingId, @RequestBody UpInsertMeetingEventCommand command){
+         eventUseCase.updateEvent(meetingId, command);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<List<MeetingView>> getMeetingView() {
         return ResponseEntity.ok(meetingEventQueryRepository.findAll());
     }

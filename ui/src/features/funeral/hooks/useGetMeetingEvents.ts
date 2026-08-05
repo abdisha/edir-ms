@@ -10,7 +10,7 @@ export function useGetMeetingEvents(){
 
 export function useGetMeetingEventById(id:string){
     return useQuery({
-        queryKey:["meeting-events"],
+        queryKey:["meeting-events",id],
         queryFn:()=>getMeetingEventById(id),
         enabled:!!id
     })

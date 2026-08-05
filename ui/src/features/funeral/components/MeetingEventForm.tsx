@@ -1,11 +1,26 @@
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Controller, useForm} from "react-hook-form";
 
-import {Calendar, ClipboardList, MapPin, Users,} from "lucide-react";
+import {
+    Calendar,
+    ClipboardList,
+    MapPin,
+    Users,
+} from "lucide-react";
 
-import {type MeetingEventFormValues, meetingEventSchema,} from "../schemas/meeting-event.schema";
+import {
+    type MeetingEventFormValues,
+    meetingEventSchema,
+} from "../schemas/meeting-event.schema";
 
-import {Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel,} from "@/shared/components/ui/field";
+import {
+    Field,
+    FieldContent,
+    FieldDescription,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from "@/shared/components/ui/field";
 
 import {Input} from "@/shared/components/ui/input";
 import {Textarea} from "@/shared/components/ui/textarea";
@@ -15,13 +30,9 @@ import {format} from "date-fns";
 import {Calendar as CalendarPicker} from "@/shared/components/ui/calendar.tsx";
 
 interface MeetingEventFormProps {
-
     defaultValues?: Partial<MeetingEventFormValues>;
-
     loading?: boolean;
-
     submitText?: string;
-
     onSubmit: (
         values: MeetingEventFormValues
     ) => Promise<void> | void;
@@ -29,39 +40,33 @@ interface MeetingEventFormProps {
 
 export default function MeetingEventForm({
 
-    defaultValues,
+                                             defaultValues,
+                                             loading = false,
+                                             submitText = "Create Meeting",
+                                             onSubmit,
 
-    loading = false,
-
-    submitText = "Create Meeting",
-
-    onSubmit,
-
-}: MeetingEventFormProps) {
+                                         }: MeetingEventFormProps) {
 
     const form = useForm<MeetingEventFormValues>({
         resolver: zodResolver(meetingEventSchema),
-
         defaultValues: {
             meetingName: "",
             agenda: "",
             location: "",
             eventDate: new Date(),
-            ...defaultValues,
+            ...(defaultValues || {}),
+            ...(defaultValues?.eventDate && { eventDate: new Date(defaultValues.eventDate) }),
         },
     });
 
     return (
-
         <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="mx-auto max-w-5xl space-y-8">
-
+            className="mx-auto max-w-5xl space-y-8"
+        >
             <div className="text-center space-y-3">
-
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-
-                    <Users className="h-8 w-8 text-primary" />
+                    <Users className="h-8 w-8 text-primary"/>
 
                 </div>
 
@@ -83,9 +88,7 @@ export default function MeetingEventForm({
             {/* Meeting Information */}
 
             <section className="rounded-xl border bg-card p-6 shadow-sm space-y-6">
-
                 <div>
-
                     <h2 className="font-semibold text-lg">
                         Meeting Information
                     </h2>
@@ -97,28 +100,22 @@ export default function MeetingEventForm({
                 </div>
 
                 <FieldGroup className="grid gap-6 md:grid-cols-2">
-
                     {/* Meeting Name */}
 
                     <Controller
                         name="meetingName"
                         control={form.control}
-                        render={({ field, fieldState }) => (
-
+                        render={({field, fieldState}) => (
                             <Field data-invalid={fieldState.invalid}>
-
                                 <FieldLabel>
                                     Meeting Name
                                 </FieldLabel>
-
                                 <FieldContent>
-
                                     <div className="relative">
-
-                                        <Users className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
+                                        <Users className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground"/>
 
                                         <Input
-                                            aria-label={'Meeting Name'}
+                                            aria-label={"Meeting Name"}
                                             {...field}
                                             className="pl-10"
                                             placeholder="Monthly Executive Meeting"
@@ -133,9 +130,7 @@ export default function MeetingEventForm({
                                 </FieldDescription>
 
                                 {fieldState.error && (
-                                    <FieldError
-                                        errors={[fieldState.error]}
-                                    />
+                                    <FieldError errors={[fieldState.error]}/>
                                 )}
 
                             </Field>
@@ -148,36 +143,31 @@ export default function MeetingEventForm({
                     <Controller
                         name="eventDate"
                         control={form.control}
-                        render={({ field, fieldState }) => (
-
+                        render={({field, fieldState}) => (
                             <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Meeting Date</FieldLabel>
-                        <FieldContent>
-                            <Popover>
-                                <PopoverTrigger>
-                                    <Button variant="outline" className="w-full justify-start">
-                                        <Calendar className="mr-2 h-4 w-4"/>
-                                        {format(field.value, "PPP")}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                    <CalendarPicker
-                                        mode="single"
-                                        selected={field.value}
-                                        onSelect={field.onChange}
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                        </FieldContent>
-                        <FieldDescription>
-                            The date when the funeral event took place.
-                        </FieldDescription>
-                        {
-                            fieldState.error && (
-                                <FieldError errors={[fieldState.error]}/>
-                            )
-                        }
-                    </Field>
+                                <FieldLabel>Meeting Date</FieldLabel>
+                                <FieldContent>
+                                    <Popover>
+                                        <PopoverTrigger>
+                                            <Button variant="outline" className="w-full justify-start">
+                                                <Calendar className="mr-2 h-4 w-4"/>
+                                                {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <CalendarPicker
+                                                mode="single"
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </FieldContent>
+                                <FieldDescription>
+                                    The date when the funeral event took place.
+                                </FieldDescription>
+                                {fieldState.error && <FieldError errors={[fieldState.error]}/>}
+                            </Field>
                         )}
                     />
 
@@ -188,9 +178,7 @@ export default function MeetingEventForm({
             {/* Location */}
 
             <section className="rounded-xl border bg-card p-6 shadow-sm space-y-6">
-
                 <div>
-
                     <h2 className="font-semibold text-lg">
                         Venue
                     </h2>
@@ -202,27 +190,22 @@ export default function MeetingEventForm({
                 </div>
 
                 <FieldGroup>
-
                     <Controller
                         name="location"
                         control={form.control}
-                        render={({ field, fieldState }) => (
-
+                        render={({field, fieldState}) => (
                             <Field data-invalid={fieldState.invalid}>
-
                                 <FieldLabel>
                                     Meeting Location
                                 </FieldLabel>
-
                                 <FieldContent>
-
                                     <div className="relative">
-
-                                        <MapPin className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
+                                        <MapPin className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground"/>
 
                                         <Input
                                             {...field}
                                             className="pl-10"
+                                            aria-label="Meeting Location"
                                             placeholder="Edir Main Hall"
                                         />
 
@@ -235,9 +218,7 @@ export default function MeetingEventForm({
                                 </FieldDescription>
 
                                 {fieldState.error && (
-                                    <FieldError
-                                        errors={[fieldState.error]}
-                                    />
+                                    <FieldError errors={[fieldState.error]}/>
                                 )}
 
                             </Field>
@@ -252,9 +233,7 @@ export default function MeetingEventForm({
             {/* Agenda */}
 
             <section className="rounded-xl border bg-card p-6 shadow-sm space-y-6">
-
                 <div>
-
                     <h2 className="font-semibold text-lg">
                         Meeting Agenda
                     </h2>
@@ -266,27 +245,22 @@ export default function MeetingEventForm({
                 </div>
 
                 <FieldGroup>
-
                     <Controller
                         name="agenda"
                         control={form.control}
-                        render={({ field, fieldState }) => (
-
+                        render={({field, fieldState}) => (
                             <Field data-invalid={fieldState.invalid}>
-
                                 <FieldLabel>
                                     Agenda
                                 </FieldLabel>
-
                                 <FieldContent>
-
                                     <div className="relative">
-
-                                        <ClipboardList className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                        <ClipboardList className="absolute left-3 top-3 h-4 w-4 text-muted-foreground"/>
 
                                         <Textarea
                                             {...field}
                                             rows={6}
+                                            aria-label="Meeting Agenda"
                                             className="pl-10"
                                             placeholder="Discuss monthly contributions, financial report, funeral support activities, upcoming community events..."
                                         />
@@ -300,9 +274,7 @@ export default function MeetingEventForm({
                                 </FieldDescription>
 
                                 {fieldState.error && (
-                                    <FieldError
-                                        errors={[fieldState.error]}
-                                    />
+                                    <FieldError errors={[fieldState.error]}/>
                                 )}
 
                             </Field>
@@ -317,7 +289,6 @@ export default function MeetingEventForm({
             {/* Footer */}
 
             <div className="flex justify-end border-t pt-6">
-
                 <Button
                     size="lg"
                     disabled={loading}

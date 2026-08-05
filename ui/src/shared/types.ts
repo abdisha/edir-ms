@@ -1,5 +1,5 @@
 export interface Options{
-    onSuccess?:()=>void;
+    onSuccess?:(data?:any)=>void;
 }
 
 export interface Member {
