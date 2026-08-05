@@ -8,4 +8,8 @@ public interface EventUseCase {
     UUID addEvent(UpInsertMeetingEventCommand command);
 
     void updateEvent(UUID meetingId, UpInsertMeetingEventCommand command);
+
+    void closeEvent(UUID meetingId);
+
+    void deleteEvent(UUID meetingId);
 }

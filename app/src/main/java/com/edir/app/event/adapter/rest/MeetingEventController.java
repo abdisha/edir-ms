@@ -27,6 +27,13 @@ class MeetingEventController {
       var id=   eventUseCase.addEvent(upInsertMeetingEventCommand);
         return ResponseEntity.ok().body(id);
     }
+
+    @PostMapping("/{meetingId}/close")
+    public ResponseEntity<Void> closeEvent(@PathVariable UUID meetingId) {
+        eventUseCase.closeEvent(meetingId);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/{meetingId}")
     public ResponseEntity<Void> updateEvent(@PathVariable UUID meetingId, @RequestBody UpInsertMeetingEventCommand command){
          eventUseCase.updateEvent(meetingId, command);
@@ -37,8 +44,16 @@ class MeetingEventController {
     public ResponseEntity<List<MeetingView>> getMeetingView() {
         return ResponseEntity.ok(meetingEventQueryRepository.findAll());
     }
+
     @GetMapping("/{meetingId}")
     public ResponseEntity<Optional<MeetingView>> getMeetingViewById(@PathVariable UUID meetingId) {
         return ResponseEntity.ok(meetingEventQueryRepository.findByMeetingView(meetingId));
+    }
+
+
+    @DeleteMapping("/{meetingId}")
+    public ResponseEntity<Void> deleteMeeting(@PathVariable UUID meetingId) {
+        eventUseCase.deleteEvent(meetingId);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,9 +1,9 @@
 package com.edir.app.inventory.application.services;
 
-import com.edir.app.inventory.application.in.commands.IssueItemCommand;
-import com.edir.app.inventory.application.in.usecases.ItemIssueUseCase;
-import com.edir.app.inventory.application.out.AllocationRepository;
-import com.edir.app.inventory.application.out.ItemIssueRepository;
+import com.edir.app.inventory.application.ports.in.commands.IssueItemCommand;
+import com.edir.app.inventory.application.ports.in.usecases.ItemIssueUseCase;
+import com.edir.app.inventory.application.ports.out.AllocationRepository;
+import com.edir.app.inventory.application.ports.out.ItemIssueRepository;
 import com.edir.app.inventory.domain.entity.Allocation;
 import com.edir.app.inventory.domain.entity.ItemIssue;
 import com.edir.app.inventory.domain.valueobjects.ItemId;

@@ -28,5 +28,7 @@ public class MeetingEventEntity {
     @NotNull
     private String location;
     @NotNull
+    private Boolean isClosed;
+    @NotNull
     private ZonedDateTime eventDate;
 }

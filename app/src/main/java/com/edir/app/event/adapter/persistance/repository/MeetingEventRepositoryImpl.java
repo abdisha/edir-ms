@@ -32,6 +32,11 @@ class MeetingEventRepositoryImpl implements MeetingEventRepository, MeetingEvent
     }
 
     @Override
+    public void delete(MeetingEvent meetingEvent) {
+        eventRepository.delete(mapper.meetingEventToMeetingEventEntity(meetingEvent));
+    }
+
+    @Override
     public Optional<MeetingView> findByMeetingView(UUID id) {
         return eventRepository.findMeetingViewById(id);
     }

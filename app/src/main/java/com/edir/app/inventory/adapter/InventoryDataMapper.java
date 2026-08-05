@@ -2,7 +2,7 @@ package com.edir.app.inventory.adapter;
 
 import com.edir.app.inventory.adapter.persistance.entity.*;
 import com.edir.app.inventory.adapter.rest.response.ItemAllocationResponse;
-import com.edir.app.inventory.application.out.query.AllocationItemView;
+import com.edir.app.inventory.application.ports.out.query.AllocationItemView;
 import com.edir.app.inventory.domain.entity.*;
 import com.edir.app.inventory.domain.valueobjects.*;
 import com.edir.app.shared.domain.valueobjects.ItemCode;

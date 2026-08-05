@@ -2,11 +2,11 @@ package com.edir.app.inventory.application.services;
 
 import com.edir.app.inventory.application.exceptions.StoreAlreadyExistsException;
 import com.edir.app.inventory.application.exceptions.StoreNotFoundException;
-import com.edir.app.inventory.application.in.commands.ChangeStoreNameCommand;
-import com.edir.app.inventory.application.in.commands.ChangeStoreOwnerCommand;
-import com.edir.app.inventory.application.in.commands.RegisterStoreCommand;
-import com.edir.app.inventory.application.in.usecases.StoreManagementUseCase;
-import com.edir.app.inventory.application.out.StoreRepository;
+import com.edir.app.inventory.application.ports.in.commands.ChangeStoreNameCommand;
+import com.edir.app.inventory.application.ports.in.commands.ChangeStoreOwnerCommand;
+import com.edir.app.inventory.application.ports.in.commands.RegisterStoreCommand;
+import com.edir.app.inventory.application.ports.in.usecases.StoreManagementUseCase;
+import com.edir.app.inventory.application.ports.out.StoreRepository;
 import com.edir.app.inventory.domain.entity.Store;
 import com.edir.app.inventory.domain.valueobjects.StoreId;
 import com.edir.app.shared.application.usecase.UseCase;

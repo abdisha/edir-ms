@@ -1,8 +1,8 @@
 package com.edir.app.inventory.adapter.persistance.jpa;
 
 import com.edir.app.inventory.adapter.persistance.entity.AllocationEntity;
-import com.edir.app.inventory.application.out.query.AllocationView;
-import com.edir.app.inventory.application.out.query.StoreAllocationSummaryView;
+import com.edir.app.inventory.application.ports.out.query.AllocationView;
+import com.edir.app.inventory.application.ports.out.query.StoreAllocationSummaryView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

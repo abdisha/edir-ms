@@ -1,13 +1,13 @@
 package com.edir.app.inventory.adapter.rest;
 
 import com.edir.app.inventory.adapter.rest.response.AllocationResponse;
-import com.edir.app.inventory.application.in.commands.AllocateItemCommand;
-import com.edir.app.inventory.application.in.commands.TransferCommand;
-import com.edir.app.inventory.application.in.usecases.InventoryAllocationUseCase;
-import com.edir.app.inventory.application.out.query.AllocationQueryService;
-import com.edir.app.inventory.application.out.query.ItemQueryService;
-import com.edir.app.inventory.application.out.query.ItemView;
-import com.edir.app.inventory.application.out.query.StoreAllocationSummaryView;
+import com.edir.app.inventory.application.ports.in.commands.AllocateItemCommand;
+import com.edir.app.inventory.application.ports.in.commands.TransferCommand;
+import com.edir.app.inventory.application.ports.in.usecases.InventoryAllocationUseCase;
+import com.edir.app.inventory.application.ports.out.query.AllocationQueryService;
+import com.edir.app.inventory.application.ports.out.query.ItemQueryService;
+import com.edir.app.inventory.application.ports.out.query.ItemView;
+import com.edir.app.inventory.application.ports.out.query.StoreAllocationSummaryView;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,10 +1,10 @@
 package com.edir.app.inventory.application.services;
 
 import com.edir.app.inventory.application.exceptions.ItemNotFoundException;
-import com.edir.app.inventory.application.in.commands.RegisterItemCommand;
-import com.edir.app.inventory.application.in.commands.UpdateItemCommand;
-import com.edir.app.inventory.application.in.usecases.ItemManagementUseCase;
-import com.edir.app.inventory.application.out.ItemRepository;
+import com.edir.app.inventory.application.ports.in.commands.RegisterItemCommand;
+import com.edir.app.inventory.application.ports.in.commands.UpdateItemCommand;
+import com.edir.app.inventory.application.ports.in.usecases.ItemManagementUseCase;
+import com.edir.app.inventory.application.ports.out.ItemRepository;
 import com.edir.app.inventory.domain.entity.Item;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.inventory.domain.valueobjects.ItemQuantity;

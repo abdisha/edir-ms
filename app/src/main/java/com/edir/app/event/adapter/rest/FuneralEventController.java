@@ -50,7 +50,6 @@ class FuneralEventController {
         return ResponseEntity.ok(funeralEventQueryService.findAll());
     }
 
-
     @GetMapping("/{funeralId}")
     public ResponseEntity<Optional<FuneralEventView>> getFuneralEventById(@Valid  @PathVariable UUID funeralId) {
         return ResponseEntity.ok(funeralEventQueryService.findById(funeralId));

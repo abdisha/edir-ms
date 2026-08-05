@@ -2,7 +2,7 @@ package com.edir.app.inventory.adapter.persistance;
 
 import com.edir.app.inventory.adapter.InventoryDataMapper;
 import com.edir.app.inventory.adapter.persistance.jpa.JpaItemRepository;
-import com.edir.app.inventory.application.out.ItemRepository;
+import com.edir.app.inventory.application.ports.out.ItemRepository;
 import com.edir.app.inventory.domain.entity.Item;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.shared.adapter.PersistenceAdapter;

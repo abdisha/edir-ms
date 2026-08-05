@@ -1,7 +1,7 @@
 package com.edir.app.inventory.adapter.persistance.jpa;
 
 import com.edir.app.inventory.adapter.persistance.entity.ItemEntity;
-import com.edir.app.inventory.application.out.query.ItemView;
+import com.edir.app.inventory.application.ports.out.query.ItemView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -8,6 +8,7 @@ import com.edir.app.event.domain.entity.MeetingEvent;
 import com.edir.app.event.domain.valueobjects.MeetingEventId;
 import com.edir.app.shared.application.usecase.UseCase;
 import lombok.AllArgsConstructor;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -31,13 +32,28 @@ class EventService implements EventUseCase {
 
     @Override
     public void updateEvent(UUID meetingId, UpInsertMeetingEventCommand command) {
-        Optional<MeetingEvent> result = eventRepository.findById(new MeetingEventId(meetingId));
-        if (result.isEmpty()) {
-            throw new MeetingEventNotFoundException(meetingId);
-        }
-        MeetingEvent event = result.get();
+        MeetingEvent event = getMeetingEvent(meetingId);
 
-        event.updateInformation(command.meetingName(), command.eventDate(), command.location());
+        event.updateInformation(command.meetingName(), command.agenda(), command.eventDate(), command.location());
         eventRepository.save(event);
+    }
+
+    @Override
+    public void closeEvent(UUID meetingId) {
+        MeetingEvent meetingEvent = getMeetingEvent(meetingId);
+        meetingEvent.closeMeeting();
+        eventRepository.save(meetingEvent);
+    }
+
+    @Override
+    public void deleteEvent(UUID meetingId) {
+        MeetingEvent meetingEvent = getMeetingEvent(meetingId);
+        eventRepository.delete(meetingEvent);
+    }
+
+    private MeetingEvent getMeetingEvent(UUID meetingId) {
+        return eventRepository
+            .findById(new MeetingEventId(meetingId))
+            .orElseThrow(() -> new MeetingEventNotFoundException(meetingId));
     }
 }
