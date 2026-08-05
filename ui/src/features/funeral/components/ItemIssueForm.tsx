@@ -122,8 +122,8 @@ export default function ItemIssueForm({
                                         <SelectContent>
                                             {items.map((item) => (
                                                 <SelectItem
-                                                    key={item.itemId}
-                                                    value={item.itemId}
+                                                    key={item.itemCode}
+                                                    value={item.itemCode}
                                                 >
                                                     {item.itemName}
                                                 </SelectItem>
@@ -218,6 +218,8 @@ export default function ItemIssueForm({
                                             min={1}
                                             className="pl-10"
                                             {...field}
+                                            onChange={(e) => field.onChange(Number(e.target.value))}
+
                                         />
 
                                     </div>
@@ -251,6 +253,14 @@ export default function ItemIssueForm({
                     type="submit"
                     disabled={loading}
                 >
+                    {
+                        loading && (
+                            <span className="sr-only">
+                                Issuing item...
+                            </span>
+                        )
+                    }
+
                     <PackagePlus className="mr-2 h-4 w-4"/>
 
                     {submitText}

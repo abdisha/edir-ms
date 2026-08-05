@@ -14,6 +14,7 @@ import {FormDrawer} from "@/shared/components/FromDrawer.tsx";
 import {useFormDrawer} from "@/shared/components/useFormDrawer.ts";
 import ItemIssueForm from "@/features/funeral/components/ItemIssueForm.tsx";
 import {useGetInventory} from "@/features/funeral/hooks/useGetInventory.ts";
+import {useAddFuneralEventItemIssue} from "@/features/funeral/hooks/useCreateFuneralEvent.ts";
 
 const FuneralEventDetailPage = () => {
   const { eventId = "" } = useParams<{ eventId: string }>();
@@ -23,6 +24,9 @@ const FuneralEventDetailPage = () => {
   const members = useGetMembers();
   const {open,closeDrawer,openDrawer} = useFormDrawer();
   const {data:item,isLoading:isItemLoading,isError:itemErr} = useGetInventory();
+  const addItemMutation = useAddFuneralEventItemIssue({
+      onSuccess:()=>closeDrawer()
+  })
 
     if (pageLoading || members.isLoading ||isItemLoading) {
         return (
@@ -86,8 +90,16 @@ const FuneralEventDetailPage = () => {
         <FormDrawer open={open} onOpenChange={openDrawer} title={'Issue Item for funeral'}>
             <ItemIssueForm funeralId={eventId}
                            items={item}
+                           loading={addItemMutation.isPending}
                            onCancel={()=>closeDrawer()}
-                           onSubmit={(values)=>console.log(values)}/>
+                           onSubmit={(values)=>
+                               addItemMutation.mutate({
+                                   funeralId:values.funeralId,
+                                   itemCode:values.itemCode,
+                                   quantity:values.quantity,
+                                   name: item.find((i: { itemCode: string; })=>i.itemCode===values.itemCode)?.itemName
+                               })
+            }/>
         </FormDrawer>
       {isItemError&& (
         <Alert>

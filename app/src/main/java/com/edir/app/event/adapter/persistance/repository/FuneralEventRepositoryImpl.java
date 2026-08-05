@@ -46,6 +46,6 @@ class FuneralEventRepositoryImpl implements FuneralEventRepository, FuneralEvent
 
     @Override
     public List<ItemIssueView> findByFuneralId(UUID funeralId) {
-        return List.of();
+        return jpaFuneralEventRepository.findItemIssueViewByFuneralId(funeralId);
     }
 }

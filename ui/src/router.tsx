@@ -5,7 +5,7 @@ import {ContributionRoutes} from "@/features/contribution/ContributionRoutes.tsx
 import {authRouter} from "@/features/auths/authRouter.tsx";
 import {PublicRoute} from "@/shared/PublicRoute.tsx";
 import {ProtectedRoute} from "@/shared/ProtectedRoute.tsx";
-import FuneralEventRoutes from "@/features/funeral/FuneralEventRoutes.tsx";
+import EventRoutes from "@/features/funeral/EventRoutes.tsx";
 import InventoryRoutes from "@/features/inventory/InventoryRoutes.tsx";
 import StoreRoutes from "@/features/setting/storeRoutes.tsx";
 
@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
                 children:[
                     ...EdirRoutes,
                     ...ContributionRoutes,
-                    ...FuneralEventRoutes,
+                    ...EventRoutes,
                     ...InventoryRoutes,
                     ...StoreRoutes
                 ]

@@ -8,12 +8,12 @@ import {Badge} from "@/shared/components/ui/badge";
 import {Separator} from "@/shared/components/ui/separator";
 
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import {useNavigate} from "react-router";
 import FuneralEventTable from "@/features/funeral/components/FuneralEventTable.tsx";
@@ -126,12 +126,12 @@ interface Props {
 function EventTypeDialog({ open, onOpenChange }: Props) {
   const navigate =useNavigate();
   function select(type: "FUNERAL" | "MEETING") {
-    navigate("/"+"new-funeral-event"+"/funeral-event");
-
+    if (type === "FUNERAL") {
+      navigate("/" + "new-funeral-event" + "/funeral-event");
+    }else{
+      navigate("/" + "new-meeting-event" + "/meeting-event");
+    }
     onOpenChange(false);
-    console.log(type);
-    // Open Funeral Drawer
-    // or Meeting Drawer
   }
 
   return (

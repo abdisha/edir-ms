@@ -25,7 +25,7 @@ export async function getFuneralEventById(id:string){
 }
 
 export async function addFuneralEventItemIssue(data:UpInsItemIssue){
-    const result = await  api.post(`${endpoint}/issue-item`,data);
+    const result = await  api.post(`${endpoint}/${data.funeralId}/issue-item`,data);
     return result.data;
 }
 

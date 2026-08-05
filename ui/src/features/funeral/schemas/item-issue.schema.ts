@@ -2,6 +2,7 @@ import {z} from "zod";
 
 export const itemIssueSchema = z.object({
     funeralId: z.string().uuid(),
+    itemName:z.string().optional(),
 
     itemCode: z
         .string()
