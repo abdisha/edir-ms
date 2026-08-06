@@ -109,4 +109,8 @@ public class MeetingEvent extends AggregateRoot<MeetingEventId> {
     public String getAgenda() {
         return agenda;
     }
+
+    public @NotNull Boolean getIsClosed() {
+        return isClosed;
+    }
 }

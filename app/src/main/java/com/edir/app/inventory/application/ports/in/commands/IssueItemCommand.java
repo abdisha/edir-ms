@@ -9,6 +9,5 @@ public record IssueItemCommand(
     @NotNull List<IssueItem> issueItems,
     @NotNull UUID funeralId,
     @NotNull UUID issuerId
-
 ) {
 }

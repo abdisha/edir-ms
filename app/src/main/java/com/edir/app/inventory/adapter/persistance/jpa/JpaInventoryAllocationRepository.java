@@ -17,7 +17,7 @@ public interface JpaInventoryAllocationRepository extends JpaRepository<Allocati
     Optional<AllocationEntity> findAllocationEntitiesByStoreId(UUID holderMemberId);
     @Query(
         value = """
-                select new com.edir.app.inventory.application.out.query.AllocationView(
+                select new com.edir.app.inventory.application.ports.out.query.AllocationView(
                     a.allocationId,
                     a.storeId,
                     s.name as storeName,
@@ -41,7 +41,7 @@ public interface JpaInventoryAllocationRepository extends JpaRepository<Allocati
 
     @Query(
         value = """
-                select new com.edir.app.inventory.application.out.query.AllocationView(
+                select new com.edir.app.inventory.application.ports.out.query.AllocationView(
                     a.allocationId,
                     a.storeId,
                     s.name as storeName,
@@ -63,7 +63,7 @@ public interface JpaInventoryAllocationRepository extends JpaRepository<Allocati
     List<AllocationView> findAllocationViewByStoreId(UUID storeId);
 
     @Query(value = """
-    SELECT new com.edir.app.inventory.application.out.query.StoreAllocationSummaryView(
+    SELECT new com.edir.app.inventory.application.ports.out.query.StoreAllocationSummaryView(
         s.id,
         s.name,
         s.location,

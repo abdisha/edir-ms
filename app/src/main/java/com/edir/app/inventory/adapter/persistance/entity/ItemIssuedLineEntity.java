@@ -22,6 +22,7 @@ public class ItemIssuedLineEntity  {
     private UUID itemId;
     @NotNull
     private UUID fromId;
+
     private int issuedQuantity;
 
     @ManyToOne()

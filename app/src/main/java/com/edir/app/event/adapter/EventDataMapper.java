@@ -75,6 +75,7 @@ public class EventDataMapper {
             .id(meetingEvent.getId().id())
             .name(meetingEvent.getMeetingName())
             .agenda(meetingEvent.getAgenda())
+            .isClosed(meetingEvent.getIsClosed())
             .location(meetingEvent.getLocation())
             .eventDate(meetingEvent.getEventDate())
             .build();
@@ -86,6 +87,7 @@ public class EventDataMapper {
             entity.getName(),
             entity.getEventDate(),
             entity.getAgenda(),
+            entity.getIsClosed(),
             entity.getLocation()
         );
     }

@@ -1,11 +1,11 @@
 package com.edir.app.event.domain.entity;
 
 import com.edir.app.event.domain.events.FuneralClosedEvent;
-import com.edir.app.event.domain.events.ItemIssueAddedEvent;
 import com.edir.app.event.domain.exceptions.FuneralAlreadyClosedExceptions;
 import com.edir.app.event.domain.valueobjects.FuneralEventId;
 import com.edir.app.event.domain.valueobjects.RelationShip;
 import com.edir.app.shared.domain.entity.AggregateRoot;
+import com.edir.app.shared.domain.event.ItemIssueAddedEvent;
 import com.edir.app.shared.domain.exceptions.DomainValidationException;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
 import com.edir.app.shared.domain.valueobjects.MemberId;
@@ -145,7 +145,7 @@ public class FuneralEvent extends AggregateRoot<FuneralEventId> {
                         ZonedDateTime.now()
                     ))
             );
-        registerEvent(new ItemIssueAddedEvent(itemCode,quantity,ZonedDateTime.now()));
+        registerEvent(new ItemIssueAddedEvent(this.getId().id(),itemCode,quantity,mournerId,ZonedDateTime.now()));
     }
 
     public void close(){

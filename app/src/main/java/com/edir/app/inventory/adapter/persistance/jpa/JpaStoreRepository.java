@@ -15,7 +15,7 @@ public interface JpaStoreRepository extends JpaRepository<StoreEntity, UUID> {
     Optional<StoreEntity> findStoreEntitiesByName(String name);
 
     @Query(value = """
-            select  new com.edir.app.inventory.application.out.query.StoreView(
+            select  new com.edir.app.inventory.application.ports.out.query.StoreView(
             s.id,
             s.name,
             s.location,
