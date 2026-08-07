@@ -8,16 +8,16 @@ import type {FuneralEvent} from "@/features/funeral/types/types.ts";
 import type {Member} from "@/shared/types.ts";
 
 interface FuneralEventBannerProps {
-    funeral:FuneralEvent;
+    funeral: FuneralEvent;
     members: Member[]
     onEdit?: () => void;
 }
 
 export function FuneralEventBanner({
-                                  funeral,
+                                       funeral,
                                        members,
-                                  onEdit,
-                              }: FuneralEventBannerProps) {
+                                       onEdit,
+                                   }: FuneralEventBannerProps) {
     return (
         <Card className="overflow-hidden border shadow-sm">
             <div className="bg-linear-to-r from-primary/10 via-primary/5 to-background">
@@ -31,12 +31,12 @@ export function FuneralEventBanner({
                             >
                                 {funeral.isClose ? (
                                     <>
-                                        <CheckCircle2 className="mr-1 h-3 w-3" />
+                                        <CheckCircle2 className="mr-1 h-3 w-3"/>
                                         Closed
                                     </>
                                 ) : (
                                     <>
-                                        <Clock3 className="mr-1 h-3 w-3" />
+                                        <Clock3 className="mr-1 h-3 w-3"/>
                                         Active
                                     </>
                                 )}
@@ -51,52 +51,52 @@ export function FuneralEventBanner({
                                     Funeral support for{" "}
                                     <span className="font-medium text-foreground">
                                  {funeral.deceasedPersonFullName}
-                  </span>
+                                 </span>
                                 </p>
                             </div>
                         </div>
 
                         <Button onClick={onEdit}>
-                            <Pencil className="mr-2 h-4 w-4" />
+                            <Pencil className="mr-2 h-4 w-4"/>
                             Edit Event
                         </Button>
                     </div>
 
-                    <Separator />
+                    <Separator/>
 
                     {/* Information */}
                     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-5">
 
                         <InfoCard
-                            icon={<CalendarDays className="h-5 w-5" />}
+                            icon={<CalendarDays className="h-5 w-5"/>}
                             label="Funeral Date"
                             value={new Date(funeral.funeralDate).toLocaleDateString()}
                         />
 
                         <InfoCard
-                            icon={<User className="h-5 w-5" />}
+                            icon={<User className="h-5 w-5"/>}
                             label="Relationship"
                             value={funeral.relationShip.replaceAll("_", " ")}
                         />
 
                         <InfoCard
-                            icon={<CircleDollarSign className="h-5 w-5" />}
+                            icon={<CircleDollarSign className="h-5 w-5"/>}
                             label="Payout"
                             value={`ETB ${funeral.payout.toLocaleString()}`}
                         />
 
                         <InfoCard
-                            icon={<Users className="h-5 w-5" />}
+                            icon={<Users className="h-5 w-5"/>}
                             label="Member ID"
-                            value={members.find(m=>m.memberId=funeral.memberId)?.fullName || ""}
+                            value={members.find(m => m.memberId = funeral.memberId)?.fullName || ""}
                         />
 
                         <InfoCard
                             icon={
                                 funeral.isClose ? (
-                                    <CheckCircle2 className="h-5 w-5 text-green-600" />
+                                    <CheckCircle2 className="h-5 w-5 text-green-600"/>
                                 ) : (
-                                    <Clock3 className="h-5 w-5 text-amber-600" />
+                                    <Clock3 className="h-5 w-5 text-amber-600"/>
                                 )
                             }
                             label="Status"

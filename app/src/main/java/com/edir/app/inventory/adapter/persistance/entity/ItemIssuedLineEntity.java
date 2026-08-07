@@ -1,5 +1,6 @@
 package com.edir.app.inventory.adapter.persistance.entity;
 
+import com.edir.app.inventory.domain.valueobjects.ItemIssueStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -20,9 +21,9 @@ public class ItemIssuedLineEntity  {
     private UUID id;
     @NotNull
     private UUID itemId;
-    @NotNull
     private UUID fromId;
-
+    @Enumerated(EnumType.STRING)
+    private ItemIssueStatus status;
     private int issuedQuantity;
 
     @ManyToOne()

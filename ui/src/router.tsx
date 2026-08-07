@@ -8,6 +8,7 @@ import {ProtectedRoute} from "@/shared/ProtectedRoute.tsx";
 import EventRoutes from "@/features/funeral/EventRoutes.tsx";
 import InventoryRoutes from "@/features/inventory/InventoryRoutes.tsx";
 import StoreRoutes from "@/features/setting/storeRoutes.tsx";
+import ReportRoutes from "@/features/reports/ReportRoutes.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -29,7 +30,8 @@ export const router = createBrowserRouter([
                     ...ContributionRoutes,
                     ...EventRoutes,
                     ...InventoryRoutes,
-                    ...StoreRoutes
+                    ...StoreRoutes,
+                    ...ReportRoutes,
                 ]
 
             }

@@ -4,8 +4,10 @@ package com.edir.app.inventory.domain.entity;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.inventory.domain.valueobjects.ItemIssueId;
 import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
+import com.edir.app.inventory.domain.valueobjects.StoreId;
 import com.edir.app.shared.domain.entity.AggregateRoot;
 import com.edir.app.shared.domain.valueobjects.MemberId;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ public class ItemIssue extends AggregateRoot<ItemIssueId> {
             itemIssueLines,issuerId);
     }
 
-    public void addLine(ItemId itemId, MemberId fromId, ItemQuantity quantity){
+    public void addLine(ItemId itemId, StoreId fromId, ItemQuantity quantity){
         Optional<ItemIssueLine> optionalItemIssue = itemIssueLines
             .stream()
             .filter(i->i.getItemId().equals(itemId))
@@ -69,6 +71,20 @@ public class ItemIssue extends AggregateRoot<ItemIssueId> {
             return;
         }
         optionalItemIssue.get().increaseIssuedQuantity(quantity);
+    }
+
+    public void approve(@NotNull UUID item) {
+        itemIssueLines.stream()
+            .filter(i -> i.getItemId().id().equals(item))
+            .findFirst()
+            .ifPresent(ItemIssueLine::approve);
+    }
+
+    public void reject(@NotNull UUID item){
+        itemIssueLines.stream()
+            .filter(i -> i.getItemId().id().equals(item))
+            .findFirst()
+            .ifPresent(ItemIssueLine::rejected);
     }
 
     public MemberId getIssuerId() {

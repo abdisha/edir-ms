@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record IssueItem(
    @NotNull UUID item,
-    @NotNull UUID from,
+    UUID from,
     @Min(value = 1,message = "Quantity must be greater than zero")
     Integer quantity
 ) {
