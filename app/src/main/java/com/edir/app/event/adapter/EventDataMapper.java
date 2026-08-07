@@ -40,9 +40,12 @@ public class EventDataMapper {
         FuneralEventEntity eventEntity = FuneralEventEntity.builder()
             .funeralEventId(edirEvent.getId().id())
             .name(edirEvent.getFuneralName())
+            .deceasedPersonAddress(edirEvent.getFuneralAddress())
+            .deceasedPersonFullName(edirEvent.getDeceasedPersonFullName())
             .funeralDate(edirEvent.getFuneralDate())
             .mournerId(edirEvent.getMournerId().value())
             .payOut(edirEvent.getPayOut().amount())
+            .relationShip(edirEvent.getRelationShip())
             .payOutDate(edirEvent.getFuneralDate())
             .isClosed(edirEvent.getIsClosed())
             .build();
@@ -72,6 +75,7 @@ public class EventDataMapper {
             .id(meetingEvent.getId().id())
             .name(meetingEvent.getMeetingName())
             .agenda(meetingEvent.getAgenda())
+            .isClosed(meetingEvent.getIsClosed())
             .location(meetingEvent.getLocation())
             .eventDate(meetingEvent.getEventDate())
             .build();
@@ -83,6 +87,7 @@ public class EventDataMapper {
             entity.getName(),
             entity.getEventDate(),
             entity.getAgenda(),
+            entity.getIsClosed(),
             entity.getLocation()
         );
     }

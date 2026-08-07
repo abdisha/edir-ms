@@ -2,7 +2,7 @@ package com.edir.app.inventory.adapter;
 
 import com.edir.app.inventory.adapter.persistance.entity.*;
 import com.edir.app.inventory.adapter.rest.response.ItemAllocationResponse;
-import com.edir.app.inventory.application.out.query.AllocationItemView;
+import com.edir.app.inventory.application.ports.out.query.AllocationItemView;
 import com.edir.app.inventory.domain.entity.*;
 import com.edir.app.inventory.domain.valueobjects.*;
 import com.edir.app.shared.domain.valueobjects.ItemCode;
@@ -13,6 +13,7 @@ import java.util.List;
 
 @Component
 public class InventoryDataMapper {
+
     public Allocation inventoryAllocationEntityToInventoryAllocation(AllocationEntity entity) {
         return Allocation.rehydrate(
             new AllocationId(entity.getAllocationId()),
@@ -101,8 +102,9 @@ public class InventoryDataMapper {
             itemIssue.getIssuedLineEntities().stream().map(
                 i->ItemIssueLine.rehydrate(
                     new ItemIssueLineId(i.getId()),
-                    new MemberId(i.getFromId()),
+                    new StoreId(i.getFromId()),
                     new ItemId(i.getItemId()),
+                    i.getStatus(),
                     new ItemQuantity(i.getIssuedQuantity())
                 )
             ).toList()
@@ -118,7 +120,7 @@ public class InventoryDataMapper {
             .issuedLineEntities(itemIssue.getItemIssueLines().stream().map(
                 i-> ItemIssuedLineEntity.builder()
                     .id(i.getId().id())
-                    .fromId(i.getFromId().value())
+                    .fromId(i.getFromId().id())
                     .issuedQuantity(i.getIssuedQuantity().quantity())
                     .itemId(i.getItemId().id()).build()
             ).toList())

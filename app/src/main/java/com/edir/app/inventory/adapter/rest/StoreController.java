@@ -1,11 +1,11 @@
 package com.edir.app.inventory.adapter.rest;
 
-import com.edir.app.inventory.application.in.commands.ChangeStoreNameCommand;
-import com.edir.app.inventory.application.in.commands.ChangeStoreOwnerCommand;
-import com.edir.app.inventory.application.in.commands.RegisterStoreCommand;
-import com.edir.app.inventory.application.in.usecases.StoreManagementUseCase;
-import com.edir.app.inventory.application.out.query.StoreQueryRepository;
-import com.edir.app.inventory.application.out.query.StoreView;
+import com.edir.app.inventory.application.ports.in.commands.ChangeStoreNameCommand;
+import com.edir.app.inventory.application.ports.in.commands.ChangeStoreOwnerCommand;
+import com.edir.app.inventory.application.ports.in.commands.RegisterStoreCommand;
+import com.edir.app.inventory.application.ports.in.usecases.StoreManagementUseCase;
+import com.edir.app.inventory.application.ports.out.query.StoreQueryRepository;
+import com.edir.app.inventory.application.ports.out.query.StoreView;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

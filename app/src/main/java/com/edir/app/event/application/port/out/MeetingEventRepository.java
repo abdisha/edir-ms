@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface MeetingEventRepository {
     void save(MeetingEvent meetingEvent);
     Optional<MeetingEvent> findById(MeetingEventId meetingEventId);
+
+    void delete(MeetingEvent meetingEvent);
 }

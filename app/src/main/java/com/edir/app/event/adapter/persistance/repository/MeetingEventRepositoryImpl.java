@@ -27,18 +27,22 @@ class MeetingEventRepositoryImpl implements MeetingEventRepository, MeetingEvent
 
     @Override
     public Optional<MeetingEvent> findById(MeetingEventId meetingEventId) {
-      var result =  eventRepository.findById(meetingEventId.id())
-            .map(mapper::meetingEventEntityToDomain);
-        return result;
+        return eventRepository.findById(meetingEventId.id())
+              .map(mapper::meetingEventEntityToDomain);
+    }
+
+    @Override
+    public void delete(MeetingEvent meetingEvent) {
+        eventRepository.delete(mapper.meetingEventToMeetingEventEntity(meetingEvent));
     }
 
     @Override
     public Optional<MeetingView> findByMeetingView(UUID id) {
-        return Optional.empty();
+        return eventRepository.findMeetingViewById(id);
     }
 
     @Override
     public List<MeetingView> findAll() {
-        return List.of();
+        return eventRepository.findAllMeetingView();
     }
 }

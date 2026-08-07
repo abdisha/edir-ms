@@ -1,8 +1,8 @@
 package com.edir.app.inventory.adapter.persistance.query;
 
 import com.edir.app.inventory.adapter.persistance.jpa.JpaItemRepository;
-import com.edir.app.inventory.application.out.query.ItemQueryRepository;
-import com.edir.app.inventory.application.out.query.ItemView;
+import com.edir.app.inventory.application.ports.out.query.ItemQueryRepository;
+import com.edir.app.inventory.application.ports.out.query.ItemView;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -9,6 +9,7 @@ import com.edir.app.event.application.port.out.query.ItemIssueView;
 import com.edir.app.event.domain.valueobjects.FuneralEventId;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +21,15 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(REST_VERSION+"/funeral-events")
+@RequestMapping(REST_VERSION+"funeral-events")
 class FuneralEventController {
     private final FuneralEventUseCase funeralEventUseCase;
     private final FuneralEventQueryService funeralEventQueryService;
 
     @PostMapping()
-    public ResponseEntity<Void> post(@Valid  @RequestBody CreateFuneralEventCommand command) {
-        funeralEventUseCase.addEvent(command);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UUID> post(@Valid  @RequestBody CreateFuneralEventCommand command) {
+        var result = funeralEventUseCase.addEvent(command);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result.id());
     }
 
     @PostMapping("/{funeralId}/issue-item")
@@ -48,7 +49,6 @@ class FuneralEventController {
     public ResponseEntity<List<FuneralEventView>> getFuneralEvents() {
         return ResponseEntity.ok(funeralEventQueryService.findAll());
     }
-
 
     @GetMapping("/{funeralId}")
     public ResponseEntity<Optional<FuneralEventView>> getFuneralEventById(@Valid  @PathVariable UUID funeralId) {

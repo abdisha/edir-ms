@@ -1,11 +1,11 @@
 package com.edir.app.inventory.application.services;
 
 import com.edir.app.inventory.application.exceptions.ItemNotFoundException;
-import com.edir.app.inventory.application.in.commands.AllocateItemCommand;
-import com.edir.app.inventory.application.in.commands.TransferCommand;
-import com.edir.app.inventory.application.in.usecases.InventoryAllocationUseCase;
-import com.edir.app.inventory.application.out.AllocationRepository;
-import com.edir.app.inventory.application.out.ItemRepository;
+import com.edir.app.inventory.application.ports.in.commands.AllocateItemCommand;
+import com.edir.app.inventory.application.ports.in.commands.TransferCommand;
+import com.edir.app.inventory.application.ports.in.usecases.InventoryAllocationUseCase;
+import com.edir.app.inventory.application.ports.out.AllocationRepository;
+import com.edir.app.inventory.application.ports.out.ItemRepository;
 import com.edir.app.inventory.domain.entity.Allocation;
 import com.edir.app.inventory.domain.entity.Item;
 import com.edir.app.inventory.domain.exceptions.InsufficientQuantityException;

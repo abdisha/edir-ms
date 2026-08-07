@@ -25,7 +25,7 @@ import {
     SelectValue,
 } from "@/shared/components/ui/select";
 import {MapPin, Store} from "lucide-react";
-import type {Member} from "@/features/setting/types.ts";
+import type {Member} from "@/shared/types.ts";
 
 const schema = z.object({
     name: z.string().min(2),

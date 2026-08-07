@@ -1,11 +1,11 @@
 package com.edir.app.inventory.adapter.rest;
 
 import com.edir.app.inventory.adapter.rest.response.ItemResponse;
-import com.edir.app.inventory.application.in.commands.RegisterItemCommand;
-import com.edir.app.inventory.application.in.commands.UpdateItemCommand;
-import com.edir.app.inventory.application.in.usecases.ItemManagementUseCase;
-import com.edir.app.inventory.application.out.query.ItemQueryService;
-import com.edir.app.inventory.application.out.query.ItemView;
+import com.edir.app.inventory.application.ports.in.commands.RegisterItemCommand;
+import com.edir.app.inventory.application.ports.in.commands.UpdateItemCommand;
+import com.edir.app.inventory.application.ports.in.usecases.ItemManagementUseCase;
+import com.edir.app.inventory.application.ports.out.query.ItemQueryService;
+import com.edir.app.inventory.application.ports.out.query.ItemView;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

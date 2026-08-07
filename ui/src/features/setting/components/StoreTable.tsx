@@ -1,7 +1,7 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/shared/components/ui/table";
 import {Button} from "@/shared/components/ui/button";
 import {Edit, MapPin, Store as StoreIcon} from "lucide-react";
-import type {Member} from "@/features/setting/types.ts";
+import type {Member} from "@/shared/types.ts";
 
 interface Store {
   id: string;

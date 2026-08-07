@@ -36,16 +36,16 @@ class FuneralEventRepositoryImpl implements FuneralEventRepository, FuneralEvent
 
     @Override
     public Optional<FuneralEventView> findById(UUID funeralId) {
-        return Optional.empty();
+        return jpaFuneralEventRepository.findFuneralEventViewById(funeralId);
     }
 
     @Override
     public List<FuneralEventView> findAll() {
-        return List.of();
+        return jpaFuneralEventRepository.findAllFuneralEventView();
     }
 
     @Override
     public List<ItemIssueView> findByFuneralId(UUID funeralId) {
-        return List.of();
+        return jpaFuneralEventRepository.findItemIssueViewByFuneralId(funeralId);
     }
 }

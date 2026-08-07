@@ -47,8 +47,8 @@ const navigation = [
     icon: Handshake,
   },
   {
-    title: "Funeral Event",
-    href: "/event-event",
+    title: "Events",
+    href: "/event",
     icon: CalendarsIcon,
   },
   {

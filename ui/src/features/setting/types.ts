@@ -5,7 +5,3 @@ export interface Store{
     ownerId:string;
 }
 
-export interface Member {
-    memberId: string;
-    fullName: string;
-}

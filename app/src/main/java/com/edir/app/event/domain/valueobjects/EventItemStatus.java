@@ -3,7 +3,7 @@ package com.edir.app.event.domain.valueobjects;
 public enum EventItemStatus {
     ISSUED("ISS"),
     RETURNED("RET");
-    private String value;
+    private final String value;
     EventItemStatus(String value){
         this.value = value;
     }

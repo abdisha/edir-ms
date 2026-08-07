@@ -1,5 +1,7 @@
 package com.edir.app.edir.domain.valueobjects;
 
+import com.edir.app.edir.domain.entity.Edir;
+
 import java.util.Objects;
 
 public record EdirName(String name) {
@@ -7,3 +9,4 @@ public record EdirName(String name) {
         Objects.requireNonNull(name, "Edir name cannot be null");
     }
 }
+

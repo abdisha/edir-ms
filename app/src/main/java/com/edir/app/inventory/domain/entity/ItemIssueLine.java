@@ -1,34 +1,51 @@
 package com.edir.app.inventory.domain.entity;
 
-import com.edir.app.inventory.domain.valueobjects.ItemId;
-import com.edir.app.inventory.domain.valueobjects.ItemIssueLineId;
-import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
+import com.edir.app.inventory.domain.valueobjects.*;
 import com.edir.app.shared.domain.entity.BaseEntity;
-import com.edir.app.shared.domain.valueobjects.MemberId;
 
 public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
     private ItemId itemId;
-    private MemberId fromId;
+    private StoreId fromId;
+    private ItemIssueStatus status;
     private ItemQuantity issuedQuantity;
 
-    // Private constructor to enforce creation through factory methods
-    private ItemIssueLine(ItemIssueLineId itemIssueLineId, MemberId fromId, ItemId itemId, ItemQuantity issuedQuantity) {
+    private ItemIssueLine(ItemIssueLineId itemIssueLineId,
+                          StoreId fromId,
+                          ItemId itemId,
+                          ItemIssueStatus status,
+                          ItemQuantity issuedQuantity) {
         super(itemIssueLineId);
         this.itemId = itemId;
         this.issuedQuantity = issuedQuantity;
         this.fromId = fromId;
+        this.status = status;
+
     }
 
-    public static ItemIssueLine create(ItemId itemId, MemberId fromId, ItemQuantity issuedQuantity) {
+    public static ItemIssueLine create(ItemId itemId,
+                                       StoreId fromId,
+                                       ItemQuantity issuedQuantity) {
 
         if (issuedQuantity.quantity() <= 0) {
             throw new IllegalArgumentException("Issued quantity must be positive.");
         }
-        return new ItemIssueLine(ItemIssueLineId.generateId(), fromId, itemId, issuedQuantity);
+        return new ItemIssueLine(ItemIssueLineId.generateId(),
+            fromId,
+            itemId,
+            ItemIssueStatus.PENDING,
+            issuedQuantity);
     }
 
-    public static ItemIssueLine rehydrate(ItemIssueLineId itemIssueLineId, MemberId fromId, ItemId itemId, ItemQuantity issuedQuantity) {
-        return new ItemIssueLine(itemIssueLineId, fromId,itemId, issuedQuantity);
+    public static ItemIssueLine rehydrate(ItemIssueLineId itemIssueLineId,
+                                          StoreId fromId,
+                                          ItemId itemId,
+                                          ItemIssueStatus status,
+                                          ItemQuantity issuedQuantity) {
+        return new ItemIssueLine(itemIssueLineId,
+            fromId,
+            itemId,
+            status,
+            issuedQuantity);
     }
 
     public void increaseIssuedQuantity(ItemQuantity quantityToIncrease) {
@@ -36,6 +53,13 @@ public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
             throw new IllegalArgumentException("Quantity to increase must be positive.");
         }
         this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() + quantityToIncrease.quantity());
+    }
+
+    public void approve(){
+        this.status = ItemIssueStatus.APPROVED;
+    }
+    public void rejected(){
+        this.status = ItemIssueStatus.REJECTED;
     }
 
     public void decreaseIssuedQuantity(ItemQuantity quantityToDecrease) {
@@ -48,7 +72,10 @@ public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
         this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() - quantityToDecrease.quantity());
     }
 
-    public MemberId getFromId() {
+    public ItemIssueStatus getStatus(){
+        return status;
+    }
+    public StoreId getFromId() {
         return fromId;
     }
 

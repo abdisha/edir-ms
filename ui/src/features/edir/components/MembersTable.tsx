@@ -45,16 +45,15 @@ export function MemberTable({
     const canGoPrevious = pagination.currentPage > 1;
     const canGoNext = pagination.currentPage < pagination.totalPages;
 
-    // Show skeleton rows during loading
+
     const skeletonRows = Array.from({ length: pagination.pageSize }).map((_, i) => i);
 
     return (
         <div className="w-full space-y-6">
-            {/* Table */}
+
             <div className="w-full overflow-x-auto">
                 <Table>
-                    {/* Header */}
-                    <TableHeader>
+                  <TableHeader>
                         {table.getHeaderGroups().map((group) => (
                             <TableRow key={group.id} className="border-b hover:bg-transparent">
                                 {group.headers.map((header) => (
@@ -72,10 +71,8 @@ export function MemberTable({
                         ))}
                     </TableHeader>
 
-                    {/* Body */}
                     <TableBody>
                         {loading ? (
-                            // Loading skeleton rows
                             skeletonRows.map((index) => (
                                 <TableRow key={`skeleton-${index}`}>
                                     {columns.map((column) => (
@@ -103,7 +100,6 @@ export function MemberTable({
                                 </TableRow>
                             ))
                         ) : (
-                            // Empty state
                             <TableRow>
                                 <TableCell
                                     colSpan={columns.length}
@@ -120,7 +116,6 @@ export function MemberTable({
                 </Table>
             </div>
 
-            {/* Pagination */}
             {!loading && pagination.totalPages > 1 && (
                 <div className="flex items-center justify-between">
                     <div className="text-sm text-muted-foreground">

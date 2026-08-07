@@ -1,7 +1,7 @@
 package com.edir.app.inventory.adapter.persistance.jpa;
 
 import com.edir.app.inventory.adapter.persistance.entity.ItemEntity;
-import com.edir.app.inventory.application.out.query.ItemView;
+import com.edir.app.inventory.application.ports.out.query.ItemView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface JpaItemRepository extends JpaRepository<ItemEntity, UUID> {
     @Query(value = """
-    select new com.edir.app.inventory.application.out.query.ItemView(
+    select new com.edir.app.inventory.application.ports.out.query.ItemView(
     i.id,
     i.name,
     i.status,
@@ -26,7 +26,7 @@ public interface JpaItemRepository extends JpaRepository<ItemEntity, UUID> {
     List<ItemView> findAllItems();
 
     @Query(value = """
-    select new com.edir.app.inventory.application.out.query.ItemView(
+    select new com.edir.app.inventory.application.ports.out.query.ItemView(
     i.id,
     i.name,
     i.status,
@@ -39,7 +39,7 @@ public interface JpaItemRepository extends JpaRepository<ItemEntity, UUID> {
     List<ItemView> findAllUnAllocatedItems();
 
     @Query(value = """
-    select new com.edir.app.inventory.application.out.query.ItemView(
+    select new com.edir.app.inventory.application.ports.out.query.ItemView(
     i.id,
     i.name,
     i.status,
@@ -51,4 +51,5 @@ public interface JpaItemRepository extends JpaRepository<ItemEntity, UUID> {
     Optional<ItemView> findItemViewById(UUID id);
 
 
+    Optional<ItemEntity> findItemEntitiesByItemCode(String itemCode);
 }

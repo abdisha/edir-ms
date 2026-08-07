@@ -2,10 +2,11 @@ package com.edir.app.inventory.adapter.persistance;
 
 import com.edir.app.inventory.adapter.InventoryDataMapper;
 import com.edir.app.inventory.adapter.persistance.jpa.JpaItemRepository;
-import com.edir.app.inventory.application.out.ItemRepository;
+import com.edir.app.inventory.application.ports.out.ItemRepository;
 import com.edir.app.inventory.domain.entity.Item;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.shared.adapter.PersistenceAdapter;
+import com.edir.app.shared.domain.valueobjects.ItemCode;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
@@ -26,6 +27,12 @@ class InventoryItemRepositoryImpl implements ItemRepository {
     @Override
     public Optional<Item> findById(ItemId id) {
         return itemRepository.findById(id.id())
+            .map(mapper::itemEntityToItem);
+    }
+
+    @Override
+    public Optional<Item> findByItemCode(ItemCode itemCode) {
+        return itemRepository.findItemEntitiesByItemCode(itemCode.code())
             .map(mapper::itemEntityToItem);
     }
 }
