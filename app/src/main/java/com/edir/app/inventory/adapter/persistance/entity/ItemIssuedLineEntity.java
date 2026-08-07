@@ -4,10 +4,7 @@ import com.edir.app.inventory.domain.valueobjects.ItemIssueStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 @AllArgsConstructor
@@ -15,7 +12,7 @@ import java.util.UUID;
 @Data
 @Builder
 @Entity
-@Table(name = "item_issue", schema = "inventory")
+@Table(name = "item_issue_line", schema = "inventory")
 public class ItemIssuedLineEntity  {
     @Id
     private UUID id;
@@ -24,11 +21,13 @@ public class ItemIssuedLineEntity  {
     private UUID fromId;
     @Enumerated(EnumType.STRING)
     private ItemIssueStatus status;
-    private int issuedQuantity;
+    private Integer issuedQuantity;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JsonIgnore
-    @JoinColumn(name = "item_issue_id", referencedColumnName = "id")
+    @JoinColumn(name = "item_issue_id")
     private ItemIssueEntity itemIssueEntity;
 
 }

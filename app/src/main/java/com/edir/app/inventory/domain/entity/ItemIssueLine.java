@@ -2,6 +2,7 @@ package com.edir.app.inventory.domain.entity;
 
 import com.edir.app.inventory.domain.valueobjects.*;
 import com.edir.app.shared.domain.entity.BaseEntity;
+import com.edir.app.shared.domain.exceptions.DomainValidationException;
 
 public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
     private ItemId itemId;
@@ -27,7 +28,7 @@ public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
                                        ItemQuantity issuedQuantity) {
 
         if (issuedQuantity.quantity() <= 0) {
-            throw new IllegalArgumentException("Issued quantity must be positive.");
+            throw new DomainValidationException("Issued quantity must be positive.");
         }
         return new ItemIssueLine(ItemIssueLineId.generateId(),
             fromId,

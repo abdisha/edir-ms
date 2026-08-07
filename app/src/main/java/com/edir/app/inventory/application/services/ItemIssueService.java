@@ -31,17 +31,12 @@ class ItemIssueService implements ItemIssueUseCase {
 
         var itemIssue = ItemIssue.create(command.funeralId(),new MemberId(command.issuerId()));
 
-         command.issueItems().forEach(
+         command.issueItems()
+             .forEach(
              i->{
-                 Optional<Allocation> allocationOptional =
-                     allocationRepository.findByStoreId(new StoreId(i.from()));
-                 if(allocationOptional.isEmpty()){
-                     return;
-                 }
-                 Allocation allocation = allocationOptional.get();
-                 allocation.issueItems(new ItemId(i.item()),new ItemQuantity(i.quantity()));
-                 itemIssue.addLine(new ItemId(i.item()),new StoreId(i.from()),new ItemQuantity(i.quantity()));
-                 allocationRepository.save(allocation);
+                 itemIssue.addLine(new ItemId(i.item()),
+                     new StoreId(i.from()),
+                     new ItemQuantity(i.quantity()));
              }
          );
 
@@ -57,6 +52,17 @@ class ItemIssueService implements ItemIssueUseCase {
         ItemIssue itemIssue = result.get();
         itemIssue.approve(issueItem.item());
 
+        Optional<Allocation> allocationOptional = allocationRepository
+            .findByStoreId(new StoreId(issueItem.from()));
+        if (allocationOptional.isEmpty()) {
+            return;
+        }
+        Allocation allocation = allocationOptional.get();
+        allocation.issueItems(new ItemId(issueItem.item()), new ItemQuantity(issueItem.quantity()));
+        itemIssue.addLine(new ItemId(issueItem.item()),
+            new StoreId(issueItem.from()),
+            new ItemQuantity(issueItem.quantity()));
+        allocationRepository.save(allocation);
         repository.save(itemIssue);
     }
 
