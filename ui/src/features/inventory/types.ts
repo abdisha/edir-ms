@@ -57,3 +57,20 @@ export interface StoreAllocationSummary {
     totalItem: number
 }
 
+export  interface IssueView {
+    issueId: string
+    funeralId: string
+    funeralName: string
+    issueDate: string
+}
+
+export interface IssueItemView {
+    issueId: string
+    itemId: string
+    itemName: string
+    itemCode: string
+    quantity: number
+    fromId: string
+    store: string
+    status: string
+}

@@ -1,9 +1,24 @@
 import {Button} from "@/shared/components/ui/button.tsx";
 import {PlusCircle} from "lucide-react";
 import {TabsContent} from "@/shared/components/ui/tabs.tsx";
-import InventoryIssueTable from "@/features/inventory/components/tables/InventoryIssueTable.tsx";
+import {useState} from "react";
+import {IssueTable} from "@/features/inventory/components/tables/IssueTable.tsx";
+import {useGetIssue, useGetIssueItem} from "@/features/inventory/hooks/useGetIssueItem.ts";
 
 const InventoryIssueTabContent =()=>{
+    const [selectedIssueId, setSelectedIssueId] = useState<string>();
+
+    const {
+        data: issueItems = [],
+        isLoading: itemsLoading,
+    } = useGetIssueItem(selectedIssueId);
+    const {
+        data: issues = [],
+        isLoading: isIssuesLoading,
+    } = useGetIssue();
+
+
+
     return (
         <TabsContent value="item-issue" className="mt-4">
             <h2 className="text-lg font-bold   mb-2">Current Item Issues</h2>
@@ -21,7 +36,15 @@ const InventoryIssueTabContent =()=>{
                     </div>
                 </Button>
             </div>
-            <InventoryIssueTable/>
+            <IssueTable
+                issues={issues}
+                issueItems={issueItems}
+                selectedIssueId={selectedIssueId}
+                loading={isIssuesLoading}
+                itemsLoading={itemsLoading}
+                onSelectIssue={setSelectedIssueId}
+            />
+            {/*<InventoryIssueTable/>*/}
         </TabsContent>
     )
 }
