@@ -29,7 +29,8 @@ class ItemIssueService implements ItemIssueUseCase {
     @Override
     public void issueItem(IssueItemCommand command) {
 
-        var itemIssue = ItemIssue.create(command.funeralId(),new MemberId(command.issuerId()));
+       var itemIssue = repository.findByFuneralId(command.funeralId())
+           .orElse(ItemIssue.create(command.funeralId(),new MemberId(command.issuerId())));
 
          command.issueItems()
              .forEach(

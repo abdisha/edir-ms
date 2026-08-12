@@ -23,7 +23,7 @@ public class ItemIssuedLineEntity  {
     private ItemIssueStatus status;
     private Integer issuedQuantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnore

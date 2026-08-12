@@ -2,8 +2,8 @@ import {Button} from "@/shared/components/ui/button.tsx";
 import {PlusCircle} from "lucide-react";
 import {TabsContent} from "@/shared/components/ui/tabs.tsx";
 import {useState} from "react";
-import {IssueTable} from "@/features/inventory/components/tables/IssueTable.tsx";
 import {useGetIssue, useGetIssueItem} from "@/features/inventory/hooks/useGetIssueItem.ts";
+import InventoryIssueTable from "@/features/inventory/components/tables/InventoryIssueTable.tsx";
 
 const InventoryIssueTabContent =()=>{
     const [selectedIssueId, setSelectedIssueId] = useState<string>();
@@ -12,6 +12,7 @@ const InventoryIssueTabContent =()=>{
         data: issueItems = [],
         isLoading: itemsLoading,
     } = useGetIssueItem(selectedIssueId);
+
     const {
         data: issues = [],
         isLoading: isIssuesLoading,
@@ -36,13 +37,13 @@ const InventoryIssueTabContent =()=>{
                     </div>
                 </Button>
             </div>
-            <IssueTable
+            <InventoryIssueTable
                 issues={issues}
                 issueItems={issueItems}
-                selectedIssueId={selectedIssueId}
+                onSelectIssue={issueId => setSelectedIssueId(issueId)}
                 loading={isIssuesLoading}
                 itemsLoading={itemsLoading}
-                onSelectIssue={setSelectedIssueId}
+                onItemSelect={item => setSelectedIssueId(item.issueId)}
             />
             {/*<InventoryIssueTable/>*/}
         </TabsContent>

@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
 @Repository
 public interface JpaItemIssuedRepository extends JpaRepository<ItemIssueEntity, UUID> {
    @Query(
@@ -43,4 +45,6 @@ public interface JpaItemIssuedRepository extends JpaRepository<ItemIssueEntity, 
 """
    )
     List<IssueItemView> getIssuesItem(UUID issueId);
+
+    Optional<ItemIssueEntity> findItemIssueEntitiesByFuneralId(UUID funeralId);
 }

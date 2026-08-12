@@ -9,6 +9,7 @@ import com.edir.app.shared.adapter.PersistenceAdapter;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @PersistenceAdapter
@@ -20,6 +21,12 @@ class ItemIssueRepositoryImpl implements ItemIssueRepository {
     public ItemIssueId save(ItemIssue itemIssue) {
         var result = jpaItemIssuedRepository.save(dataMapper.itemIssueToItemIssueEntity(itemIssue));
         return new ItemIssueId(result.getId());
+    }
+
+    @Override
+    public Optional<ItemIssue> findByFuneralId(UUID funeralId) {
+        return  jpaItemIssuedRepository.findItemIssueEntitiesByFuneralId(funeralId)
+            .map(dataMapper::itemIssueEntityToItemIssue);
     }
 
     @Override
