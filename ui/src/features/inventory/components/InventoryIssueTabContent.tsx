@@ -1,24 +1,54 @@
 import {Button} from "@/shared/components/ui/button.tsx";
-import {PlusCircle} from "lucide-react";
+import {PlusCircle, Trash2Icon} from "lucide-react";
 import {TabsContent} from "@/shared/components/ui/tabs.tsx";
 import {useState} from "react";
 import {useGetIssue, useGetIssueItem} from "@/features/inventory/hooks/useGetIssueItem.ts";
 import InventoryIssueTable from "@/features/inventory/components/tables/InventoryIssueTable.tsx";
+import {FormDrawer} from "@/shared/components/FromDrawer.tsx";
+import InventoryIssueApprovalForm from "@/features/inventory/components/forms/InventoryApprovalForm.tsx";
+import {useFormDrawer} from "@/shared/components/useFormDrawer.ts";
+import type {IssueItemView} from "@/features/inventory/types.ts";
+import {useApprove, useReject} from "@/features/inventory/hooks/useIssuesManagement.ts";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogMedia,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "@/shared/components/ui/alert-dialog.tsx";
 
 const InventoryIssueTabContent =()=>{
     const [selectedIssueId, setSelectedIssueId] = useState<string>();
+    const [selectedItemIssue, setSelectedItemIssue] = useState<IssueItemView>();
+    const [selectedItemId, setSelectedItemId] = useState<string>();
+    const [dialog, setDialog] = useState<boolean>(false);
+    const approveMutation = useApprove();
+    const rejectMutation = useReject();
 
-    const {
-        data: issueItems = [],
-        isLoading: itemsLoading,
-    } = useGetIssueItem(selectedIssueId);
+    const {setOpen, open} = useFormDrawer();
+    const {data: issueItems = [], isLoading: itemsLoading} = useGetIssueItem(selectedIssueId);
 
-    const {
-        data: issues = [],
-        isLoading: isIssuesLoading,
-    } = useGetIssue();
+    const {data: issues = [], isLoading: isIssuesLoading} = useGetIssue();
 
+    const handleSelectIssue = (item: IssueItemView) => {
+        setSelectedItemIssue(item);
+        setOpen(true);
+    };
 
+    const handleAlertDialog =(itemId:string)=>{
+        setSelectedItemId(itemId);
+        setDialog(true);
+    }
+    const handleReject =async ()=>{
+       if(selectedItemId){
+          await rejectMutation.mutateAsync(selectedItemId)
+       }
+    }
 
     return (
         <TabsContent value="item-issue" className="mt-4">
@@ -43,11 +73,78 @@ const InventoryIssueTabContent =()=>{
                 onSelectIssue={issueId => setSelectedIssueId(issueId)}
                 loading={isIssuesLoading}
                 itemsLoading={itemsLoading}
-                onItemSelect={item => setSelectedIssueId(item.issueId)}
+                onItemRejected={handleAlertDialog}
+                onItemSelect={handleSelectIssue}
             />
-            {/*<InventoryIssueTable/>*/}
+
+            <FormDrawer
+                open={open}
+                onOpenChange={setOpen}
+                title="Review Inventory Issue"
+                description="Approve or reject this inventory issue."
+            >
+                {selectedItemIssue && (
+                    <InventoryIssueApprovalForm
+                        funeralId={selectedItemIssue.issueId}
+                        issueId={selectedItemIssue.issueId}
+                        defaultQuantity={selectedItemIssue.quantity}
+                        loading={itemsLoading}
+                        onCancel={() => setOpen(false)}
+                        onApprove={async (values) => {
+                            await approveMutation.mutateAsync({
+                                issueId: selectedIssueId || values.issueId,
+                                from: selectedItemIssue.fromId,
+                                item: selectedItemIssue.itemId,
+                                quantity: values.quantity,
+                            });
+
+                            setOpen(false);
+                        }}
+                    />
+                )}
+            </FormDrawer>
+
+            <AlertDialogDestructive
+            open={dialog}
+            setOpen={setDialog}
+            title={"Reject Item Issue"}
+            description={"Are you sure you want to reject this item issue?"}
+            onConfirm={handleReject}
+            />
         </TabsContent>
     )
 }
 
 export default InventoryIssueTabContent;
+
+interface AlertProps {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    title: string;
+    description: string;
+    onConfirm: () => void;
+}
+
+export function AlertDialogDestructive({open, setOpen, title, description, onConfirm}: AlertProps) {
+    return (
+        <AlertDialog open={open} defaultOpen={false}>
+            <AlertDialogTrigger type="button"/>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogMedia
+                        className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
+                        <Trash2Icon/>
+                    </AlertDialogMedia>
+                    <AlertDialogTitle>{title}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        {description}
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel variant="outline" onClick={() => setOpen(false)}>Cancel</AlertDialogCancel>
+                    <AlertDialogAction variant="destructive" onClick={onConfirm}>Reject</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    )
+}

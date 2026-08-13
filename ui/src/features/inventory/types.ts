@@ -62,6 +62,7 @@ export  interface IssueView {
     funeralId: string
     funeralName: string
     issueDate: string
+    itemCount:number
 }
 
 export interface IssueItemView {

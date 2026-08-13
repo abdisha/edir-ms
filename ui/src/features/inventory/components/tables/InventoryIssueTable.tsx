@@ -2,12 +2,14 @@ import {useState} from "react";
 
 import {
     CalendarDays,
+    CheckCircle2Icon,
     ChevronDown,
     ChevronRight,
     ClipboardList,
     MapPin,
     MoreHorizontal,
     Package,
+    Trash2,
     Warehouse,
 } from "lucide-react";
 
@@ -18,33 +20,22 @@ import {Badge} from "@/shared/components/ui/badge";
 import {Separator} from "@/shared/components/ui/separator";
 import {Skeleton} from "@/shared/components/ui/skeleton";
 import type {IssueItemView, IssueView} from "@/features/inventory/types.ts";
-
-// export interface IssueView {
-//     issueId: string;
-//     funeralId: string;
-//     funeralName: string;
-//     issueDate: string;
-// }
-//
-// export interface IssueItemView {
-//     issueId: string;
-//     itemId: string;
-//     itemName: string;
-//     itemCode: string;
-//     quantity: number;
-//     fromId: string;
-//     store: string;
-//     status: string;
-// }
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/shared/components/ui/dropdown-menu.tsx";
 
 interface InventoryIssueTableProps {
     issues: IssueView[];
     issueItems: IssueItemView[];
     loading?: boolean;
     itemsLoading?: boolean;
-
     onSelectIssue?: (issueId: string) => void;
     onItemSelect?: (item: IssueItemView) => void;
+    onItemRejected: (itemId: string) => void;
 }
 
 const InventoryIssueTable = ({
@@ -54,22 +45,19 @@ const InventoryIssueTable = ({
                                  itemsLoading = false,
                                  onSelectIssue,
                                  onItemSelect,
+                                 onItemRejected,
                              }: InventoryIssueTableProps) => {
 
-    const [expandedIssues, setExpandedIssues] =
-        useState<Set<string>>(new Set());
+    const [expandedIssues, setExpandedIssues] = useState<Set<string>>(new Set());
 
     const toggleIssue = (issueId: string) => {
         setExpandedIssues((previous) => {
-
             const next = new Set(previous);
-
             if (next.has(issueId)) {
                 next.delete(issueId);
             } else {
                 next.add(issueId);
             }
-
             return next;
         });
     };
@@ -80,84 +68,50 @@ const InventoryIssueTable = ({
         );
     };
 
-    return (
-        <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
-
+    return (<div className="overflow-hidden rounded-xl border bg-card shadow-sm">
             <Table>
-
-                {/* =====================================================
-                    HEADER
-                ====================================================== */}
-
                 <TableHeader>
-
                     <TableRow className="bg-muted/40 hover:bg-muted/40">
-
                         <TableHead className="w-12" />
-
                         <TableHead>
                             Issue
                         </TableHead>
-
                         <TableHead>
                             Funeral Event
                         </TableHead>
-
                         <TableHead>
                             Issue Date
                         </TableHead>
-
                         <TableHead>
                             Items
                         </TableHead>
-
                         <TableHead className="text-right">
                             Actions
                         </TableHead>
-
                     </TableRow>
-
                 </TableHeader>
-
-                {/* =====================================================
-                    BODY
-                ====================================================== */}
-
                 <TableBody>
-
                     {loading ? (
-
                         <IssueTableSkeleton />
-
                     ) : issues.length === 0 ? (
-
                         <TableRow>
-
                             <TableCell
                                 colSpan={6}
                                 className="h-56"
                             >
-
                                 <EmptyState />
-
                             </TableCell>
-
                         </TableRow>
-
                     ) : (
-
                         issues.map((issue) => {
-
                             const isExpanded =
                                 expandedIssues.has(
                                     issue.issueId
                                 );
-
                             const items =
                                 getIssueItems(
                                     issue.issueId
                                 );
-
                             return (
                                 <IssueGroup
                                     key={issue.issueId}
@@ -165,6 +119,7 @@ const InventoryIssueTable = ({
                                     items={items}
                                     expanded={isExpanded}
                                     itemsLoading={itemsLoading}
+                                    onItemRejected={onItemRejected}
                                     onToggle={() =>
                                         toggleIssue(
                                             issue.issueId
@@ -179,33 +134,24 @@ const InventoryIssueTable = ({
                                 />
                             );
                         })
-
                     )}
-
                 </TableBody>
-
             </Table>
-
         </div>
     );
 };
 
 export default InventoryIssueTable;
 
-
-/* =========================================================
-   ISSUE GROUP
-========================================================= */
-
 interface IssueGroupProps {
     issue: IssueView;
     items: IssueItemView[];
     expanded: boolean;
     itemsLoading: boolean;
-
     onToggle: () => void;
     onSelectIssue?: (issueId: string) => void;
     onItemSelect?: (item: IssueItemView) => void;
+    onItemRejected: (itemId: string) => void;
 }
 
 const IssueGroup = ({
@@ -216,16 +162,13 @@ const IssueGroup = ({
                         onToggle,
                         onSelectIssue,
                         onItemSelect,
+                        onItemRejected
                     }: IssueGroupProps) => {
 
     return (
         <>
-            {/* =====================================================
-                PARENT ISSUE ROW
-            ====================================================== */}
-
             <TableRow
-                onClick={onToggle}
+                onClick={() => onToggle()}
                 className={`
                     cursor-pointer
                     border-b
@@ -237,12 +180,9 @@ const IssueGroup = ({
                 }
                 `}
             >
-
-                {/* Expand button */}
-
                 <TableCell className="pl-4">
-
                     <Button
+                        aria-label={'Expand issue'}
                         type="button"
                         variant="ghost"
                         size="icon"
@@ -250,268 +190,157 @@ const IssueGroup = ({
                         onClick={(event) => {
                             event.stopPropagation();
                             onToggle();
+                            onSelectIssue?.(
+                                issue.issueId
+                            );
                         }}
                     >
-
                         {expanded ? (
                             <ChevronDown className="h-4 w-4" />
                         ) : (
                             <ChevronRight className="h-4 w-4" />
                         )}
-
                     </Button>
-
                 </TableCell>
-
-                {/* Issue */}
-
                 <TableCell>
-
                     <div className="flex items-center gap-3">
-
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-
                             <ClipboardList className="h-5 w-5 text-primary" />
-
                         </div>
-
                         <div>
-
                             <p className="font-semibold">
                                 Inventory Issue
                             </p>
-
                             <p className="font-mono text-xs text-muted-foreground">
                                 {issue.issueId.slice(0, 8)}...
                             </p>
-
                         </div>
-
                     </div>
-
                 </TableCell>
-
-                {/* Funeral */}
-
                 <TableCell>
-
                     <div className="space-y-1">
-
                         <p className="font-medium">
                             {issue.funeralName}
                         </p>
-
                         <p className="flex items-center gap-1 text-xs text-muted-foreground">
-
                             <MapPin className="h-3 w-3" />
-
                             Funeral Event
-
                         </p>
-
                     </div>
-
                 </TableCell>
-
-                {/* Date */}
-
                 <TableCell>
-
                     <div className="flex items-center gap-2">
-
                         <CalendarDays className="h-4 w-4 text-muted-foreground" />
-
                         <span>
                             {formatDate(issue.issueDate)}
                         </span>
-
                     </div>
-
                 </TableCell>
-
-                {/* Number of items */}
-
                 <TableCell>
-
                     <Badge variant="secondary">
-
                         <Package className="mr-1.5 h-3.5 w-3.5" />
-
-                        {items.length}{" "}
-                        {items.length === 1
+                        {issue.itemCount}{" "}
+                        {issue.itemCount === 1
                             ? "Item"
                             : "Items"}
-
                     </Badge>
-
                 </TableCell>
-
-                {/* Actions */}
-
                 <TableCell className="text-right">
-
                     <Button
                         aria-label={'View issue'}
                         variant="ghost"
                         size="icon"
                         onClick={(event) => {
                             event.stopPropagation();
-
                             onSelectIssue?.(
                                 issue.issueId
                             );
                         }}
                     >
-
                         <MoreHorizontal className="h-4 w-4" />
-
                     </Button>
-
                 </TableCell>
-
             </TableRow>
-
-
-            {/* =====================================================
-                CHILD ITEMS
-            ====================================================== */}
-
             {expanded && (
-
                 <TableRow className="hover:bg-transparent">
-
                     <TableCell
                         colSpan={6}
                         className="p-0"
                     >
-
                         <div className="bg-muted/20 px-8 py-5">
-
-                            {/* Child header */}
-
                             <div className="mb-4 flex items-center justify-between">
-
                                 <div>
-
                                     <h3 className="flex items-center gap-2 font-semibold">
-
                                         <Package className="h-4 w-4 text-primary" />
-
                                         Issued Items
-
                                     </h3>
-
                                     <p className="text-sm text-muted-foreground">
-
                                         Inventory items associated with this
                                         issue.
-
                                     </p>
-
                                 </div>
-
                                 <Badge variant="outline">
-                                    {items.length} items
+                                    {issue.itemCount} items
                                 </Badge>
-
                             </div>
-
                             <Separator className="mb-4" />
-
-                            {/* Items */}
-
                             <div className="overflow-hidden rounded-lg border bg-background">
-
                                 <Table>
-
                                     <TableHeader>
-
                                         <TableRow className="bg-muted/30">
-
                                             <TableHead className="pl-5">
                                                 Item
                                             </TableHead>
-
                                             <TableHead>
                                                 Item Code
                                             </TableHead>
-
                                             <TableHead>
                                                 Store
                                             </TableHead>
-
                                             <TableHead>
                                                 Quantity
                                             </TableHead>
-
                                             <TableHead>
                                                 Status
                                             </TableHead>
-
+                                            <TableHead className="text-right">
+                                                Actions
+                                            </TableHead>
                                         </TableRow>
-
                                     </TableHeader>
-
                                     <TableBody>
-
                                         {itemsLoading ? (
-
                                             <ItemSkeleton />
-
                                         ) : items.length === 0 ? (
-
                                             <TableRow>
-
                                                 <TableCell
                                                     colSpan={5}
                                                     className="h-28 text-center"
                                                 >
-
                                                     <div className="text-sm text-muted-foreground">
-
                                                         No items found for
                                                         this issue.
-
                                                     </div>
-
                                                 </TableCell>
-
                                             </TableRow>
-
                                         ) : (
-
                                             items.map((item) => (
-
                                                 <TableRow
                                                     key={item.itemId}
-                                                    className="cursor-pointer hover:bg-muted/40"
-                                                    onClick={() =>
-                                                        onItemSelect?.(
-                                                            item
-                                                        )
-                                                    }
+                                                    className="cursor-pointer"
+
                                                 >
-
                                                     <TableCell className="pl-5">
-
                                                         <div className="flex items-center gap-3">
-
                                                             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted">
-
                                                                 <Package className="h-4 w-4 text-muted-foreground" />
-
                                                             </div>
 
                                                             <div>
-
-                                                                <p className="font-medium">
-
+                                                                <p className="font-medium hover:text-primary">
                                                                     {item.itemName}
-
                                                                 </p>
-
                                                                 <p className="font-mono text-xs text-muted-foreground">
-
                                                                     {item.itemId.slice(
                                                                         0,
                                                                         8
@@ -525,48 +354,66 @@ const IssueGroup = ({
                                                         </div>
 
                                                     </TableCell>
-
                                                     <TableCell>
-
                                                         <Badge
                                                             variant="outline"
                                                             className="font-mono"
                                                         >
                                                             {item.itemCode}
                                                         </Badge>
-
                                                     </TableCell>
 
                                                     <TableCell>
-
                                                         <div className="flex items-center gap-2">
-
                                                             <Warehouse className="h-4 w-4 text-muted-foreground" />
-
                                                             {item.store}
-
                                                         </div>
-
                                                     </TableCell>
-
                                                     <TableCell>
-
                                                         <span className="font-semibold">
-
                                                             {item.quantity}
-
                                                         </span>
-
                                                     </TableCell>
 
                                                     <TableCell>
-
                                                         <StatusBadge
                                                             status={
                                                                 item.status
                                                             }
                                                         />
 
+                                                    </TableCell>
+                                                    <TableCell className="text-right">
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger>
+                                                                <Button size="icon" variant="ghost"
+                                                                        className="h-8 w-8 text-muted-foreground hover:text-foreground">
+                                                                    <MoreHorizontal className="h-4 w-4"/>
+                                                                    <span className="sr-only">Actions</span>
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end" className="w-40">
+                                                                <DropdownMenuItem className="cursor-pointer "
+                                                                                  onClick={() =>
+                                                                                      onItemSelect?.(
+                                                                                          item
+                                                                                      )
+                                                                                  }
+                                                                >
+                                                                    <CheckCircle2Icon
+                                                                        className="mr-2 h-4 w-4 text-muted-foreground"/>
+                                                                    Approve
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    className="cursor-pointer text-destructive focus:text-destructive"
+                                                                    onClick={() => onItemRejected(item.itemId)}>
+                                                                    <Trash2
+                                                                        className="mr-2 h-4 w-4 text-muted-foreground"/>
+                                                                    Reject
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuSeparator/>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
                                                     </TableCell>
 
                                                 </TableRow>
@@ -593,11 +440,6 @@ const IssueGroup = ({
     );
 };
 
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
 const EmptyState = () => (
     <div className="flex flex-col items-center justify-center gap-3">
 
@@ -621,11 +463,6 @@ const EmptyState = () => (
 
     </div>
 );
-
-
-/* =========================================================
-   LOADING
-========================================================= */
 
 const IssueTableSkeleton = () => (
     <>

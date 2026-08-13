@@ -22,6 +22,7 @@ public class ItemIssuedLineEntity  {
     @Enumerated(EnumType.STRING)
     private ItemIssueStatus status;
     private Integer issuedQuantity;
+    private Integer approvedQuantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @ToString.Exclude

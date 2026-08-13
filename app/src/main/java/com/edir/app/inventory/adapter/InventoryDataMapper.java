@@ -105,6 +105,7 @@ public class InventoryDataMapper {
                     new StoreId(i.getFromId()),
                     new ItemId(i.getItemId()),
                     i.getStatus(),
+                    new ItemQuantity(i.getApprovedQuantity()),
                     new ItemQuantity(i.getIssuedQuantity())
                 )
             ).toList()
@@ -122,6 +123,7 @@ public class InventoryDataMapper {
                     .id(i.getId().id())
                     .fromId(i.getFromId().id())
                     .status(i.getStatus())
+                    .approvedQuantity(i.getApprovedQuantity().quantity())
                     .issuedQuantity(i.getIssuedQuantity().quantity())
                     .itemId(i.getItemId().id()).build()
             ).toList())

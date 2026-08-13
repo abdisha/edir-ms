@@ -31,7 +31,7 @@ class InventoryIssueController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/approve/{issueId}")
+    @PutMapping("/{issueId}/approve")
     public ResponseEntity<Void> approveIssue(@PathVariable UUID issueId,
                                              @Valid @RequestBody IssueItem issueItem) {
 
@@ -49,11 +49,9 @@ class InventoryIssueController {
         return ResponseEntity.ok(queryService.getIssuesItem(issueId));
     }
 
-    @PutMapping("/reject/{issueId}")
-    public ResponseEntity<Void> rejectIssue(@PathVariable UUID issueId,
-                                             @Valid @RequestBody IssueItem issueItem) {
-
-        itemIssueUseCase.rejected(issueId, issueItem);
+    @PutMapping("{issueId}/reject/{itemId}")
+    public ResponseEntity<Void> rejectIssue(@PathVariable UUID issueId,@PathVariable UUID itemId) {
+        itemIssueUseCase.rejected(issueId, itemId);
         return ResponseEntity.ok().build();
     }
 }

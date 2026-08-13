@@ -50,14 +50,17 @@ class ItemIssueService implements ItemIssueUseCase {
         if (result.isEmpty()) {
             return;
         }
+
         ItemIssue itemIssue = result.get();
-        itemIssue.approve(issueItem.item());
+        itemIssue.approve(issueItem.item(), new ItemQuantity(issueItem.quantity()));
 
         Optional<Allocation> allocationOptional = allocationRepository
             .findByStoreId(new StoreId(issueItem.from()));
+
         if (allocationOptional.isEmpty()) {
             return;
         }
+
         Allocation allocation = allocationOptional.get();
         allocation.issueItems(new ItemId(issueItem.item()), new ItemQuantity(issueItem.quantity()));
         itemIssue.addLine(new ItemId(issueItem.item()),
@@ -68,13 +71,13 @@ class ItemIssueService implements ItemIssueUseCase {
     }
 
     @Override
-    public void rejected(UUID issueId, IssueItem issueItem) {
+    public void rejected(UUID issueId, UUID issueItem) {
         Optional<ItemIssue> result = repository.findById(new ItemIssueId(issueId));
         if (result.isEmpty()) {
             return;
         }
         ItemIssue itemIssue = result.get();
-        itemIssue.reject(issueItem.item());
+        itemIssue.reject(issueItem);
 
         repository.save(itemIssue);
     }
