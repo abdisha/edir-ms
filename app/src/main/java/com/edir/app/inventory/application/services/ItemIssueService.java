@@ -14,14 +14,16 @@ import com.edir.app.inventory.domain.valueobjects.StoreId;
 import com.edir.app.shared.application.usecase.UseCase;
 import com.edir.app.shared.domain.valueobjects.MemberId;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
-@UseCase
 @Transactional
+@Slf4j
+@UseCase
 class ItemIssueService implements ItemIssueUseCase {
     private final AllocationRepository allocationRepository;
     private final ItemIssueRepository repository;
@@ -50,31 +52,35 @@ class ItemIssueService implements ItemIssueUseCase {
         if (result.isEmpty()) {
             return;
         }
+
         ItemIssue itemIssue = result.get();
-        itemIssue.approve(issueItem.item());
+        itemIssue.approve(issueItem.item(), new ItemQuantity(issueItem.quantity()));
 
         Optional<Allocation> allocationOptional = allocationRepository
             .findByStoreId(new StoreId(issueItem.from()));
-        if (allocationOptional.isEmpty()) {
-            return;
+
+        if (allocationOptional.isPresent()) {
+            Allocation allocation = allocationOptional.get();
+            allocation.issueItems(new ItemId(issueItem.item()), new ItemQuantity(issueItem.quantity()));
+            allocationRepository.save(allocation);
+        }else{
+            log.warn("Couldn't find any allocated store for this item: {}",issueItem.item());
         }
-        Allocation allocation = allocationOptional.get();
-        allocation.issueItems(new ItemId(issueItem.item()), new ItemQuantity(issueItem.quantity()));
+
         itemIssue.addLine(new ItemId(issueItem.item()),
             new StoreId(issueItem.from()),
             new ItemQuantity(issueItem.quantity()));
-        allocationRepository.save(allocation);
         repository.save(itemIssue);
     }
 
     @Override
-    public void rejected(UUID issueId, IssueItem issueItem) {
+    public void rejected(UUID issueId, UUID issueItem) {
         Optional<ItemIssue> result = repository.findById(new ItemIssueId(issueId));
         if (result.isEmpty()) {
             return;
         }
         ItemIssue itemIssue = result.get();
-        itemIssue.reject(issueItem.item());
+        itemIssue.reject(issueItem);
 
         repository.save(itemIssue);
     }

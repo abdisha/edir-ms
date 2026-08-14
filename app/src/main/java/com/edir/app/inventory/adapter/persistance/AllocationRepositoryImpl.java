@@ -46,6 +46,7 @@ record AllocationRepositoryImpl(JpaInventoryAllocationRepository allocationRepos
            return createAllocationResponse(allocatedItemView);
     }
 
+
     @Override
     public List<StoreAllocationSummaryView> getAllocationSummary() {
         return allocationRepository.getStoreAllocationSummary();

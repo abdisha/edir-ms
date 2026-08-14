@@ -7,6 +7,7 @@ public record IssueView(
     UUID issueId,
     UUID funeralId,
     String funeralName,
-    ZonedDateTime issueDate
+    ZonedDateTime issueDate,
+    Long itemCount
 ) {
 }

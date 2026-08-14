@@ -9,15 +9,18 @@ public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
     private StoreId fromId;
     private ItemIssueStatus status;
     private ItemQuantity issuedQuantity;
+    private ItemQuantity approvedQuantity;
 
     private ItemIssueLine(ItemIssueLineId itemIssueLineId,
                           StoreId fromId,
                           ItemId itemId,
                           ItemIssueStatus status,
-                          ItemQuantity issuedQuantity) {
+                          ItemQuantity issuedQuantity,
+                          ItemQuantity approvedQuantity) {
         super(itemIssueLineId);
         this.itemId = itemId;
         this.issuedQuantity = issuedQuantity;
+        this.approvedQuantity = approvedQuantity;
         this.fromId = fromId;
         this.status = status;
 
@@ -34,19 +37,24 @@ public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
             fromId,
             itemId,
             ItemIssueStatus.PENDING,
-            issuedQuantity);
+            issuedQuantity,
+            ItemQuantity.of(0)
+        );
     }
 
     public static ItemIssueLine rehydrate(ItemIssueLineId itemIssueLineId,
                                           StoreId fromId,
                                           ItemId itemId,
                                           ItemIssueStatus status,
-                                          ItemQuantity issuedQuantity) {
+                                          ItemQuantity issuedQuantity,
+                                          ItemQuantity approvedQuantity
+                                          ) {
         return new ItemIssueLine(itemIssueLineId,
             fromId,
             itemId,
             status,
-            issuedQuantity);
+            issuedQuantity,
+            approvedQuantity);
     }
 
     public void increaseIssuedQuantity(ItemQuantity quantityToIncrease) {
@@ -56,22 +64,23 @@ public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
         this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() + quantityToIncrease.quantity());
     }
 
-    public void approve(){
+    public void approve(ItemQuantity quantityToApprove){
+        if(quantityToApprove.quantity() <= 0){
+            throw new DomainValidationException("Quantity to approve must be positive.");
+        }
+        if(this.issuedQuantity.quantity() < quantityToApprove.quantity()){
+            throw new DomainValidationException("Cannot approve more than issued quantity.");
+        }
+
+        this.approvedQuantity = new ItemQuantity(this.approvedQuantity.quantity() + quantityToApprove.quantity());
         this.status = ItemIssueStatus.APPROVED;
+
     }
+
     public void rejected(){
         this.status = ItemIssueStatus.REJECTED;
     }
 
-    public void decreaseIssuedQuantity(ItemQuantity quantityToDecrease) {
-        if (quantityToDecrease.quantity() <= 0) {
-            throw new IllegalArgumentException("Quantity to decrease must be positive.");
-        }
-        if (this.issuedQuantity.quantity() < quantityToDecrease.quantity()) {
-            throw new IllegalArgumentException("Cannot decrease quantity below zero.");
-        }
-        this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() - quantityToDecrease.quantity());
-    }
 
     public ItemIssueStatus getStatus(){
         return status;
@@ -82,6 +91,10 @@ public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
 
     public ItemId getItemId() {
         return itemId;
+    }
+
+    public ItemQuantity getApprovedQuantity(){
+        return approvedQuantity;
     }
 
     public ItemQuantity getIssuedQuantity() {

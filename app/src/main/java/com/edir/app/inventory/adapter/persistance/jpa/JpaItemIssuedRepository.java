@@ -19,8 +19,14 @@ public interface JpaItemIssuedRepository extends JpaRepository<ItemIssueEntity, 
                            i.id,
                            i.funeralId,
                            "",
-                           i.issuedDate
+                           i.issuedDate,
+                           count(line) as itemCount
                ) from ItemIssueEntity i
+                         left join i.issuedLineEntities line
+            group by
+             i.id,
+            i.funeralId,
+            i.issuedDate
            """
    )
     List<IssueView> getIssues();
