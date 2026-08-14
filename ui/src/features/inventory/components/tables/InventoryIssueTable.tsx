@@ -19,24 +19,6 @@ import {Separator} from "@/shared/components/ui/separator";
 import {Skeleton} from "@/shared/components/ui/skeleton";
 import type {IssueItemView, IssueView} from "@/features/inventory/types.ts";
 
-// export interface IssueView {
-//     issueId: string;
-//     funeralId: string;
-//     funeralName: string;
-//     issueDate: string;
-// }
-//
-// export interface IssueItemView {
-//     issueId: string;
-//     itemId: string;
-//     itemName: string;
-//     itemCode: string;
-//     quantity: number;
-//     fromId: string;
-//     store: string;
-//     status: string;
-// }
-
 interface InventoryIssueTableProps {
     issues: IssueView[];
     issueItems: IssueItemView[];
@@ -82,12 +64,7 @@ const InventoryIssueTable = ({
 
     return (
         <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
-
             <Table>
-
-                {/* =====================================================
-                    HEADER
-                ====================================================== */}
 
                 <TableHeader>
 
@@ -118,10 +95,6 @@ const InventoryIssueTable = ({
                     </TableRow>
 
                 </TableHeader>
-
-                {/* =====================================================
-                    BODY
-                ====================================================== */}
 
                 <TableBody>
 
@@ -185,17 +158,11 @@ const InventoryIssueTable = ({
                 </TableBody>
 
             </Table>
-
         </div>
     );
 };
 
 export default InventoryIssueTable;
-
-
-/* =========================================================
-   ISSUE GROUP
-========================================================= */
 
 interface IssueGroupProps {
     issue: IssueView;
@@ -220,9 +187,6 @@ const IssueGroup = ({
 
     return (
         <>
-            {/* =====================================================
-                PARENT ISSUE ROW
-            ====================================================== */}
 
             <TableRow
                 onClick={onToggle}
@@ -232,7 +196,7 @@ const IssueGroup = ({
                     transition-colors
                     ${
                     expanded
-                        ? "bg-primary/[0.04]"
+                        ? "bg-primary/4"
                         : "hover:bg-muted/30"
                 }
                 `}
@@ -594,10 +558,6 @@ const IssueGroup = ({
 };
 
 
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
 const EmptyState = () => (
     <div className="flex flex-col items-center justify-center gap-3">
 
@@ -622,10 +582,6 @@ const EmptyState = () => (
     </div>
 );
 
-
-/* =========================================================
-   LOADING
-========================================================= */
 
 const IssueTableSkeleton = () => (
     <>
