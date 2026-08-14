@@ -183,7 +183,7 @@ const InventoryIssueApprovalForm = ({
                                         placeholder="Enter quantity"
                                         onChange={(event) =>
                                             field.onChange(
-                                                event.target.value
+                                                Number(event.target.value)
                                             )
                                         }
                                     />

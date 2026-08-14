@@ -393,17 +393,21 @@ const IssueGroup = ({
                                                                 </Button>
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end" className="w-40">
-                                                                <DropdownMenuItem className="cursor-pointer "
-                                                                                  onClick={() =>
-                                                                                      onItemSelect?.(
-                                                                                          item
-                                                                                      )
-                                                                                  }
-                                                                >
-                                                                    <CheckCircle2Icon
-                                                                        className="mr-2 h-4 w-4 text-muted-foreground"/>
-                                                                    Approve
-                                                                </DropdownMenuItem>
+                                                                {
+                                                                    item.status == "PENDING" &&
+                                                                    <DropdownMenuItem className="cursor-pointer "
+                                                                                      onClick={() =>
+                                                                                          onItemSelect?.(
+                                                                                              item
+                                                                                          )
+                                                                                      }
+                                                                    >
+                                                                        <CheckCircle2Icon
+                                                                            className="mr-2 h-4 w-4 text-muted-foreground"/>
+                                                                        Approve
+                                                                    </DropdownMenuItem>
+
+                                                                }
                                                                 <DropdownMenuItem
                                                                     className="cursor-pointer text-destructive focus:text-destructive"
                                                                     onClick={() => onItemRejected(item.itemId)}>
