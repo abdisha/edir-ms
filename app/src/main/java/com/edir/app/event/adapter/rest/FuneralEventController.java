@@ -6,6 +6,7 @@ import com.edir.app.event.application.port.in.usecases.FuneralEventUseCase;
 import com.edir.app.event.application.port.out.query.FuneralEventQueryService;
 import com.edir.app.event.application.port.out.query.FuneralEventView;
 import com.edir.app.event.application.port.out.query.ItemIssueView;
+import com.edir.app.event.domain.valueobjects.EventItemId;
 import com.edir.app.event.domain.valueobjects.FuneralEventId;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -58,5 +59,12 @@ class FuneralEventController {
     @GetMapping("/{funeralId}/issued-item")
     public ResponseEntity<List<ItemIssueView>> getIssuedItems(@Valid  @PathVariable UUID funeralId) {
         return ResponseEntity.ok(funeralEventQueryService.findByFuneralId(funeralId));
+    }
+
+    @DeleteMapping("/{funeralId}/issued-item/{issuedItemId}")
+    public ResponseEntity<Void> deleteIssuedItem(@Valid  @PathVariable UUID funeralId,
+                                                 @PathVariable UUID issuedItemId) {
+        funeralEventUseCase.deleteIssuedItem(new FuneralEventId(funeralId), new EventItemId(issuedItemId));
+        return ResponseEntity.ok().build();
     }
 }

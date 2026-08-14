@@ -1,63 +1,100 @@
 package com.edir.app.inventory.domain.entity;
 
-import com.edir.app.inventory.domain.valueobjects.ItemId;
-import com.edir.app.inventory.domain.valueobjects.ItemIssueLineId;
-import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
+import com.edir.app.inventory.domain.valueobjects.*;
 import com.edir.app.shared.domain.entity.BaseEntity;
 import com.edir.app.shared.domain.exceptions.DomainValidationException;
-import com.edir.app.shared.domain.valueobjects.MemberId;
 
 public class ItemIssueLine extends BaseEntity<ItemIssueLineId> {
-    private final ItemId itemId;
-    private final MemberId fromId;
+    private ItemId itemId;
+    private StoreId fromId;
+    private ItemIssueStatus status;
     private ItemQuantity issuedQuantity;
+    private ItemQuantity approvedQuantity;
 
-    // Private constructor to enforce creation through factory methods
     private ItemIssueLine(ItemIssueLineId itemIssueLineId,
-                          MemberId fromId,
+                          StoreId fromId,
                           ItemId itemId,
-                          ItemQuantity issuedQuantity) {
+                          ItemIssueStatus status,
+                          ItemQuantity issuedQuantity,
+                          ItemQuantity approvedQuantity) {
         super(itemIssueLineId);
         this.itemId = itemId;
         this.issuedQuantity = issuedQuantity;
+        this.approvedQuantity = approvedQuantity;
         this.fromId = fromId;
+        this.status = status;
+
     }
 
-    public static ItemIssueLine create(ItemId itemId, MemberId fromId, ItemQuantity issuedQuantity) {
+    public static ItemIssueLine create(ItemId itemId,
+                                       StoreId fromId,
+                                       ItemQuantity issuedQuantity) {
 
         if (issuedQuantity.quantity() <= 0) {
             throw new DomainValidationException("Issued quantity must be positive.");
         }
-        return new ItemIssueLine(ItemIssueLineId.generateId(), fromId, itemId, issuedQuantity);
+        return new ItemIssueLine(ItemIssueLineId.generateId(),
+            fromId,
+            itemId,
+            ItemIssueStatus.PENDING,
+            issuedQuantity,
+            ItemQuantity.of(0)
+        );
     }
 
-    public static ItemIssueLine rehydrate(ItemIssueLineId itemIssueLineId, MemberId fromId, ItemId itemId, ItemQuantity issuedQuantity) {
-        return new ItemIssueLine(itemIssueLineId, fromId,itemId, issuedQuantity);
+    public static ItemIssueLine rehydrate(ItemIssueLineId itemIssueLineId,
+                                          StoreId fromId,
+                                          ItemId itemId,
+                                          ItemIssueStatus status,
+                                          ItemQuantity issuedQuantity,
+                                          ItemQuantity approvedQuantity
+                                          ) {
+        return new ItemIssueLine(itemIssueLineId,
+            fromId,
+            itemId,
+            status,
+            issuedQuantity,
+            approvedQuantity);
     }
 
     public void increaseIssuedQuantity(ItemQuantity quantityToIncrease) {
         if (quantityToIncrease.quantity() <= 0) {
-            throw new DomainValidationException("Quantity to increase must be positive.");
+            throw new IllegalArgumentException("Quantity to increase must be positive.");
         }
         this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() + quantityToIncrease.quantity());
     }
 
-    public void decreaseIssuedQuantity(ItemQuantity quantityToDecrease) {
-        if (quantityToDecrease.quantity() <= 0) {
-            throw new DomainValidationException("Quantity to decrease must be positive.");
+    public void approve(ItemQuantity quantityToApprove){
+        if(quantityToApprove.quantity() <= 0){
+            throw new DomainValidationException("Quantity to approve must be positive.");
         }
-        if (this.issuedQuantity.quantity() < quantityToDecrease.quantity()) {
-            throw new DomainValidationException("Cannot decrease quantity below zero.");
+        if(this.issuedQuantity.quantity() < quantityToApprove.quantity()){
+            throw new DomainValidationException("Cannot approve more than issued quantity.");
         }
-        this.issuedQuantity = new ItemQuantity(this.issuedQuantity.quantity() - quantityToDecrease.quantity());
+
+        this.approvedQuantity = new ItemQuantity(this.approvedQuantity.quantity() + quantityToApprove.quantity());
+        this.status = ItemIssueStatus.APPROVED;
+
     }
 
-    public MemberId getFromId() {
+    public void rejected(){
+        this.status = ItemIssueStatus.REJECTED;
+    }
+
+
+    public ItemIssueStatus getStatus(){
+        return status;
+    }
+    public StoreId getFromId() {
         return fromId;
     }
 
     public ItemId getItemId() {
         return itemId;
+    }
+
+    public ItemQuantity getApprovedQuantity(){
+        return approvedQuantity;
     }
 
     public ItemQuantity getIssuedQuantity() {

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +30,6 @@ public class ItemIssueEntity {
     private ZonedDateTime issuedDate;
 
     @OneToMany(mappedBy = "itemIssueEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemIssuedLineEntity> issuedLineEntities;
+    private List<ItemIssuedLineEntity> issuedLineEntities = new ArrayList<>();
 
 }

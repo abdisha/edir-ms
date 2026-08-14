@@ -73,11 +73,13 @@ public class ItemIssue extends AggregateRoot<ItemIssueId> {
         optionalItemIssue.get().increaseIssuedQuantity(quantity);
     }
 
-    public void approve(@NotNull UUID item) {
+    public void approve(@NotNull UUID item,@NotNull ItemQuantity quantity) {
         itemIssueLines.stream()
             .filter(i -> i.getItemId().id().equals(item))
             .findFirst()
-            .ifPresent(ItemIssueLine::approve);
+            .ifPresent(
+                i -> i.approve(quantity)
+            );
     }
 
     public void reject(@NotNull UUID item){

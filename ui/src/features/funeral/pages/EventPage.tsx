@@ -22,16 +22,11 @@ import {SpinnerPage} from "@/pages/SpinnerPage.tsx";
 import {PageError} from "@/pages/PageError.tsx";
 import MeetingEventTable from "@/features/funeral/components/MeetingEventTable.tsx";
 import {useGetMeetingEvents} from "@/features/funeral/hooks/useGetMeetingEvents.ts";
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/shared/components/ui/tabs";
+import {Tabs, TabsContent, TabsList, TabsTrigger,} from "@/shared/components/ui/tabs";
 
 export default function EventPage() {
     const [open, setOpen] = useState(false);
-    const {data, isLoading, isError, error} = useGetFuneralEvent();
+    const {data, isLoading, isError} = useGetFuneralEvent();
     const meetingEvents = useGetMeetingEvents();
     const navigate = useNavigate();
 
@@ -40,7 +35,7 @@ export default function EventPage() {
     }
 
     if (isError || meetingEvents.isError) {
-        return <PageError title={'Unable to load events'} description={error.message || meetingEvents.error.message}/>
+        return <PageError title={'Unable to load events'}/>
     }
 
     return (

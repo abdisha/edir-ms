@@ -6,6 +6,7 @@ import com.edir.app.event.application.port.in.command.CreateFuneralEventCommand;
 import com.edir.app.event.application.port.in.usecases.FuneralEventUseCase;
 import com.edir.app.event.application.port.out.FuneralEventRepository;
 import com.edir.app.event.domain.entity.FuneralEvent;
+import com.edir.app.event.domain.valueobjects.EventItemId;
 import com.edir.app.event.domain.valueobjects.FuneralEventId;
 import com.edir.app.shared.application.usecase.UseCase;
 import com.edir.app.shared.domain.event.DomainEventPublisher;
@@ -62,5 +63,16 @@ class FuneralEventService implements FuneralEventUseCase {
 
         publisher.publishEvent(funeralEventOptional.get());
         repository.save(funeralEventOptional.get());
+    }
+
+    @Override
+    public void deleteIssuedItem(FuneralEventId funeralId, EventItemId issuedItemId) {
+       Optional<FuneralEvent> funeralEventOptional =   repository.findById(funeralId);
+       if (funeralEventOptional.isEmpty()){
+           throw new FuneralEventNotFoundExceptions(funeralId);
+       }
+       funeralEventOptional.get().removeIssuedItem(issuedItemId);
+       publisher.publishEvent(funeralEventOptional.get());
+       repository.save(funeralEventOptional.get());
     }
 }

@@ -105,6 +105,7 @@ public class InventoryDataMapper {
                     new StoreId(i.getFromId()),
                     new ItemId(i.getItemId()),
                     i.getStatus(),
+                    new ItemQuantity(i.getApprovedQuantity()),
                     new ItemQuantity(i.getIssuedQuantity())
                 )
             ).toList()
@@ -113,19 +114,23 @@ public class InventoryDataMapper {
     }
 
     public ItemIssueEntity itemIssueToItemIssueEntity(ItemIssue itemIssue){
-        return ItemIssueEntity.builder()
+        ItemIssueEntity issueEntity = ItemIssueEntity.builder()
             .id(itemIssue.getId().id())
             .funeralId(itemIssue.getFuneralId())
             .issuedDate(itemIssue.getIssuedDate())
             .issuedLineEntities(itemIssue.getItemIssueLines().stream().map(
-                i-> ItemIssuedLineEntity.builder()
+                i -> ItemIssuedLineEntity.builder()
                     .id(i.getId().id())
                     .fromId(i.getFromId().id())
+                    .status(i.getStatus())
+                    .approvedQuantity(i.getApprovedQuantity().quantity())
                     .issuedQuantity(i.getIssuedQuantity().quantity())
                     .itemId(i.getItemId().id()).build()
             ).toList())
             .issuerId(itemIssue.getIssuerId().value())
             .build();
+        issueEntity.getIssuedLineEntities().forEach(i->i.setItemIssueEntity(issueEntity));
+        return issueEntity;
 
     }
 

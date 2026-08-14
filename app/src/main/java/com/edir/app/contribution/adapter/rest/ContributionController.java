@@ -20,7 +20,7 @@ import static com.edir.app.shared.EdirConstant.REST_VERSION;
 @AllArgsConstructor
 @RestController
 @RequestMapping(REST_VERSION+"contributions")
-public class ContributionController {
+class ContributionController {
     private final ContributionUseCase contributionUseCase;
     private final ContributionQueryService contributionQueryService;
 
