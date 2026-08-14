@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Allocation extends AggregateRoot<AllocationId> {
-    private StoreId storeId;
+    private final StoreId storeId;
     private final List<ItemAllocation> itemAllocations = new ArrayList<>();
 
     protected Allocation(AllocationId allocationId,

@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Store extends BaseEntity<StoreId> {
     private String name;
-    private String location;
+    private final String location;
     private MemberId storeOwner;
 
     public Store(StoreId storeId,
