@@ -1,8 +1,9 @@
 package com.edir.app.inventory.adapter.rest;
 
 
-import com.edir.app.inventory.application.ports.in.commands.IssueItem;
+import com.edir.app.inventory.adapter.rest.request.ApprovalRequest;
 import com.edir.app.inventory.application.ports.in.commands.IssueItemCommand;
+import com.edir.app.inventory.application.ports.in.commands.ItemIssueApproveCommand;
 import com.edir.app.inventory.application.ports.in.usecases.ItemIssueUseCase;
 import com.edir.app.inventory.application.ports.out.query.IssueItemView;
 import com.edir.app.inventory.application.ports.out.query.IssueQueryService;
@@ -33,9 +34,17 @@ class InventoryIssueController {
 
     @PutMapping("/{issueId}/approve")
     public ResponseEntity<Void> approveIssue(@PathVariable UUID issueId,
-                                             @Valid @RequestBody IssueItem issueItem) {
+                                             @Valid @RequestBody ApprovalRequest approvalRequest) {
 
-        itemIssueUseCase.Approve(issueId, issueItem);
+        itemIssueUseCase.Approve(
+            new ItemIssueApproveCommand(
+                issueId,
+                approvalRequest.item(),
+                approvalRequest.from(),
+                approvalRequest.quantity()
+            )
+        );
+
         return ResponseEntity.ok().build();
     }
 

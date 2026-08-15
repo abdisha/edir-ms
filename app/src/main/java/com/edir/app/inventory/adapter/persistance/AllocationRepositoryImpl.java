@@ -8,6 +8,7 @@ import com.edir.app.inventory.application.ports.out.AllocationRepository;
 import com.edir.app.inventory.application.ports.out.query.AllocationView;
 import com.edir.app.inventory.application.ports.out.query.StoreAllocationSummaryView;
 import com.edir.app.inventory.domain.entity.Allocation;
+import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.inventory.domain.valueobjects.StoreId;
 import com.edir.app.shared.adapter.PersistenceAdapter;
 
@@ -34,6 +35,14 @@ record AllocationRepositoryImpl(JpaInventoryAllocationRepository allocationRepos
     }
 
 
+    @Override
+    public List<Allocation> findByAllocationByItem(ItemId itemId) {
+
+        return allocationRepository.findAllocationEntitiesByItemId(itemId.id()).stream().map(
+            mapper::inventoryAllocationEntityToInventoryAllocation
+        ).toList();
+    }
+
     public List<AllocationResponse> findAllocationViewByStoreId(StoreId storeId) {
         var allocationView = allocationRepository.findAllocationViewByStoreId(storeId.id());
 
@@ -42,8 +51,8 @@ record AllocationRepositoryImpl(JpaInventoryAllocationRepository allocationRepos
 
     @Override
     public List<AllocationResponse> findAllocatedItem(StoreId storeId) {
-         var allocatedItemView = allocationRepository.findAllocationViewByItemId(storeId.id());
-           return createAllocationResponse(allocatedItemView);
+        var allocatedItemView = allocationRepository.findAllocationViewByItemId(storeId.id());
+        return createAllocationResponse(allocatedItemView);
     }
 
 
@@ -52,8 +61,14 @@ record AllocationRepositoryImpl(JpaInventoryAllocationRepository allocationRepos
         return allocationRepository.getStoreAllocationSummary();
     }
 
+    @Override
+    public void saveAll(List<Allocation> allocations) {
+        allocationRepository.saveAll(allocations.stream()
+            .map(mapper::inventoryAllocationToInventoryAllocationEntity).toList());
+    }
 
-    private  ArrayList<AllocationResponse> createAllocationResponse(List<AllocationView> allocationView) {
+
+    private ArrayList<AllocationResponse> createAllocationResponse(List<AllocationView> allocationView) {
         var allocationResponse = new ArrayList<AllocationResponse>();
         var member = activeMemberQuery.findActiveMembers();
 

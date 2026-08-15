@@ -69,6 +69,7 @@ public class ItemAllocation extends BaseEntity<ItemAllocationId> {
         this.issuedDate=ZonedDateTime.now();
     }
 
+
     public ItemQuantity getIssuedQuantity() {
         return issuedQuantity;
     }
@@ -82,6 +83,9 @@ public class ItemAllocation extends BaseEntity<ItemAllocationId> {
     public ZonedDateTime getIssuedDate() {
         return issuedDate;
     }
+    public int availableQuantity() {
+        return quantity.quantity();
+    }
 
     public ItemId getItemId() {
         return itemId;
@@ -94,6 +98,5 @@ public class ItemAllocation extends BaseEntity<ItemAllocationId> {
     public ZonedDateTime getReceivedDate() {
         return receivedDate;
     }
-
 
 }

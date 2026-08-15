@@ -5,10 +5,14 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record IssueItem(
-   @NotNull UUID item,
+public record ItemIssueApproveCommand(
+    @NotNull
+    UUID issueId,
+    @NotNull
+    UUID item,
+    @NotNull
     UUID from,
-    @Min(value = 1,message = "Quantity must be greater than zero")
+    @Min(value = 0,message = "Quantity must be greater than zero")
     Integer quantity
 ) {
 }

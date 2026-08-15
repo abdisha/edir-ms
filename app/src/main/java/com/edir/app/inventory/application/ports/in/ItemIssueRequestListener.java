@@ -1,7 +1,6 @@
 package com.edir.app.inventory.application.ports.in;
 
 import com.edir.app.inventory.application.exceptions.ItemNotFoundException;
-import com.edir.app.inventory.application.ports.in.commands.IssueItem;
 import com.edir.app.inventory.application.ports.in.commands.IssueItemCommand;
 import com.edir.app.inventory.application.ports.in.usecases.ItemIssueUseCase;
 import com.edir.app.inventory.application.ports.out.ItemRepository;
@@ -37,13 +36,11 @@ class ItemIssueRequestListener {
 
         itemIssueUseCase.issueItem(
             new IssueItemCommand(
-                List.of(new IssueItem(
-                    result.get().getId().id(),
-                    itemIssueAddedEvent.funeralEventId(),
-                    itemIssueAddedEvent.quantity()
-                )),
                 itemIssueAddedEvent.funeralEventId(),
-                itemIssueAddedEvent.requestedFor().value()
+                itemIssueAddedEvent.requestedFor().value(),
+                result.get().getId().id(),
+                itemIssueAddedEvent.quantity()
+
             )
         );
     }

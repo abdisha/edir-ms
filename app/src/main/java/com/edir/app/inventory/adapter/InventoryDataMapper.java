@@ -105,8 +105,8 @@ public class InventoryDataMapper {
                     new StoreId(i.getFromId()),
                     new ItemId(i.getItemId()),
                     i.getStatus(),
-                    new ItemQuantity(i.getApprovedQuantity()),
-                    new ItemQuantity(i.getIssuedQuantity())
+                    new ItemQuantity(i.getIssuedQuantity()),
+                    new ItemQuantity(i.getApprovedQuantity())
                 )
             ).toList()
 

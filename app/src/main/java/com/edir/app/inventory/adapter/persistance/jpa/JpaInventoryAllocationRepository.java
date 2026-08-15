@@ -15,6 +15,7 @@ import java.util.UUID;
 public interface JpaInventoryAllocationRepository extends JpaRepository<AllocationEntity, UUID> {
 
     Optional<AllocationEntity> findAllocationEntitiesByStoreId(UUID holderMemberId);
+
     @Query(
         value = """
                 select new com.edir.app.inventory.application.ports.out.query.AllocationView(
@@ -37,6 +38,14 @@ public interface JpaInventoryAllocationRepository extends JpaRepository<Allocati
             """
     )
     List<AllocationView> findAllocationViewByItemId(UUID itemId);
+
+    @Query(
+        """
+                 from AllocationEntity  a join   a.itemAllocations i where i.id =:itemId
+                             order by i.quantityOnHand desc
+            """
+    )
+    List<AllocationEntity> findAllocationEntitiesByItemId(UUID itemId);
 
 
     @Query(
@@ -63,17 +72,16 @@ public interface JpaInventoryAllocationRepository extends JpaRepository<Allocati
     List<AllocationView> findAllocationViewByStoreId(UUID storeId);
 
     @Query(value = """
-    SELECT new com.edir.app.inventory.application.ports.out.query.StoreAllocationSummaryView(
-        s.id,
-        s.name,
-        s.location,
-        size(i.itemAllocations)
-    )
-    from StoreEntity s
-    left join AllocationEntity i on i.storeId = s.id
-    """)
+        SELECT new com.edir.app.inventory.application.ports.out.query.StoreAllocationSummaryView(
+            s.id,
+            s.name,
+            s.location,
+            size(i.itemAllocations)
+        )
+        from StoreEntity s
+        left join AllocationEntity i on i.storeId = s.id
+        """)
     List<StoreAllocationSummaryView> getStoreAllocationSummary();
-
 
 
 }
