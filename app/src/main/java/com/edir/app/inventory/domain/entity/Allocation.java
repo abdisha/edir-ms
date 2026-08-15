@@ -1,12 +1,13 @@
 package com.edir.app.inventory.domain.entity;
 
 import com.edir.app.inventory.domain.exceptions.InvalidItemQuantityException;
-import com.edir.app.inventory.domain.exceptions.NoItemToReturnException;
+import com.edir.app.inventory.domain.exceptions.ItemNotAllocatedException;
 import com.edir.app.inventory.domain.valueobjects.AllocationId;
 import com.edir.app.inventory.domain.valueobjects.ItemId;
 import com.edir.app.inventory.domain.valueobjects.ItemQuantity;
 import com.edir.app.inventory.domain.valueobjects.StoreId;
 import com.edir.app.shared.domain.entity.AggregateRoot;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +50,7 @@ public class Allocation extends AggregateRoot<AllocationId> {
     public void allocate(ItemId id, ItemQuantity quantity) {
         validatePositiveQuantity(quantity.quantity());
 
-        Optional<ItemAllocation> itemAllocation = itemAllocations.stream()
-            .filter(item -> item.getItemId()
-                .equals(id)).findFirst();
+        Optional<ItemAllocation> itemAllocation = findItemAllocation(id);
 
         if (itemAllocation.isEmpty()) {
             itemAllocations.add(ItemAllocation.create(id, quantity));
@@ -63,12 +62,10 @@ public class Allocation extends AggregateRoot<AllocationId> {
 
     public void returnItems(ItemId id, ItemQuantity quantity){
         validatePositiveQuantity(quantity.quantity());
-        Optional<ItemAllocation> optionalItemAllocation = itemAllocations.stream()
-            .filter(item -> item.getItemId()
-                .equals(id)).findFirst();
+        Optional<ItemAllocation> optionalItemAllocation = findItemAllocation(id);
 
         if (optionalItemAllocation.isEmpty()){
-            throw new NoItemToReturnException(id);
+            throw new ItemNotAllocatedException(id);
         }
 
         optionalItemAllocation.get().returnItems(quantity);
@@ -76,18 +73,23 @@ public class Allocation extends AggregateRoot<AllocationId> {
     }
     public void issueItems(ItemId id, ItemQuantity quantity){
         validatePositiveQuantity(quantity.quantity());
-        Optional<ItemAllocation> optionalItemAllocation = itemAllocations.stream()
-            .filter(item -> item.getItemId()
-                .equals(id))
-            .findFirst();
+        Optional<ItemAllocation> optionalItemAllocation = findItemAllocation(id);
 
         if (optionalItemAllocation.isEmpty()){
-            throw new NoItemToReturnException(id);
+            throw new ItemNotAllocatedException(id);
         }
 
         optionalItemAllocation.get().issueItem(quantity);
 
     }
+
+    private @NonNull Optional<ItemAllocation> findItemAllocation(ItemId id) {
+        return itemAllocations.stream()
+            .filter(item -> item.getItemId()
+                .equals(id))
+            .findFirst();
+    }
+
     private static void validatePositiveQuantity(int quantity) {
         if (quantity <= 0) {
             throw new InvalidItemQuantityException(

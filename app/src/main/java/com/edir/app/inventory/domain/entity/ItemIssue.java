@@ -60,14 +60,14 @@ public class ItemIssue extends AggregateRoot<ItemIssueId> {
             itemIssueLines,issuerId);
     }
 
-    public void addLine(ItemId itemId, StoreId fromId, ItemQuantity quantity){
+    public void addLine(ItemId itemId,  ItemQuantity quantity){
         Optional<ItemIssueLine> optionalItemIssue = itemIssueLines
             .stream()
             .filter(i->i.getItemId().equals(itemId))
             .findFirst();
 
         if(optionalItemIssue.isEmpty()){
-            itemIssueLines.add(ItemIssueLine.create(itemId,fromId,quantity));
+            itemIssueLines.add(ItemIssueLine.create(itemId,quantity));
             return;
         }
         optionalItemIssue.get().increaseIssuedQuantity(quantity);

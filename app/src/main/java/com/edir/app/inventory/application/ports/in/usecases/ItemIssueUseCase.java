@@ -1,13 +1,13 @@
 package com.edir.app.inventory.application.ports.in.usecases;
 
-import com.edir.app.inventory.application.ports.in.commands.IssueItem;
 import com.edir.app.inventory.application.ports.in.commands.IssueItemCommand;
+import com.edir.app.inventory.application.ports.in.commands.ItemIssueApproveCommand;
 
 import java.util.UUID;
 
 public interface ItemIssueUseCase {
     void issueItem(IssueItemCommand command);
-    void Approve(UUID issueId, IssueItem issueItem);
+    void Approve(ItemIssueApproveCommand approveCommand);
     void rejected(UUID issueId,UUID issueItem);
 
 }

@@ -7,7 +7,7 @@ import {useFormDrawer} from "@/shared/components/useFormDrawer.ts";
 import InventoryItemTable from "@/features/inventory/components/tables/InventoryItemTable.tsx";
 import {InventoryItemForm} from "@/features/inventory/components/forms/InventoryItemFrom.tsx";
 import {useGetInventory} from "@/features/inventory/hooks/useGetInventory.ts";
-import {useGetItemById} from "@/features/inventory/hooks/useGetItemById.tsx";
+import {useGetItemById} from "@/features/inventory/hooks/useGetItemById.ts";
 import {useState} from "react";
 import {useUpdateItem} from "@/features/inventory/hooks/useUpdateItem.ts";
 import {SpinnerCard} from "@/shared/components/SpinnerCard.tsx";

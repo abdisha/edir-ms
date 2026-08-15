@@ -13,9 +13,7 @@ const SetupEdirPage = () => {
         }
     },[createMutation.isSuccess])
     return (
-        // SetupEdirPage.tsx
-
-        <EdirForm
+      <EdirForm
             onCancel={()=>navigation(-1)}
             loading={createMutation.isPending}
             submitText="Create Edir"
