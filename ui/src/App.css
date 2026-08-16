@@ -7,7 +7,7 @@
   border: 2px solid transparent;
   transition: border-color 0.3s;
   margin-bottom: 24px;
-
+  /* */
   &:hover {
     border-color: var(--accent-border);
   }
@@ -160,7 +160,7 @@
     height: 48px;
   }
 }
-
+/**/
 .ticks {
   position: relative;
   width: 100%;
@@ -182,3 +182,7 @@
     border-right-color: var(--border);
   }
 }
+
+
+
+/* css for Edir*/
